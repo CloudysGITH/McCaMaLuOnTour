@@ -369,7 +369,7 @@ document.querySelectorAll('.day-card, .hotel-card, .quest-card, .weather-card, .
     const days = [
         // Phase 1: Anreise
         { date: '2026-12-19', label: 'Sa 19. Dez', loc: 'Bangkok → Istanbul', title: 'Abflug! Los geht die Winter Tour', prompt: 'Wie war der Abflug um 22:10? Aufregung? Wer hat im Flieger geschlafen?' },
-        { date: '2026-12-20', label: 'So 20. Dez', loc: 'München → Nürnberg', title: '\u{1F384} Ankunft, Carla-Reunion & Christkindlesmarkt!', prompt: 'REUNION! Wie war das Wiedersehen mit Carla? Erster Glühwein nach 5 Jahren Bangkok – wie war die Weihnachtsstimmung? Drei im Weggla probiert?' },
+        { date: '2026-12-20', label: 'So 20. Dez', loc: 'München → Nürnberg', title: '\u{1F384} Ankunft, Carla-Reunion & Christkindlesmarkt!', prompt: 'REUNION! Wie war das Wiedersehen mit Carla? Erster Glühwein nach 5 Jahren Bangkok – wie war die Weihnachtsstimmung? Bratwurst probiert?' },
         // Phase 2: Hepberg -> Bonn (geplant)
         { date: '2026-12-21', label: 'Mo 21. Dez', loc: 'Hepberg', title: 'Tag bei Familie Jantz', prompt: 'Jetlag besiegt? Was habt ihr mit Familie Jantz unternommen?' },
         { date: '2026-12-22', label: 'Di 22. Dez', loc: 'Hepberg → Bonn', title: 'Fahrt nach Bonn – zu Oma & Opa!', prompt: 'Wie war die Fahrt? Wiedersehen mit Oma & Opa nach so langer Zeit?' },
@@ -377,17 +377,17 @@ document.querySelectorAll('.day-card, .hotel-card, .quest-card, .weather-card, .
         { date: '2026-12-24', label: 'Do 24. Dez', loc: 'Bonn', title: '\u{1F384} Heiligabend bei Oma & Opa!', prompt: 'Bescherung! Bestes Geschenk? Was gab es zu essen? Wer hat geweint vor Rührung?' },
         { date: '2026-12-25', label: 'Fr 25. Dez', loc: 'Bonn', title: '1. Weihnachtstag in Bonn', prompt: 'Weihnachts-Food-Koma? Rheinspaziergang? Erzählt!' },
         // Phase 3: Kaunertal
-        { date: '2026-12-26', label: 'Sa 26. Dez', loc: 'Bonn → Kaunertal', title: 'Lange Fahrt & Check-in Apart Gletscherblick!', prompt: 'Wie war die 7h-Etappe? Erster Eindruck vom Kaunertal und der Wohnung? Liegt Schnee?' },
+        { date: '2026-12-26', label: 'Sa 26. Dez', loc: 'Bonn → Kaunertal', title: 'Lange Fahrt & Check-in Apart Gletscherblick!', prompt: 'Wie war die 7h-Etappe? Erster Eindruck vom Kaunertal und der Wohnung? Ski-Abholung geschafft? Liegt Schnee?' },
         { date: '2026-12-27', label: 'So 27. Dez', loc: 'Kaunertaler Gletscher', title: '\u{1F3BF} Skitag 1 – Gletscher!', prompt: 'Erster Tag auf der Piste! Wie waren Schnee und Beine?' },
         { date: '2026-12-28', label: 'Mo 28. Dez', loc: 'Kaunertal', title: 'Skitag 2', prompt: 'Gletscher oder Fendels? Schönste Abfahrt?' },
         { date: '2026-12-29', label: 'Di 29. Dez', loc: 'Kaunertal', title: 'Skitag 3', prompt: 'Muskelkater-Update? Bestes Hüttenessen bisher?' },
         { date: '2026-12-30', label: 'Mi 30. Dez', loc: 'Kaunertal', title: 'Skitag 4', prompt: 'Was war heute besonders?' },
         { date: '2026-12-31', label: 'Do 31. Dez', loc: 'Kaunertal', title: '\u{1F386} Silvester in den Bergen!', prompt: 'Wie habt ihr reingefeiert? Feuerwerk überm Tal? Vorsätze für 2027?' },
         { date: '2027-01-01', label: 'Fr 1. Jan', loc: 'Kaunertal', title: 'Neujahr – Skitag oder Ausschlafen?', prompt: 'Frohes Neues! Erster Skitag 2027 oder gemütlicher Start?' },
-        { date: '2027-01-02', label: 'Sa 2. Jan', loc: 'Kaunertal', title: 'Skitag', prompt: 'Highlight des Tages?' },
-        { date: '2027-01-03', label: 'So 3. Jan', loc: 'Kaunertal → ?', title: 'Check-out Apart Gletscherblick', prompt: 'Abschied vom Kaunertal – was werdet ihr vermissen? Wohin geht’s jetzt?' },
+        { date: '2027-01-02', label: 'Sa 2. Jan', loc: 'Pitztaler Gletscher', title: '\u{1F3D4}\uFE0F Pitztal-Tag mit Caro, Tobi, Paul, Benedikt & Sofia!', prompt: 'Wie war der Tag mit den Freunden? Café 3.440 besucht? Wer hatte die schnellste Linie?' },
+        { date: '2027-01-03', label: 'So 3. Jan', loc: 'Kaunertal → ?', title: 'Skitag 8 (Finale!) & Check-out', prompt: 'Letzter Skitag und Abschied vom Kaunertal – was werdet ihr vermissen? Wohin geht’s jetzt?' },
         // Phase 4: Nach-Ski (Plan folgt)
-        { date: '2027-01-04', label: 'Mo 4. Jan', loc: 'folgt', title: 'Nach-Ski-Phase – letzter Skipass-Tag!', prompt: 'Skipass gilt noch – nochmal auf die Piste oder schon weitergezogen?' },
+        { date: '2027-01-04', label: 'Mo 4. Jan', loc: 'folgt', title: 'Nach-Ski-Phase – Tag 1', prompt: 'Wie fühlen sich die Beine nach 8 Skitagen an? Was steht heute an?' },
         { date: '2027-01-05', label: 'Di 5. Jan', loc: 'folgt', title: 'Nach-Ski-Phase – Tag 2', prompt: 'Was habt ihr heute gemacht?' },
         { date: '2027-01-06', label: 'Mi 6. Jan', loc: 'folgt', title: 'Heilige Drei Könige (Feiertag in AT!)', prompt: 'Sternsinger gesehen? Was stand an?' },
         { date: '2027-01-07', label: 'Do 7. Jan', loc: 'folgt', title: 'Letzter voller Tag in Europa', prompt: 'Koffer packen – was MUSS mit nach Bangkok?' },
