@@ -1,0 +1,20 @@
+{
+    "name": "Berger Winter Tour 2026",
+    "short_name": "BWT 26",
+    "start_url": "./",
+    "display": "standalone",
+    "background_color": "#06101c",
+    "theme_color": "#38bdf8",
+    "icons": [
+        {
+            "src": "icon-180.png?v=1",
+            "sizes": "180x180",
+            "type": "image/png"
+        },
+        {
+            "src": "icon-512.png?v=1",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ]
+}

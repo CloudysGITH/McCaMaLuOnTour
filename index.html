@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mc CaMaLu on Tour</title>
+
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
+    <meta name="theme-color" content="#0a0a14">
+
+    <!-- Open Graph / WhatsApp Preview -->
+    <meta property="og:title" content="Mc CaMaLu on Tour">
+    <meta property="og:description" content="Die Reisen der Familie Berger &ndash; Summer Tour 2026 (Frankreich &amp; Deutschland) &amp; Winter Tour 2026 (Kaunertal, Tirol)">
+    <meta property="og:url" content="https://cloudysgith.github.io/McCaMaLuOnTour/">
+    <meta property="og:type" content="website">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --bg: #0a0a14;
+            --text: #e8e8ed;
+            --text-dim: #8c8ca6;
+            --font: 'Outfit', -apple-system, sans-serif;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: var(--font);
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+
+        /* ===== LOCK SCREEN ===== */
+        .lock-screen {
+            position: fixed; inset: 0; z-index: 9999;
+            background: var(--bg);
+            display: flex; align-items: center; justify-content: center;
+            transition: opacity 0.5s, visibility 0.5s;
+        }
+        .lock-screen.unlocked { opacity: 0; visibility: hidden; pointer-events: none; }
+        body.locked { overflow: hidden; }
+        .lock-content { text-align: center; padding: 2rem; }
+        .lock-emoji { font-size: 4rem; margin-bottom: 1.5rem; animation: floaty 3s ease-in-out infinite; }
+        .lock-title {
+            font-size: clamp(1.8rem, 5vw, 2.5rem); font-weight: 900; margin-bottom: 0.5rem;
+            background: linear-gradient(100deg, #fbbf24, #f472b6, #38bdf8);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+        }
+        .lock-sub { color: var(--text-dim); margin-bottom: 2rem; font-size: 1rem; }
+        .lock-input {
+            display: block; width: 280px; margin: 0 auto 1rem; padding: 0.9rem 1.2rem;
+            background: #15151f; border: 2px solid #26263a; border-radius: 12px;
+            color: var(--text); font-family: var(--font); font-size: 1.1rem; text-align: center;
+            outline: none; transition: border-color 0.3s;
+        }
+        .lock-input:focus { border-color: #7c5cfc; }
+        .lock-btn {
+            display: inline-block; padding: 0.8rem 2.5rem;
+            background: linear-gradient(135deg, #7c5cfc, #f472b6);
+            color: white; border: none; border-radius: 50px;
+            font-family: var(--font); font-weight: 600; font-size: 1rem; cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .lock-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(124,92,252,0.3); }
+        .lock-error { color: #ef4444; margin-top: 1rem; font-size: 0.9rem; min-height: 1.4em; }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20% { transform: translateX(-10px); } 40% { transform: translateX(10px); }
+            60% { transform: translateX(-6px); } 80% { transform: translateX(6px); }
+        }
+
+        /* ===== HEADER ===== */
+        .hub-header {
+            text-align: center;
+            padding: clamp(2.5rem, 6vh, 5rem) 1.5rem 1.5rem;
+        }
+
+        .hub-pre {
+            text-transform: uppercase;
+            letter-spacing: 0.45em;
+            font-size: 0.8rem;
+            color: var(--text-dim);
+            font-weight: 500;
+            margin-bottom: 0.8rem;
+        }
+
+        .hub-title {
+            font-size: clamp(2.6rem, 8vw, 5.5rem);
+            font-weight: 900;
+            letter-spacing: -0.02em;
+            line-height: 1;
+            background: linear-gradient(100deg, #fbbf24 0%, #f472b6 35%, #7c5cfc 60%, #38bdf8 85%, #2dd4bf 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hub-sub {
+            margin-top: 1rem;
+            color: var(--text-dim);
+            font-size: clamp(0.95rem, 2vw, 1.1rem);
+        }
+
+        .hub-sub strong { color: var(--text); font-weight: 600; }
+
+        /* ===== TILES ===== */
+        .tiles {
+            flex: 1;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(min(420px, 100%), 1fr));
+            gap: clamp(1rem, 2.5vw, 2rem);
+            padding: clamp(1.5rem, 3vw, 3rem);
+            max-width: 1500px;
+            width: 100%;
+            margin: 0 auto;
+            align-items: stretch;
+        }
+
+        .tile {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            min-height: clamp(380px, 58vh, 560px);
+            border-radius: 28px;
+            padding: 2.5rem;
+            text-decoration: none;
+            color: var(--text);
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.08);
+            transition: transform 0.4s cubic-bezier(.2,.8,.25,1), box-shadow 0.4s, border-color 0.4s;
+            isolation: isolate;
+        }
+
+        .tile:hover {
+            transform: translateY(-8px) scale(1.012);
+            border-color: rgba(255,255,255,0.22);
+        }
+
+        .tile-summer {
+            background:
+                radial-gradient(ellipse at 18% 18%, rgba(251,191,36,0.32), transparent 55%),
+                radial-gradient(ellipse at 85% 30%, rgba(244,114,182,0.28), transparent 55%),
+                radial-gradient(ellipse at 50% 95%, rgba(124,92,252,0.35), transparent 60%),
+                #141020;
+        }
+        .tile-summer:hover { box-shadow: 0 24px 70px rgba(244,114,182,0.25); }
+
+        .tile-winter {
+            background:
+                radial-gradient(ellipse at 20% 15%, rgba(125,211,252,0.30), transparent 55%),
+                radial-gradient(ellipse at 85% 35%, rgba(45,212,191,0.22), transparent 55%),
+                radial-gradient(ellipse at 50% 95%, rgba(56,189,248,0.30), transparent 60%),
+                #0a1422;
+        }
+        .tile-winter:hover { box-shadow: 0 24px 70px rgba(56,189,248,0.25); }
+
+        .tile-deco {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .tile-deco span {
+            position: absolute;
+            opacity: 0.85;
+            animation: floaty 6s ease-in-out infinite;
+        }
+
+        @keyframes floaty {
+            0%, 100% { transform: translateY(0) rotate(-4deg); }
+            50% { transform: translateY(-14px) rotate(4deg); }
+        }
+
+        .tile-emoji {
+            font-size: clamp(3.2rem, 6vw, 4.6rem);
+            margin-bottom: auto;
+            filter: drop-shadow(0 6px 24px rgba(0,0,0,0.35));
+        }
+
+        .tile-season {
+            text-transform: uppercase;
+            letter-spacing: 0.35em;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--text-dim);
+            margin-bottom: 0.6rem;
+        }
+
+        .tile h2 {
+            font-size: clamp(1.9rem, 4vw, 2.9rem);
+            font-weight: 900;
+            line-height: 1.05;
+            margin-bottom: 0.9rem;
+        }
+
+        .tile-summer h2 em {
+            font-style: normal;
+            background: linear-gradient(135deg, #fbbf24, #f472b6);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+        }
+
+        .tile-winter h2 em {
+            font-style: normal;
+            background: linear-gradient(135deg, #7dd3fc, #2dd4bf);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+        }
+
+        .tile-route {
+            color: var(--text-dim);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 0.5rem;
+        }
+
+        .tile-dates {
+            font-weight: 700;
+            font-size: 1.05rem;
+            margin-bottom: 1.4rem;
+        }
+        .tile-summer .tile-dates { color: #fbbf24; }
+        .tile-winter .tile-dates { color: #7dd3fc; }
+
+        .tile-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .tile-cta {
+            display: inline-block;
+            padding: 0.75rem 1.8rem;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            color: #fff;
+            transition: transform 0.3s;
+        }
+        .tile:hover .tile-cta { transform: translateX(4px); }
+        .tile-summer .tile-cta { background: linear-gradient(135deg, #7c5cfc, #f472b6); }
+        .tile-winter .tile-cta { background: linear-gradient(135deg, #38bdf8, #2dd4bf); }
+
+        .tile-countdown {
+            font-family: 'Space Grotesk', monospace;
+            font-size: 0.85rem;
+            color: var(--text-dim);
+        }
+        .tile-countdown strong { color: var(--text); font-size: 1rem; }
+
+        /* ===== FOOTER ===== */
+        .hub-footer {
+            text-align: center;
+            padding: 1.5rem;
+            color: var(--text-dim);
+            font-size: 0.85rem;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .tile-deco span { animation: none; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- PASSWORD SCREEN -->
+<div class="lock-screen" id="lockScreen">
+    <div class="lock-content">
+        <div class="lock-emoji">&#x2708;&#xFE0F;</div>
+        <h1 class="lock-title">Mc CaMaLu on Tour</h1>
+        <p class="lock-sub">Familien-Bereich &ndash; bitte Codewort eingeben</p>
+        <form id="lockForm" onsubmit="return false;">
+            <input type="password" id="lockInput" class="lock-input" placeholder="Codewort..." autocomplete="off" autofocus>
+            <button type="submit" class="lock-btn" id="lockBtn">Rein da!</button>
+        </form>
+        <p class="lock-error" id="lockError"></p>
+    </div>
+</div>
+
+<header class="hub-header">
+    <p class="hub-pre">familie berger presents</p>
+    <h1 class="hub-title">Mc CaMaLu on Tour</h1>
+    <p class="hub-sub"><strong>M</strong>ark &middot; <strong>C</strong>laudia &middot; <strong>Ca</strong>rla &middot; <strong>Ma</strong>rlene &middot; <strong>Lu</strong>isa &ndash; zwei Touren, eine Familie</p>
+</header>
+
+<main class="tiles">
+    <!-- SOMMER -->
+    <a class="tile tile-summer" href="sommer/">
+        <div class="tile-deco">
+            <span style="top:12%; right:10%; font-size:2.2rem; animation-delay:-1s;">&#x2600;&#xFE0F;</span>
+            <span style="top:34%; left:8%; font-size:1.6rem; animation-delay:-3s;">&#x1F3D6;&#xFE0F;</span>
+            <span style="top:20%; left:38%; font-size:1.3rem; animation-delay:-4.5s;">&#x1F30A;</span>
+        </div>
+        <div class="tile-emoji">&#x1F334;</div>
+        <p class="tile-season">Sommer 2026</p>
+        <h2>Berger <em>Summer Tour</em></h2>
+        <p class="tile-route">Bangkok &rarr; Bordeaux &rarr; &Icirc;le d'Ol&eacute;ron &rarr; Beaune &rarr; Sindelfingen &rarr; Bonn &rarr; M&uuml;nchen &rarr; Passau &rarr; Leipzig &rarr; Bangkok</p>
+        <p class="tile-dates">20. Juni &ndash; 5. August 2026</p>
+        <div class="tile-footer">
+            <span class="tile-cta">Zur Summer Tour &rarr;</span>
+            <span class="tile-countdown" id="cdSummer"></span>
+        </div>
+    </a>
+
+    <!-- WINTER -->
+    <a class="tile tile-winter" href="winter/">
+        <div class="tile-deco">
+            <span style="top:12%; right:12%; font-size:2rem; animation-delay:-2s;">&#x2744;&#xFE0F;</span>
+            <span style="top:36%; left:8%; font-size:1.6rem; animation-delay:-0.5s;">&#x1F384;</span>
+            <span style="top:18%; left:42%; font-size:1.3rem; animation-delay:-3.8s;">&#x26F7;&#xFE0F;</span>
+        </div>
+        <div class="tile-emoji">&#x26C4;</div>
+        <p class="tile-season">Winter 2026/27</p>
+        <h2>Berger <em>Winter Tour</em></h2>
+        <p class="tile-route">Bangkok &rarr; M&uuml;nchen &rarr; N&uuml;rnberg &rarr; Hepberg &rarr; Bonn &rarr; Kaunertal (Tirol) &rarr; M&uuml;nchen &rarr; Bangkok</p>
+        <p class="tile-dates">19. Dezember 2026 &ndash; 9. Januar 2027</p>
+        <div class="tile-footer">
+            <span class="tile-cta">Zur Winter Tour &rarr;</span>
+            <span class="tile-countdown" id="cdWinter"></span>
+        </div>
+    </a>
+</main>
+
+<footer class="hub-footer">
+    Made with &#x2764;&#xFE0F; for the best trips ever &ndash; Familie Berger
+</footer>
+
+<script>
+// --- Password Lock (gemeinsam fuer Hub + beide Touren) ---
+(function() {
+    const UNLOCK_KEY = 'mccamalu_unlocked';
+    const lockScreen = document.getElementById('lockScreen');
+    const lockInput = document.getElementById('lockInput');
+    const lockError = document.getElementById('lockError');
+    const lockBtn = document.getElementById('lockBtn');
+
+    if (sessionStorage.getItem(UNLOCK_KEY) === 'true') {
+        lockScreen.classList.add('unlocked');
+    } else {
+        document.body.classList.add('locked');
+    }
+
+    function tryUnlock() {
+        if (lockInput.value.toLowerCase().trim() === 'gruenesblatt') {
+            sessionStorage.setItem(UNLOCK_KEY, 'true');
+            lockScreen.classList.add('unlocked');
+            document.body.classList.remove('locked');
+            lockError.textContent = '';
+        } else {
+            lockError.textContent = 'Falsches Codewort! Versuch es nochmal.';
+            lockInput.value = '';
+            lockInput.focus();
+            lockScreen.style.animation = 'shake 0.4s ease';
+            setTimeout(() => lockScreen.style.animation = '', 400);
+        }
+    }
+    lockBtn.addEventListener('click', tryUnlock);
+    lockInput.addEventListener('keydown', e => { if (e.key === 'Enter') tryUnlock(); });
+})();
+</script>
+<script>
+(function() {
+    const tours = [
+        { el: document.getElementById('cdSummer'), start: new Date('2026-06-20T06:40:00+07:00'), end: new Date('2026-08-05T23:59:59+02:00'), live: 'JETZT unterwegs! \u{1F334}', done: 'War das schön! ❤️' },
+        { el: document.getElementById('cdWinter'), start: new Date('2026-12-19T22:10:00+07:00'), end: new Date('2027-01-09T23:59:59+07:00'), live: 'JETZT unterwegs! ⛄', done: 'War das schön! ❤️' }
+    ];
+
+    function update() {
+        const now = new Date();
+        tours.forEach(t => {
+            if (!t.el) return;
+            if (now > t.end) { t.el.textContent = t.done; return; }
+            if (now >= t.start) { t.el.textContent = t.live; return; }
+            const days = Math.floor((t.start - now) / 86400000);
+            const hours = Math.floor(((t.start - now) % 86400000) / 3600000);
+            t.el.innerHTML = 'noch <strong>' + days + '</strong> Tage, ' + hours + ' Std';
+        });
+    }
+    update();
+    setInterval(update, 60000);
+})();
+</script>
+</body>
+</html>

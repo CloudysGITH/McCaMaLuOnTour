@@ -1,0 +1,1178 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Berger Winter Tour 2026</title>
+
+    <!-- Homescreen Icon (TODO: Winter-Icons erstellen) -->
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png?v=1">
+    <link rel="manifest" href="manifest.json?v=1">
+    <meta name="theme-color" content="#38bdf8">
+
+    <!-- Open Graph / WhatsApp Preview (TODO: Route & og-image ergaenzen) -->
+    <meta property="og:title" content="Berger Winter Tour 2026">
+    <meta property="og:description" content="Bangkok &rarr; M&uuml;nchen &rarr; N&uuml;rnberg &rarr; Hepberg &rarr; Bonn &rarr; Kaunertal (Tirol) &rarr; M&uuml;nchen &rarr; Bangkok | 19. Dezember 2026 &ndash; 9. Januar 2027 | Ski: Kaunertaler Gletscher &amp; Fendels">
+    <meta property="og:url" content="https://cloudysgith.github.io/McCaMaLuOnTour/winter/">
+    <meta property="og:type" content="website">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css?v=1">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <!--
+    Firebase SDK - TODO: eigenes Firebase-Projekt fuer die Winter Tour anlegen
+    (wie bst2026 im Sommer) und Config hier eintragen. Solange die Config fehlt,
+    laufen Tagebuch, Ratings & Reisekasse im Platzhalter-Modus.
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
+        import { getDatabase, ref, set, onValue, push } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "TODO",
+            authDomain: "TODO.firebaseapp.com",
+            databaseURL: "https://TODO.firebasedatabase.app",
+            projectId: "TODO",
+            storageBucket: "TODO.firebasestorage.app",
+            messagingSenderId: "TODO",
+            appId: "TODO"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+        window.fbDb = db;
+        window.fbRef = ref;
+        window.fbSet = set;
+        window.fbOnValue = onValue;
+        window.fbPush = push;
+        window.firebaseReady = true;
+        window.dispatchEvent(new Event('firebase-ready'));
+    </script>
+    -->
+</head>
+<body>
+
+<!-- SCHNEEFALL -->
+<div class="snow-layer" id="snowLayer" aria-hidden="true"></div>
+
+<!-- PASSWORD SCREEN -->
+<div class="lock-screen" id="lockScreen">
+    <div class="lock-content">
+        <div class="lock-emoji">&#x2744;&#xFE0F;</div>
+        <h1 class="lock-title">Berger Winter Tour 2026</h1>
+        <p class="lock-sub">Familien-Bereich &ndash; bitte Codewort eingeben</p>
+        <form id="lockForm" onsubmit="return false;">
+            <input type="password" id="lockInput" class="lock-input" placeholder="Codewort..." autocomplete="off" autofocus>
+            <button type="submit" class="lock-btn" id="lockBtn">Rein da!</button>
+        </form>
+        <p class="lock-error" id="lockError"></p>
+    </div>
+</div>
+
+<!-- HERO -->
+<section class="hero" id="top">
+    <div class="hero-bg"></div>
+    <div class="hero-content">
+        <p class="hero-pre">familie berger presents</p>
+        <h1 class="hero-title">WINTER<br>TOUR<br><span class="gradient-text">2026</span></h1>
+        <div class="xmas-divider">&#x2744;&#xFE0F; &#x1F384; &#x2744;&#xFE0F;</div>
+        <p class="hero-sub">Bangkok &rarr; M&uuml;nchen &rarr; N&uuml;rnberg &rarr; Hepberg &rarr; Bonn &rarr; Kaunertal (Tirol) &rarr; M&uuml;nchen &rarr; Bangkok</p>
+        <p class="hero-dates">19. Dezember 2026 &ndash; 9. Januar 2027 &middot; Ski: 27.12. &ndash; 04.01.</p>
+        <div class="countdown" id="countdown"></div>
+        <a href="#timeline" class="scroll-btn">Los geht's &darr;</a>
+    </div>
+</section>
+
+<!-- NAV -->
+<nav class="sticky-nav" id="nav">
+    <div class="nav-inner">
+        <a href="#top" class="nav-logo">BWT 26</a>
+        <button class="nav-toggle" id="navToggle" aria-label="Menu">&#x2630;</button>
+        <div class="nav-links" id="navLinks">
+            <a href="../">&#x2302; Mc CaMaLu</a>
+            <a href="#overview">Route</a>
+            <a href="#timeline">Tagesplan</a>
+            <a href="#hotels">Hotels</a>
+            <a href="#mobilitaet">Mobilit&auml;t</a>
+            <a href="#kosten">Kosten</a>
+            <a href="#sidequest">Side Quests</a>
+            <a href="#packliste">Packliste</a>
+            <a href="#sprachen">Spickzettel</a>
+            <a href="#tagebuch">Tagebuch</a>
+            <a href="#todos">To-Dos</a>
+        </div>
+    </div>
+</nav>
+
+<!-- CREW -->
+<section class="section crew-section" id="crew">
+    <h2 class="section-title">Die Crew</h2>
+    <div class="crew-grid">
+        <div class="crew-card">
+            <div class="crew-emoji">&#x1F468;&#x200D;&#x1F4BC;</div>
+            <h3>Mark</h3>
+            <p class="crew-role">Papa / Navigator <em>(Rolle anpassen)</em></p>
+            <p class="crew-route">BKK &rarr; MUC &rarr; Kaunertal &rarr; MUC &rarr; BKK</p>
+            <span class="crew-badge">&#x1F3BF; Skipass &#x2713; 27.12.&ndash;04.01.</span>
+        </div>
+        <div class="crew-card">
+            <div class="crew-emoji">&#x1F469;&#x200D;&#x1F4BB;</div>
+            <h3>Claudia</h3>
+            <p class="crew-role">Mama / Reise-CEO / Planungs-Genie</p>
+            <p class="crew-route">BKK &rarr; MUC &rarr; Kaunertal &rarr; MUC &rarr; BKK</p>
+            <span class="crew-badge">&#x1F3BF; Skipass &#x2713; 27.12.&ndash;04.01.</span>
+        </div>
+        <div class="crew-card">
+            <div class="crew-emoji">&#x1F31F;</div>
+            <h3>Carla</h3>
+            <p class="crew-role">Duale Studentin @ DHBW Mannheim &amp; Fresenius</p>
+            <p class="crew-route">Mannheim &rarr; N&uuml;rnberg &rarr; Kaunertal</p>
+            <span class="crew-badge badge-hot">&#x1F973; Reunion in N&uuml;rnberg!</span>
+        </div>
+        <div class="crew-card">
+            <div class="crew-emoji">&#x1F3B6;</div>
+            <h3>Luisa</h3>
+            <p class="crew-role">Vibes-Beauftragte / Playlist-Queen</p>
+            <p class="crew-route">BKK &rarr; MUC &rarr; Kaunertal &rarr; MUC &rarr; BKK</p>
+            <span class="crew-badge">&#x1F3BF; Skipass &#x2713; 27.12.&ndash;04.01.</span>
+        </div>
+        <div class="crew-card">
+            <div class="crew-emoji">&#x26F8;&#xFE0F;</div>
+            <h3>Marlene</h3>
+            <p class="crew-role">Schnee-Scout <em>(Rolle anpassen)</em></p>
+            <p class="crew-route">BKK &rarr; MUC &rarr; Kaunertal &rarr; MUC &rarr; BKK</p>
+            <span class="crew-badge">&#x1F3BF; Skipass &#x2713; 27.12.&ndash;04.01.</span>
+        </div>
+    </div>
+    <div class="placeholder-note"><strong>Fast komplett:</strong> Carla st&ouml;&szlig;t in N&uuml;rnberg dazu &#x2713; &ndash; nur ihr Zugticket (Mannheim &rarr; N&uuml;rnberg) muss noch gebucht werden.</div>
+</section>
+
+<!-- OVERVIEW MAP -->
+<section class="section" id="overview">
+    <h2 class="section-title">Die Route</h2>
+    <div class="placeholder-note"><strong>Plan (zu best&auml;tigen):</strong> MUC &rarr; Christkindlesmarkt N&uuml;rnberg &rarr; 2 N&auml;chte Hepberg (dort steht unser Auto! &#x1F697;) &rarr; Weihnachten in Bonn &rarr; 26.12. Kaunertal &ndash; alles im eigenen MB E 250 T. <strong>Offen:</strong> Carlas Zugticket.</div>
+
+    <!-- LEAFLET MAP -->
+    <div id="route-map" style="height: 500px; border-radius: 16px; border: 1px solid rgba(136,136,160,0.15); overflow: hidden;"></div>
+    <script>
+    (function() {
+        var map = L.map('route-map', {
+            center: [47.0, 10.7],
+            zoom: 10,
+            zoomControl: true,
+            scrollWheelZoom: false
+        });
+
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/">CARTO</a>',
+            subdomains: 'abcd',
+            maxZoom: 19
+        }).addTo(map);
+
+        // Stationen der Winter Tour
+        var stops = [
+            { name: 'Bangkok', lat: 13.75, lon: 100.5, color: '#fbbf24', info: 'START • Abflug 19.12. 22:10', r: 6, perm: false },
+            { name: 'Istanbul', lat: 41.01, lon: 28.98, color: '#22d3ee', info: 'Umsteigen', r: 5, perm: false },
+            { name: 'München', lat: 48.354, lon: 11.786, color: '#fbbf24', info: 'Ankunft 20.12. 09:50 ✈️', r: 7, perm: true },
+            { name: 'Nürnberg', lat: 49.454, lon: 11.077, color: '#ef4444', info: 'Christkindlesmarkt 🎄 • Reunion mit Carla 🥳', r: 7, perm: true },
+            { name: 'Mannheim', lat: 49.488, lon: 8.466, color: '#22d3ee', info: 'Carla startet hier 🚆', r: 6, perm: true },
+            { name: 'Hepberg', lat: 48.812, lon: 11.464, color: '#34d399', info: 'Familie Jantz 💛 20.–22.12.', r: 6, perm: true },
+            { name: 'Bonn', lat: 50.737, lon: 7.098, color: '#ef4444', info: 'Weihnachten bei Oma & Opa ❤️ 22.–26.12.', r: 8, perm: true },
+            { name: 'Feichten / Kaunertal', lat: 47.005, lon: 10.713, color: '#38bdf8', info: 'Basis im Tal \u{1F3E0}', r: 7, perm: true },
+            { name: 'Kaunertaler Gletscher', lat: 46.871, lon: 10.717, color: '#7dd3fc', info: 'Skigebiet bis 3.113 m \u{1F3BF}', r: 8, perm: true },
+            { name: 'Fendels', lat: 47.049, lon: 10.690, color: '#2dd4bf', info: 'Skigebiet Fendels-Ried ⛷️', r: 7, perm: true }
+        ];
+
+        function emojiIcon(emoji, size) {
+            return L.divIcon({
+                html: '<span style="font-size:' + size + 'px">' + emoji + '</span>',
+                className: 'emoji-marker',
+                iconSize: [size, size],
+                iconAnchor: [size/2, size/2]
+            });
+        }
+
+        // Flugrouten (gestrichelt, dezent): BKK -> IST -> MUC und zurueck
+        L.polyline([
+            [13.75, 100.5], [30, 65], [41.01, 28.98]
+        ], { color: '#22d3ee', weight: 2, opacity: 0.3, dashArray: '8,8' }).addTo(map);
+        L.polyline([
+            [41.01, 28.98], [45, 20], [48.354, 11.786]
+        ], { color: '#22d3ee', weight: 2, opacity: 0.3, dashArray: '8,8' }).addTo(map);
+
+        // Flugzeuge auf den Flugrouten
+        L.marker([25, 80], { icon: emojiIcon('✈️', 18) }).addTo(map);
+        L.marker([44, 21], { icon: emojiIcon('✈️', 18) }).addTo(map);
+
+        // Carlas Zug: Mannheim -> Nuernberg
+        L.polyline([
+            [49.488, 8.466], [49.454, 11.077]
+        ], { color: '#22d3ee', weight: 2, opacity: 0.5, dashArray: '8,8' }).addTo(map);
+        L.marker([49.50, 9.77], { icon: emojiIcon('\u{1F686}', 16) }).addTo(map);
+
+        // MUC -> Nuernberg (Abholung Familie Jantz)
+        L.polyline([
+            [48.354, 11.786], [49.454, 11.077]
+        ], { color: '#34d399', weight: 3, opacity: 0.7 }).addTo(map);
+        L.marker([48.95, 11.45], { icon: emojiIcon('\u{1F697}', 16) }).addTo(map);
+
+        // Nuernberg -> Hepberg (Uebernachtung bei Familie Jantz)
+        L.polyline([
+            [49.454, 11.077], [48.812, 11.464]
+        ], { color: '#34d399', weight: 3, opacity: 0.7 }).addTo(map);
+
+        // Hepberg -> Bonn (22.12., geplant)
+        L.polyline([
+            [48.812, 11.464], [49.5, 9.5], [50.737, 7.098]
+        ], { color: '#ef4444', weight: 3, opacity: 0.6, dashArray: '6,6' }).addTo(map);
+
+        // Bonn -> Kaunertal (26.12., lange Etappe)
+        L.polyline([
+            [50.737, 7.098], [49.0, 9.2], [47.6, 10.7], [47.005, 10.713]
+        ], { color: '#7dd3fc', weight: 3, opacity: 0.6, dashArray: '6,6' }).addTo(map);
+        L.marker([48.3, 9.9], { icon: emojiIcon('\u{1F698}', 16) }).addTo(map);
+
+        // Gletscherstrasse: Tal -> Gletscher
+        L.polyline([
+            [47.005, 10.713], [46.93, 10.70], [46.871, 10.717]
+        ], { color: '#7dd3fc', weight: 3, opacity: 0.7 }).addTo(map);
+
+        // Tal -> Fendels
+        L.polyline([
+            [47.005, 10.713], [47.049, 10.690]
+        ], { color: '#2dd4bf', weight: 3, opacity: 0.7 }).addTo(map);
+
+        // Deko-Marker
+        L.marker([46.90, 10.74], { icon: emojiIcon('⛷️', 20) }).addTo(map);
+
+        stops.forEach(function(s) {
+            L.circleMarker([s.lat, s.lon], {
+                radius: s.r,
+                fillColor: s.color,
+                color: s.color,
+                weight: 2,
+                opacity: 0.8,
+                fillOpacity: 0.6
+            }).addTo(map).bindTooltip(
+                '<strong>' + s.name + '</strong><br><span style="opacity:0.7">' + s.info + '</span>',
+                { permanent: s.perm, direction: 'top', className: 'map-tooltip', offset: [0, -8] }
+            );
+        });
+
+        map.fitBounds([[46.7, 6.5], [50.9, 12.3]], { padding: [30, 30] });
+    })();
+    </script>
+</section>
+
+<!-- TIMELINE -->
+<section class="section timeline-section" id="timeline">
+    <h2 class="section-title">Der Tagesplan</h2>
+    <p class="section-sub">Vom Abflug in Bangkok bis zur R&uuml;ckkehr &ndash; 22 Tage Winter. Details werden laufend erg&auml;nzt!</p>
+
+    <div class="phase-label">Sa. 19.12. &ndash; So. 20.12. &middot; Anreise Bangkok &rarr; M&uuml;nchen</div>
+
+    <!-- TAG 1 -->
+    <div class="day-card" data-day="1">
+        <div class="day-header">
+            <div class="day-date">
+                <span class="day-weekday">SA</span>
+                <span class="day-number">19</span>
+                <span class="day-month">DEZ</span>
+            </div>
+            <div class="day-title">
+                <h3>Abflug! Bangkok &rarr; Istanbul</h3>
+                <div class="day-location">&#x1F4CD; Bangkok &rarr; Istanbul (Nachtflug)</div>
+            </div>
+            <div class="day-weather">
+                <span class="weather-icon">&#x1F319;</span>
+                <span class="weather-temp">28&deg;C</span>
+            </div>
+        </div>
+        <div class="day-content">
+            <div class="day-schedule">
+                <div class="schedule-item">
+                    <span class="time">abends</span>
+                    <span class="activity">Letzte Checks, Koffer zu, ab zum Suvarnabhumi Airport</span>
+                </div>
+                <div class="schedule-item highlight">
+                    <span class="time">22:10</span>
+                    <span class="activity">Abflug Bangkok (BKK) &rarr; Istanbul &ndash; Turkish Airlines</span>
+                </div>
+            </div>
+            <div class="day-details">
+                <div class="detail-box flight-box">
+                    <h4>&#x2708;&#xFE0F; Flugdetails</h4>
+                    <p><strong>BKK &rarr; IST &rarr; MUC</strong> | Economy Class | Gesamtdauer 17h 40min</p>
+                    <p>Passagiere: Mark, Claudia, Luisa &amp; Marlene</p>
+                    <p class="small">Buchungsreferenz: WP4DGY | Carla reist separat aus Deutschland an</p>
+                </div>
+            </div>
+            <div class="day-tips">
+                <div class="tip">&#x1F4A1; <strong>Tipp:</strong> Im Handgep&auml;ck schon mal Pulli &amp; Jacke griffbereit &ndash; in M&uuml;nchen ist Winter!</div>
+            </div>
+        </div>
+        <div class="day-rating" data-day="1">
+            <span class="rating-label">Tages-Rating:</span>
+            <div class="stars">
+                <span class="star" data-value="1">&#x2B50;</span>
+                <span class="star" data-value="2">&#x2B50;</span>
+                <span class="star" data-value="3">&#x2B50;</span>
+                <span class="star" data-value="4">&#x2B50;</span>
+                <span class="star" data-value="5">&#x2B50;</span>
+            </div>
+            <span class="rating-display"></span>
+        </div>
+    </div>
+
+    <!-- TAG 2 -->
+    <div class="day-card" data-day="2">
+        <div class="day-header">
+            <div class="day-date">
+                <span class="day-weekday">SO</span>
+                <span class="day-number">20</span>
+                <span class="day-month">DEZ</span>
+            </div>
+            <div class="day-title">
+                <h3>Ankunft, Carla-Reunion &amp; Christkindlesmarkt! &#x1F384;</h3>
+                <div class="day-location">&#x1F4CD; Istanbul &rarr; M&uuml;nchen &rarr; N&uuml;rnberg</div>
+            </div>
+            <div class="day-weather">
+                <span class="weather-icon">&#x1F328;&#xFE0F;</span>
+                <span class="weather-temp">2&deg;C</span>
+            </div>
+        </div>
+        <div class="day-content">
+            <div class="day-schedule">
+                <div class="schedule-item">
+                    <span class="time">09:50</span>
+                    <span class="activity">Ankunft M&uuml;nchen (MUC) &ndash; brrr, endlich kalt! &#x2744;&#xFE0F;</span>
+                </div>
+                <div class="schedule-item">
+                    <span class="time">danach</span>
+                    <span class="activity">Abholung durch Familie Jantz &#x1F697;&#x1F49B; &ndash; Fahrt Richtung N&uuml;rnberg (~1,5h)</span>
+                </div>
+                <div class="schedule-item highlight">
+                    <span class="time">in N&uuml;rnberg</span>
+                    <span class="activity">FAMILIEN-REUNION: Carla ist da! &#x1F973; Endlich wieder zu f&uuml;nft!</span>
+                </div>
+                <div class="schedule-item highlight">
+                    <span class="time">nachmittags</span>
+                    <span class="activity">N&uuml;rnberger Christkindlesmarkt &ndash; volle Weihnachtsstimmung nach 5 Jahren Bangkok! &#x1F384;</span>
+                </div>
+                <div class="schedule-item">
+                    <span class="time">abends</span>
+                    <span class="activity">Gl&uuml;hwein, Lebkuchen &amp; Drei im Weggla &ndash; und fr&uuml;h ins Bett (Jetlag!)</span>
+                </div>
+            </div>
+            <div class="day-details">
+                <div class="detail-box place-box">
+                    <h4>&#x1F384; N&uuml;rnberger Christkindlesmarkt</h4>
+                    <p>Einer der &auml;ltesten und ber&uuml;hmtesten Weihnachtsm&auml;rkte der Welt, mitten auf dem Hauptmarkt vor der Frauenkirche. Pflichtprogramm: Original N&uuml;rnberger Rostbratw&uuml;rste (&bdquo;Drei im Weggla&ldquo;), Elisen-Lebkuchen &amp; Feuerzangenbowle. Erster Eintrag f&uuml;rs Weihnachtsmarkt-Hopping! (Side Quest &#x1F384;)</p>
+                </div>
+            </div>
+            <div class="day-tips">
+                <div class="tip special-tip">&#x1F49B; <strong>Motto des Tages:</strong> Volle Weihnachtsstimmung nach 5 Jahren Bangkok!</div>
+                <div class="tip">&#x1F4A1; <strong>Tipp gegen Jetlag:</strong> Drau&szlig;en bleiben, Tageslicht tanken &ndash; der Christkindlesmarkt ist das perfekte Anti-Jetlag-Programm.</div>
+            </div>
+        </div>
+        <div class="day-rating" data-day="2">
+            <span class="rating-label">Tages-Rating:</span>
+            <div class="stars">
+                <span class="star" data-value="1">&#x2B50;</span>
+                <span class="star" data-value="2">&#x2B50;</span>
+                <span class="star" data-value="3">&#x2B50;</span>
+                <span class="star" data-value="4">&#x2B50;</span>
+                <span class="star" data-value="5">&#x2B50;</span>
+            </div>
+            <span class="rating-display"></span>
+        </div>
+    </div>
+
+    <div class="phase-label">So. 20.12. &ndash; Sa. 26.12. &middot; Hepberg &rarr; Bonn &ndash; Weihnachten bei Oma &amp; Opa (geplant)</div>
+
+    <!-- TAG 4: FAHRT NACH BONN (GEPLANT) -->
+    <div class="day-card" data-day="3">
+        <div class="day-header">
+            <div class="day-date">
+                <span class="day-weekday">DI</span>
+                <span class="day-number">22</span>
+                <span class="day-month">DEZ</span>
+            </div>
+            <div class="day-title">
+                <h3>Fahrt nach Bonn &ndash; zu Oma &amp; Opa!</h3>
+                <div class="day-location">&#x1F4CD; Hepberg &rarr; Bonn (~480 km / ~5h)</div>
+            </div>
+            <div class="day-weather">
+                <span class="weather-icon">&#x1F698;</span>
+                <span class="weather-temp">3&deg;C</span>
+            </div>
+        </div>
+        <div class="day-content">
+            <div class="day-schedule">
+                <div class="schedule-item">
+                    <span class="time">vormittags</span>
+                    <span class="activity">Abschied von Familie Jantz &ndash; danke f&uuml;r alles! &#x1F49B;</span>
+                </div>
+                <div class="schedule-item highlight">
+                    <span class="time">abends</span>
+                    <span class="activity">Ankunft in Bonn &ndash; Wiedersehen mit Oma &amp; Opa! &#x2764;&#xFE0F;</span>
+                </div>
+            </div>
+            <div class="day-tips">
+                <div class="tip">&#x1F4CB; <strong>Status:</strong> GEPLANT &ndash; noch nicht final best&auml;tigt.</div>
+            </div>
+        </div>
+        <div class="day-rating" data-day="3">
+            <span class="rating-label">Tages-Rating:</span>
+            <div class="stars">
+                <span class="star" data-value="1">&#x2B50;</span>
+                <span class="star" data-value="2">&#x2B50;</span>
+                <span class="star" data-value="3">&#x2B50;</span>
+                <span class="star" data-value="4">&#x2B50;</span>
+                <span class="star" data-value="5">&#x2B50;</span>
+            </div>
+            <span class="rating-display"></span>
+        </div>
+    </div>
+
+    <!-- TAG: HEILIGABEND (GEPLANT) -->
+    <div class="day-card" data-day="4">
+        <div class="day-header">
+            <div class="day-date">
+                <span class="day-weekday">DO</span>
+                <span class="day-number">24</span>
+                <span class="day-month">DEZ</span>
+            </div>
+            <div class="day-title">
+                <h3>&#x1F384; Heiligabend bei Oma &amp; Opa!</h3>
+                <div class="day-location">&#x1F4CD; Bonn</div>
+            </div>
+            <div class="day-weather">
+                <span class="weather-icon">&#x1F384;</span>
+                <span class="weather-temp">4&deg;C</span>
+            </div>
+        </div>
+        <div class="day-content">
+            <div class="day-schedule">
+                <div class="schedule-item">
+                    <span class="time">tags&uuml;ber</span>
+                    <span class="activity">Baum schm&uuml;cken, letzte Geschenke einpacken, Pl&auml;tzchen naschen</span>
+                </div>
+                <div class="schedule-item highlight">
+                    <span class="time">abends</span>
+                    <span class="activity">BESCHERUNG! Erstes Weihnachten in Deutschland seit 5 Jahren &#x1F381;</span>
+                </div>
+            </div>
+            <div class="day-tips">
+                <div class="tip special-tip">&#x1F49B; <strong>Motto des Tages:</strong> Volle Weihnachtsstimmung &ndash; daf&uuml;r sind wir hier!</div>
+            </div>
+        </div>
+        <div class="day-rating" data-day="4">
+            <span class="rating-label">Tages-Rating:</span>
+            <div class="stars">
+                <span class="star" data-value="1">&#x2B50;</span>
+                <span class="star" data-value="2">&#x2B50;</span>
+                <span class="star" data-value="3">&#x2B50;</span>
+                <span class="star" data-value="4">&#x2B50;</span>
+                <span class="star" data-value="5">&#x2B50;</span>
+            </div>
+            <span class="rating-display"></span>
+        </div>
+    </div>
+
+    <div class="placeholder-note"><strong>Geplant (noch zu best&auml;tigen):</strong> 2 N&auml;chte Hepberg bei Familie Jantz (20.&ndash;22.12.), dann Bonn &ndash; Heiligabend &amp; Weihnachten bei Oma &amp; Opa (22.&ndash;26.12.). Day-Cards f&uuml;r 21./23./25.12. folgen.</div>
+
+    <div class="phase-label">Sa. 26.12. &ndash; So. 03.01. &middot; Kaunertal &ndash; Ski, Silvester &amp; Gletscher</div>
+
+    <!-- CHECK-IN KAUNERTAL -->
+    <div class="day-card" data-day="5">
+        <div class="day-header">
+            <div class="day-date">
+                <span class="day-weekday">SA</span>
+                <span class="day-number">26</span>
+                <span class="day-month">DEZ</span>
+            </div>
+            <div class="day-title">
+                <h3>Check-in Apart Gletscherblick!</h3>
+                <div class="day-location">&#x1F4CD; Bonn &rarr; Feichten, Kaunertal (~700 km / ~7h)</div>
+            </div>
+            <div class="day-weather">
+                <span class="weather-icon">&#x2744;&#xFE0F;</span>
+                <span class="weather-temp">-4&deg;C</span>
+            </div>
+        </div>
+        <div class="day-content">
+            <div class="day-schedule">
+                <div class="schedule-item">
+                    <span class="time">fr&uuml;h</span>
+                    <span class="activity">Abschied von Oma &amp; Opa, lange Etappe Bonn &rarr; Tirol (~7h)</span>
+                </div>
+                <div class="schedule-item highlight">
+                    <span class="time">nachmittags</span>
+                    <span class="activity">Ankunft im Kaunertal &ndash; Bezug Apartment &bdquo;Bliggspitz&ldquo;</span>
+                </div>
+                <div class="schedule-item">
+                    <span class="time">danach</span>
+                    <span class="activity">Supermarkt-Run, Skiverleih checken, Keycards kl&auml;ren</span>
+                </div>
+            </div>
+            <div class="day-details">
+                <div class="detail-box hotel-box">
+                    <h4>&#x1F3E8; Apart Gletscherblick &ndash; &bdquo;Bliggspitz&ldquo;</h4>
+                    <p>Feichten 168, 6524 Kaunertal &middot; 8 N&auml;chte &middot; 2 Erw. + 3 Kinder. Schlafzimmer + Wohnzimmer mit Schlafsofa, eigene K&uuml;che, Skiraum mit Schuhtrockner, WinterCard inklusive!</p>
+                    <span class="status-badge booked">GEBUCHT</span>
+                </div>
+            </div>
+            <div class="day-tips">
+                <div class="tip">&#x1F4A1; <strong>Tipp:</strong> Online Check-in vorab erledigen (App &bdquo;SARA&ldquo;) &ndash; spart Zeit. Br&ouml;tchenservice f&uuml;r den ersten Morgen vorbestellen!</div>
+            </div>
+        </div>
+        <div class="day-rating" data-day="5">
+            <span class="rating-label">Tages-Rating:</span>
+            <div class="stars">
+                <span class="star" data-value="1">&#x2B50;</span>
+                <span class="star" data-value="2">&#x2B50;</span>
+                <span class="star" data-value="3">&#x2B50;</span>
+                <span class="star" data-value="4">&#x2B50;</span>
+                <span class="star" data-value="5">&#x2B50;</span>
+            </div>
+            <span class="rating-display"></span>
+        </div>
+    </div>
+
+    <!-- SKITAG 1 -->
+    <div class="day-card" data-day="6">
+        <div class="day-header">
+            <div class="day-date">
+                <span class="day-weekday">SO</span>
+                <span class="day-number">27</span>
+                <span class="day-month">DEZ</span>
+            </div>
+            <div class="day-title">
+                <h3>Skitag 1 &ndash; Kaunertaler Gletscher! &#x1F3BF;</h3>
+                <div class="day-location">&#x1F4CD; Kaunertaler Gletscher (bis 3.113 m)</div>
+            </div>
+            <div class="day-weather">
+                <span class="weather-icon">&#x1F324;&#xFE0F;</span>
+                <span class="weather-temp">-10&deg;C</span>
+            </div>
+        </div>
+        <div class="day-content">
+            <div class="day-schedule">
+                <div class="schedule-item highlight">
+                    <span class="time">morgens</span>
+                    <span class="activity">Skipass-Start! Erster Tag auf dem Gletscher &ndash; Keycards laden beim ersten Drehkreuz</span>
+                </div>
+                <div class="schedule-item">
+                    <span class="time">mittags</span>
+                    <span class="activity">Einkehrschwung &ndash; Gletscherrestaurant (Kasspatzln!)</span>
+                </div>
+            </div>
+            <div class="day-details">
+                <div class="detail-box place-box">
+                    <h4>&#x1F3D4;&#xFE0F; Skipass &bdquo;8 in 9 Tagen&ldquo; Gletscher &amp; Fendels</h4>
+                    <p>G&uuml;ltig 27.12.2026 &ndash; 04.01.2027: 8 Skitage frei w&auml;hlbar in 9 Tagen, beide Skigebiete. Alle 5 P&auml;sse inkl. Keycard &amp; 8-Tage-Stornogarantie. Ausweis mit Foto zur Abholung mitbringen!</p>
+                </div>
+            </div>
+            <div class="day-tips">
+                <div class="tip special-tip">&#x1F49B; <strong>Motto des Tages:</strong> Es staubt! &#x2744;&#xFE0F;</div>
+            </div>
+        </div>
+        <div class="day-rating" data-day="6">
+            <span class="rating-label">Tages-Rating:</span>
+            <div class="stars">
+                <span class="star" data-value="1">&#x2B50;</span>
+                <span class="star" data-value="2">&#x2B50;</span>
+                <span class="star" data-value="3">&#x2B50;</span>
+                <span class="star" data-value="4">&#x2B50;</span>
+                <span class="star" data-value="5">&#x2B50;</span>
+            </div>
+            <span class="rating-display"></span>
+        </div>
+    </div>
+
+    <div class="placeholder-note"><strong>Wird noch gef&uuml;llt:</strong> Skitage 2&ndash;8, Silvester &#x1F386; auf 1.273 m, Neujahrs-Skitag, Fendels-Tage &amp; Check-out 03.01. &ndash; Day-Cards folgen mit der Detailplanung.</div>
+
+    <div class="phase-label">So. 03.01. &ndash; Fr. 08.01. &middot; Nach-Ski-Phase (noch offen)</div>
+
+    <div class="placeholder-note"><strong>Noch offen:</strong> 5 N&auml;chte zwischen Check-out Kaunertal und R&uuml;ckflug ab M&uuml;nchen. Skipass gilt noch bis 04.01.! Ideen? Innsbruck? Familie? M&uuml;nchen-Sightseeing?</div>
+
+    <div class="phase-label">Fr. 08.01. &ndash; Sa. 09.01. &middot; R&uuml;ckflug M&uuml;nchen &rarr; Bangkok</div>
+
+    <!-- RUECKFLUG -->
+    <div class="day-card" data-day="7">
+        <div class="day-header">
+            <div class="day-date">
+                <span class="day-weekday">FR</span>
+                <span class="day-number">08</span>
+                <span class="day-month">JAN</span>
+            </div>
+            <div class="day-title">
+                <h3>R&uuml;ckflug &ndash; Tsch&uuml;ss Winter, hallo Bangkok!</h3>
+                <div class="day-location">&#x1F4CD; M&uuml;nchen &rarr; Istanbul &rarr; Bangkok</div>
+            </div>
+            <div class="day-weather">
+                <span class="weather-icon">&#x2708;&#xFE0F;</span>
+                <span class="weather-temp">1&deg;C</span>
+            </div>
+        </div>
+        <div class="day-content">
+            <div class="day-schedule">
+                <div class="schedule-item highlight">
+                    <span class="time">19:05</span>
+                    <span class="activity">Abflug M&uuml;nchen (MUC) &ndash; Turkish Airlines via Istanbul</span>
+                </div>
+                <div class="schedule-item">
+                    <span class="time">15:10 +1</span>
+                    <span class="activity">Ankunft Bangkok am Sa. 09.01. &ndash; Flugdauer 14h 5min</span>
+                </div>
+            </div>
+            <div class="day-details">
+                <div class="detail-box flight-box">
+                    <h4>&#x2708;&#xFE0F; Flugdetails</h4>
+                    <p><strong>MUC &rarr; IST &rarr; BKK</strong> | Economy Class | Buchungsreferenz: WP4DGY</p>
+                    <p>Passagiere: Mark, Claudia, Luisa &amp; Marlene</p>
+                </div>
+            </div>
+        </div>
+        <div class="day-rating" data-day="7">
+            <span class="rating-label">Tages-Rating:</span>
+            <div class="stars">
+                <span class="star" data-value="1">&#x2B50;</span>
+                <span class="star" data-value="2">&#x2B50;</span>
+                <span class="star" data-value="3">&#x2B50;</span>
+                <span class="star" data-value="4">&#x2B50;</span>
+                <span class="star" data-value="5">&#x2B50;</span>
+            </div>
+            <span class="rating-display"></span>
+        </div>
+    </div>
+</section>
+
+<!-- HOTELS -->
+<section class="section" id="hotels">
+    <h2 class="section-title">Unterkuenfte</h2>
+    <div class="hotel-grid">
+        <div class="hotel-card">
+            <div class="hotel-status booked">GEBUCHT</div>
+            <h3>Apart Gletscherblick &ndash; Apartment &bdquo;Bliggspitz&ldquo;</h3>
+            <p class="hotel-location">&#x1F4CD; Feichten 168, 6524 Kaunertal, Tirol</p>
+            <p class="hotel-dates">26.12.2026 &ndash; 03.01.2027 &ndash; 8 N&auml;chte</p>
+            <p>2 Erw. + 3 Kinder (18/16/14). Schlafzimmer + Wohnzimmer mit Schlafsofa, Bad mit Wanne &amp; Dusche, eigene K&uuml;che mit Sp&uuml;lmaschine, 2x Flat-TV, WLAN. Skiraum mit Schuhtrockner, kostenlose WinterCard, Parkplatz vorm Haus, Br&ouml;tchenservice. <strong>1.712,00 &euro;</strong> inkl. Kurtaxe.</p>
+            <p class="hotel-dates">Res.-Nr. 9274Y9 &middot; App &bdquo;SARA&ldquo; &middot; Online Check-in verf&uuml;gbar &middot; Tel. +43 5475 302</p>
+        </div>
+        <div class="hotel-card">
+            <div class="hotel-status family">BEI FREUNDEN (GEPLANT)</div>
+            <h3>Bei Familie Jantz</h3>
+            <p class="hotel-location">&#x1F4CD; Hepberg (bei Ingolstadt)</p>
+            <p class="hotel-dates">20.12. &ndash; 22.12.2026 &ndash; 2 N&auml;chte</p>
+            <p>Erst Christkindlesmarkt N&uuml;rnberg, dann ankommen, Jetlag auskurieren und Wiedersehen feiern!</p>
+        </div>
+        <div class="hotel-card">
+            <div class="hotel-status family">BEI FAMILIE (GEPLANT)</div>
+            <h3>Bei Oma &amp; Opa &ndash; Weihnachten! &#x1F384;</h3>
+            <p class="hotel-location">&#x1F4CD; Bonn</p>
+            <p class="hotel-dates">22.12. &ndash; 26.12.2026 &ndash; 4 N&auml;chte</p>
+            <p>Das beste Hotel der Welt &ndash; mit Kuchen-Flatrate und Liebe inklusive. Heiligabend &amp; beide Weihnachtstage bei den Gro&szlig;eltern!</p>
+        </div>
+        <div class="hotel-card">
+            <div class="hotel-status">OFFEN</div>
+            <h3>Nach-Ski-Phase: 03. &ndash; 08.01.</h3>
+            <p class="hotel-location">&#x1F4CD; offen</p>
+            <p class="hotel-dates">03.01. &ndash; 08.01.2027 &ndash; 5 N&auml;chte</p>
+            <p>Zwischen Check-out Kaunertal und R&uuml;ckflug ab M&uuml;nchen. Noch zu planen.</p>
+        </div>
+    </div>
+</section>
+
+<!-- MOBILITAET -->
+<section class="section" id="mobilitaet">
+    <h2 class="section-title">Mobilit&auml;t</h2>
+    <p class="section-sub">Wie kommen wir von A nach B &ndash; und was kostet das?</p>
+
+    <div class="mobility-card">
+        <div class="mobility-status">GEL&Ouml;ST: EIGENES AUTO &#x2713;</div>
+        <h3>&#x1F697; Unser Auto: MB E 250 T-Modell (schwarz, EI-CB 1604)</h3>
+        <p class="mobility-tagline">Steht bei Familie Jantz in Hepberg &ndash; genau da, wo wir am 20.12. hinkommen. Kein Mietwagen n&ouml;tig! (Im Sommer f&auml;hrt es die komplette Summer Tour.)</p>
+
+        <div class="mobility-plan">
+            <h4>So l&auml;uft's</h4>
+            <ul>
+                <li><strong>20.12.:</strong> Abholung MUC durch Familie Jantz &#x2713; &ndash; Christkindlesmarkt N&uuml;rnberg, dann nach Hepberg zum Auto.</li>
+                <li><strong>22.12.:</strong> Mit dem eigenen E 250 T nach Bonn (~480 km / ~5h).</li>
+                <li><strong>26.12.:</strong> Bonn &rarr; Kaunertal (~700 km / ~7h) &ndash; fr&uuml;h losfahren!</li>
+                <li><strong>26.12.&ndash;03.01.:</strong> T&auml;glich Gletscherstra&szlig;e (bis 2.750 m) oder Fendels &ndash; kostenlose Parkpl&auml;tze am Apartment.</li>
+                <li><strong>08.01.:</strong> Kaunertal/Region &rarr; Flughafen M&uuml;nchen (Abflug 19:05).</li>
+                <li><strong>Carla:</strong> trifft uns in N&uuml;rnberg &#x2713; &ndash; Zug Mannheim &rarr; N&uuml;rnberg (~2,5h, ICE direkt), Ticket noch buchen.</li>
+            </ul>
+        </div>
+
+        <div class="mobility-cost-grid">
+            <div class="mobility-cost-box">
+                <span class="mobility-cost-label">Sprit (~2.000 km gesamt)</span>
+                <span class="mobility-cost-amount">~250 &ndash; 350 &euro;</span>
+                <span class="mobility-cost-note">Hepberg&rarr;Bonn&rarr;Kaunertal&rarr;MUC + Pendeln im Tal</span>
+            </div>
+            <div class="mobility-cost-box">
+                <span class="mobility-cost-label">Vignette &Ouml;sterreich</span>
+                <span class="mobility-cost-amount">~12 &euro;</span>
+                <span class="mobility-cost-note">10-Tages-Vignette digital, vorab online kaufen</span>
+            </div>
+            <div class="mobility-cost-box mobility-cost-total">
+                <span class="mobility-cost-label">Mobilit&auml;t gesamt</span>
+                <span class="mobility-cost-amount">~300 &ndash; 400 &euro;</span>
+                <span class="mobility-cost-note">Statt ~1.500+ &euro; Mietwagen &ndash; das Auto zahlt sich aus!</span>
+            </div>
+        </div>
+
+        <div class="mobility-questions">
+            <h4>&#x2753; Was wir noch kl&auml;ren m&uuml;ssen</h4>
+            <ul>
+                <li><strong>Mietwagen-Gr&ouml;&szlig;e:</strong> 5 Personen + Wintergep&auml;ck + ggf. Skier &ndash; Kombi reicht nicht?</li>
+                <li><strong>Schneeketten:</strong> f&uuml;r die Gletscherstra&szlig;e (bis 2.750 m) dabei haben oder vor Ort leihen?</li>
+                <li><strong>Ski mieten statt schleppen:</strong> Verleih in Feichten direkt im Ort.</li>
+                <li><strong>Carlas Zugticket</strong> Mannheim &rarr; N&uuml;rnberg buchen &ndash; Sparpreis-Alarm vor Weihnachten!</li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+<!-- KOSTEN-TRACKER -->
+<section class="section" id="kosten">
+    <h2 class="section-title">Kosten-Tracker</h2>
+    <p class="section-sub">Was bisher ausgegeben wurde &ndash; und was noch kommt</p>
+    <div class="cost-summary">
+        <div class="cost-total">
+            <span class="cost-label">Fl&uuml;ge &amp; Unterk&uuml;nfte</span>
+            <span class="cost-amount cost-amount-fixed" id="costFixed">0 &euro;</span>
+        </div>
+        <div class="cost-total">
+            <span class="cost-label">Reisekasse on the go</span>
+            <span class="cost-amount cost-amount-go" id="costOnTheGo">0 &euro;</span>
+        </div>
+        <div class="cost-total cost-total-grand">
+            <span class="cost-label">Gesamt</span>
+            <span class="cost-amount cost-amount-grand" id="costTotal">0 &euro;</span>
+        </div>
+    </div>
+    <div class="cost-table-wrap">
+        <table class="cost-table">
+            <thead>
+                <tr>
+                    <th>Was</th>
+                    <th>Wann</th>
+                    <th>Status</th>
+                    <th>Betrag</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Fl&uuml;ge Mark, Claudia, Luisa &amp; Marlene</strong><br><span class="cost-sub">BKK&harr;MUC via IST &bull; Turkish Airlines &bull; WP4DGY</span></td>
+                    <td>19.12. / 08.01.</td>
+                    <td><span class="cost-status booked">GEBUCHT</span></td>
+                    <td class="cost-val" data-amount="3158.20">3.158,20 &euro;</td>
+                </tr>
+                <tr>
+                    <td><strong>Skip&auml;sse 8-in-9-Tage Gletscher &amp; Fendels</strong><br><span class="cost-sub">5 Personen inkl. Keycards &amp; Stornogarantie &bull; Bestellung 4950821</span></td>
+                    <td>27.12. &ndash; 04.01.</td>
+                    <td><span class="cost-status paid">BEZAHLT</span></td>
+                    <td class="cost-val" data-amount="1840.00">1.840,00 &euro;</td>
+                </tr>
+                <tr>
+                    <td><strong>Apart Gletscherblick &bdquo;Bliggspitz&ldquo;</strong><br><span class="cost-sub">8 N&auml;chte, 2 Erw. + 3 Kinder, inkl. Kurtaxe &bull; Res. 9274Y9</span></td>
+                    <td>26.12. &ndash; 03.01.</td>
+                    <td><span class="cost-status booked">GEBUCHT</span></td>
+                    <td class="cost-val" data-amount="1712.00">1.712,00 &euro;</td>
+                </tr>
+                <tr>
+                    <td><strong>Unterkunft 20.&ndash;26.12. + 03.&ndash;08.01.</strong><br><span class="cost-sub">noch offen</span></td>
+                    <td>folgt</td>
+                    <td><span class="cost-status">OFFEN</span></td>
+                    <td class="cost-val" data-amount="0">0,00 &euro;</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <p style="text-align:center; color: var(--text-dim); font-size: 0.8rem; margin-top: 1rem;">Skip&auml;sse: je 24 &euro; Stornogarantie/Person enthalten &middot; Keycards kostenlos</p>
+
+    <!-- LIVE AUSGABEN-TRACKER -->
+    <div class="expense-tracker" id="expenseTracker">
+        <h3 class="expense-title">Reisekasse</h3>
+        <p class="expense-sub">Ausgaben unterwegs &ndash; einfach eintragen, alle sehen alles</p>
+
+        <div class="expense-summary-row">
+            <div class="expense-summary-box">
+                <span class="expense-summary-label">Ausgaben unterwegs</span>
+                <span class="expense-summary-amount" id="expenseTotal">0,00 &euro;</span>
+            </div>
+        </div>
+
+        <div class="expense-form" id="expenseForm">
+            <div class="expense-form-row">
+                <select id="expCat" class="expense-input">
+                    <option value="">Kategorie...</option>
+                    <option value="restaurant">&#x1F37D;&#xFE0F; Restaurant</option>
+                    <option value="gluehwein">&#x2615; Gl&uuml;hwein &amp; Kakao</option>
+                    <option value="skipass">&#x1F3BF; Skipass / Rodel</option>
+                    <option value="sprit">&#x26FD; Sprit</option>
+                    <option value="maut">&#x1F6E3;&#xFE0F; Maut / Vignette</option>
+                    <option value="supermarkt">&#x1F6D2; Supermarkt</option>
+                    <option value="aktivitaet">&#x26F7;&#xFE0F; Aktivit&auml;t</option>
+                    <option value="geschenke">&#x1F381; Geschenke</option>
+                    <option value="parken">&#x1F17F;&#xFE0F; Parken</option>
+                    <option value="sonstiges">&#x1F4B6; Sonstiges</option>
+                </select>
+                <input type="number" id="expAmount" class="expense-input" placeholder="Betrag &euro;" step="0.01" min="0">
+            </div>
+            <div class="expense-form-row">
+                <input type="text" id="expDesc" class="expense-input expense-desc" placeholder="Was? z.B. Gl&uuml;hwein am Weihnachtsmarkt">
+                <input type="date" id="expDate" class="expense-input">
+            </div>
+            <div class="expense-form-row">
+                <button id="expSubmit" class="expense-btn">Eintragen</button>
+            </div>
+        </div>
+
+        <div class="expense-list" id="expenseList">
+            <!-- filled by JS -->
+        </div>
+    </div>
+</section>
+
+<!-- SIDE QUESTS -->
+<section class="section sidequest-section" id="sidequest">
+    <h2 class="section-title">Side Quests</h2>
+    <p class="section-sub">Familien-Challenges fuer den ultimativen Winter! Wer sammelt die meisten Punkte?</p>
+
+    <div class="quest-grid">
+        <div class="quest-card" data-quest="1">
+            <div class="quest-difficulty easy">EASY</div>
+            <h3>&#x2615; Gl&uuml;hwein- &amp; Kakao-Degustation</h3>
+            <p>Probiert an JEDEM Ort mindestens einen Gl&uuml;hwein (Erwachsene) bzw. Kakao (alle). Bewertet von 1-10. Wer findet den besten des Winters?</p>
+            <div class="quest-reward">+10 XP pro Becher</div>
+            <label class="quest-check"><input type="checkbox"> Erledigt!</label>
+        </div>
+        <div class="quest-card" data-quest="2">
+            <div class="quest-difficulty easy">EASY</div>
+            <h3>&#x26C4; Schneemann-Challenge</h3>
+            <p>Baut den kreativsten Schneemann der Reise. Foto-Beweis Pflicht! Am Ende wird abgestimmt.</p>
+            <div class="quest-reward">+30 XP</div>
+            <label class="quest-check"><input type="checkbox"> Erledigt!</label>
+        </div>
+        <div class="quest-card" data-quest="3">
+            <div class="quest-difficulty medium">MEDIUM</div>
+            <h3>&#x1F3BF; Piste-Champion</h3>
+            <p>Wer schafft die meisten Abfahrten an einem Tag &ndash; ohne Sturz? Loser kocht abends!</p>
+            <div class="quest-reward">+50 XP</div>
+            <label class="quest-check"><input type="checkbox"> Erledigt!</label>
+        </div>
+        <div class="quest-card" data-quest="4">
+            <div class="quest-difficulty easy">EASY</div>
+            <h3>&#x1F4F8; Winter Golden Hour Challenge</h3>
+            <p>Jeden Abend zur blauen Stunde: Jeder macht EIN Foto. Am Ende des Urlaubs wird abgestimmt &ndash; bestes Foto gewinnt!</p>
+            <div class="quest-reward">+5 XP pro Foto</div>
+            <label class="quest-check"><input type="checkbox"> Erledigt!</label>
+        </div>
+        <div class="quest-card" data-quest="5">
+            <div class="quest-difficulty medium">MEDIUM</div>
+            <h3>&#x1F36A; Pl&auml;tzchen-B&auml;ckerei</h3>
+            <p>Mindestens eine Sorte Weihnachtspl&auml;tzchen gemeinsam backen &ndash; und nicht alles sofort aufessen!</p>
+            <div class="quest-reward">+40 XP</div>
+            <label class="quest-check"><input type="checkbox"> Erledigt!</label>
+        </div>
+        <div class="quest-card" data-quest="6">
+            <div class="quest-difficulty medium">MEDIUM</div>
+            <h3>&#x1F384; Weihnachtsmarkt-Hopping</h3>
+            <p>Besucht mindestens 3 verschiedene Weihnachtsm&auml;rkte und k&uuml;rt den sch&ouml;nsten. Start: N&uuml;rnberger Christkindlesmarkt am 20.12.! &#x2713;</p>
+            <div class="quest-reward">+25 XP pro Markt</div>
+            <label class="quest-check"><input type="checkbox"> Erledigt!</label>
+        </div>
+        <div class="quest-card" data-quest="7">
+            <div class="quest-difficulty hard">HARD</div>
+            <h3>&#x1F976; Eisbade-Mutprobe</h3>
+            <p>Barfu&szlig; in den Schnee oder kurz ins eiskalte Wasser &ndash; Video-Beweis! Nur f&uuml;r die Harten.</p>
+            <div class="quest-reward">+100 XP + ewiger Ruhm</div>
+            <label class="quest-check"><input type="checkbox"> Erledigt!</label>
+        </div>
+        <div class="quest-card" data-quest="8">
+            <div class="quest-difficulty hard">HARD</div>
+            <h3>&#x1F6F7; Rodel-Rennen</h3>
+            <p>Das grosse Familien-Rodelrennen &ndash; eine offizielle Rodelbahn, alle treten an, Zeitmessung Pflicht!</p>
+            <div class="quest-reward">+75 XP f&uuml;r den Sieg</div>
+            <label class="quest-check"><input type="checkbox"> Erledigt!</label>
+        </div>
+    </div>
+
+    <div class="xp-tracker">
+        <h3>XP-Tracker</h3>
+        <div class="xp-bars">
+            <div class="xp-person">
+                <span>Mark</span>
+                <div class="xp-bar"><div class="xp-fill" id="xp-mark" style="width:0%"></div></div>
+                <span class="xp-value" id="xp-mark-val">0 XP</span>
+            </div>
+            <div class="xp-person">
+                <span>Claudia</span>
+                <div class="xp-bar"><div class="xp-fill" id="xp-claudia" style="width:0%"></div></div>
+                <span class="xp-value" id="xp-claudia-val">0 XP</span>
+            </div>
+            <div class="xp-person">
+                <span>Carla</span>
+                <div class="xp-bar"><div class="xp-fill" id="xp-carla" style="width:0%"></div></div>
+                <span class="xp-value" id="xp-carla-val">0 XP</span>
+            </div>
+            <div class="xp-person">
+                <span>Luisa</span>
+                <div class="xp-bar"><div class="xp-fill" id="xp-luisa" style="width:0%"></div></div>
+                <span class="xp-value" id="xp-luisa-val">0 XP</span>
+            </div>
+            <div class="xp-person">
+                <span>Marlene</span>
+                <div class="xp-bar"><div class="xp-fill" id="xp-marlene" style="width:0%"></div></div>
+                <span class="xp-value" id="xp-marlene-val">0 XP</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- PACKLISTE -->
+<section class="section" id="packliste">
+    <h2 class="section-title">Packliste</h2>
+    <p class="section-sub">Check check &ndash; habt ihr alles? (Winter-Edition)</p>
+    <div class="pack-grid">
+        <div class="pack-category">
+            <h3>&#x1F9E5; Kleidung</h3>
+            <label><input type="checkbox"> Winterjacke (richtig warm!)</label>
+            <label><input type="checkbox"> M&uuml;tze, Schal &amp; Handschuhe</label>
+            <label><input type="checkbox"> Thermo-/Skiunterw&auml;sche</label>
+            <label><input type="checkbox"> Dicke Socken (mehrere Paar)</label>
+            <label><input type="checkbox"> Pullis zum Zwiebeln</label>
+            <label><input type="checkbox"> Warme, wasserfeste Schuhe/Stiefel</label>
+            <label><input type="checkbox"> Schneehose (falls Ski/Rodeln)</label>
+            <label><input type="checkbox"> Schickes Outfit (Weihnachten/Silvester!)</label>
+        </div>
+        <div class="pack-category">
+            <h3>&#x1F9F4; Hygiene &amp; Pflege</h3>
+            <label><input type="checkbox"> Lippenpflege (K&auml;lte!)</label>
+            <label><input type="checkbox"> Handcreme &amp; Bodylotion</label>
+            <label><input type="checkbox"> Sonnencreme (Schnee reflektiert!)</label>
+            <label><input type="checkbox"> Reiseapotheke</label>
+            <label><input type="checkbox"> Zahnbuerste &amp; Co</label>
+        </div>
+        <div class="pack-category">
+            <h3>&#x1F4F1; Tech</h3>
+            <label><input type="checkbox"> Reiseadapter (Thailand &rarr; EU)</label>
+            <label><input type="checkbox"> Powerbank (Akkus m&ouml;gen keine K&auml;lte!)</label>
+            <label><input type="checkbox"> Kopfhoerer</label>
+            <label><input type="checkbox"> Ladekabel</label>
+            <label><input type="checkbox"> Kamera</label>
+        </div>
+        <div class="pack-category">
+            <h3>&#x1F4C4; Dokumente</h3>
+            <label><input type="checkbox"> Reisepaesse</label>
+            <label><input type="checkbox"> Flugtickets (digital/Print)</label>
+            <label><input type="checkbox"> Hotel-Buchungen</label>
+            <label><input type="checkbox"> Fuehrerschein (Mietwagen!)</label>
+            <label><input type="checkbox"> Kreditkarte</label>
+            <label><input type="checkbox"> Auslandskrankenversicherung (mit Wintersport-Deckung!)</label>
+        </div>
+        <div class="pack-category">
+            <h3>&#x2744;&#xFE0F; Schnee &amp; Fun</h3>
+            <label><input type="checkbox"> Skibrille / Sonnenbrille</label>
+            <label><input type="checkbox"> Thermoskanne</label>
+            <label><input type="checkbox"> Kartenspiele / Brettspiele</label>
+            <label><input type="checkbox"> Buecher / Kindle</label>
+            <label><input type="checkbox"> Taschenw&auml;rmer</label>
+        </div>
+    </div>
+</section>
+
+<!-- TO-DOs -->
+<section class="section" id="todos">
+    <h2 class="section-title">To-Do Liste</h2>
+    <p class="section-sub">Was noch erledigt werden muss vor der Abreise!</p>
+    <div class="todo-list">
+        <div class="todo-item urgent">
+            <label><input type="checkbox"> <strong>Hepberg &amp; Bonn best&auml;tigen</strong> &ndash; 2 N&auml;chte bei Familie Jantz, dann Oma &amp; Opa Bescheid geben &#x1F384;</label>
+        </div>
+        <div class="todo-item urgent">
+            <label><input type="checkbox"> <strong>Carlas Zugticket buchen</strong> &ndash; Mannheim &rarr; N&uuml;rnberg zum 20.12., fr&uuml;h buchen (Weihnachtsverkehr!)</label>
+        </div>
+        <div class="todo-item urgent">
+            <label><input type="checkbox"> <strong>Auto winterfest machen</strong> &ndash; Winterreifen auf den E 250, Schneeketten, ggf. Dachbox &ndash; mit Familie Jantz koordinieren</label>
+        </div>
+        <div class="todo-item">
+            <label><input type="checkbox"> <strong>Plan 03.&ndash;08.01. festlegen</strong> &ndash; Skipass gilt noch bis 04.01.!</label>
+        </div>
+        <div class="todo-item">
+            <label><input type="checkbox"> <strong>Skiverleih Kaunertal reservieren</strong> &ndash; oder eigene Ausr&uuml;stung mitnehmen?</label>
+        </div>
+        <div class="todo-item">
+            <label><input type="checkbox"> <strong>Skikleidung-Check</strong> &ndash; alle gewachsen seit dem letzten Skiurlaub? Helme!</label>
+        </div>
+        <div class="todo-item">
+            <label><input type="checkbox"> <strong>Online Check-in Apart Gletscherblick</strong> &ndash; App &bdquo;SARA&ldquo;, spart Zeit bei Anreise</label>
+        </div>
+        <div class="todo-item">
+            <label><input type="checkbox"> <strong>Skipass-Abholung vorbereiten</strong> &ndash; E-Mail mit Axess-Einl&ouml;secode + Ausweise mit Foto f&uuml;r alle</label>
+        </div>
+        <div class="todo-item">
+            <label><input type="checkbox"> <strong>Auslandskrankenversicherung pr&uuml;fen</strong> &ndash; Wintersport-Deckung + Bergung!</label>
+        </div>
+        <div class="todo-item">
+            <label><input type="checkbox"> <strong>Br&ouml;tchenservice vorbestellen</strong> &ndash; f&uuml;r den ersten Morgen im Apartment</label>
+        </div>
+    </div>
+</section>
+
+<!-- LIVE WETTER -->
+<section class="section" id="wetter">
+    <h2 class="section-title">Wetter &amp; Schnee</h2>
+    <p class="section-sub">Live-Daten &ndash; 3-Tage-Vorschau fuer euren aktuellen Reise-Ort</p>
+
+    <!-- Live Forecast (filled by JS) -->
+    <div id="liveWeather" class="live-weather-container">
+        <div class="live-weather-loading">Wetterdaten werden geladen...</div>
+    </div>
+
+    <!-- Schneebericht (sichtbar waehrend der Kaunertal-Phase) -->
+    <div id="snowSection" class="tides-section" style="display:none;">
+        <div class="tides-card">
+            <h3>&#x2744;&#xFE0F; Schneebericht &ndash; Kaunertal</h3>
+            <p>Schneeh&ouml;hen, offene Lifte &amp; Pistenstatus f&uuml;r Gletscher und Fendels &ndash; immer aktuell checken, bevor ihr losfahrt. Die Gletscherstra&szlig;e ist bei starkem Schneefall manchmal kurz gesperrt!</p>
+            <div class="tides-links">
+                <a href="https://www.kaunertaler-gletscher.at" target="_blank" rel="noopener" class="tide-link">&#x1F3D4;&#xFE0F; Kaunertaler Gletscher (offiziell)</a>
+                <a href="https://www.bergfex.at/kaunertaler-gletscher/" target="_blank" rel="noopener" class="tide-link">&#x1F3BF; Bergfex: Gletscher Schneebericht</a>
+                <a href="https://www.bergfex.at/fendels/" target="_blank" rel="noopener" class="tide-link">&#x26F7;&#xFE0F; Bergfex: Fendels</a>
+            </div>
+            <div class="tides-tips">
+                <p><strong>Gut zu wissen:</strong></p>
+                <p>&#x1F698; <strong>Gletscherstra&szlig;e:</strong> 26 km vom Tal bis 2.750 m &ndash; Status morgens checken</p>
+                <p>&#x2600;&#xFE0F; <strong>H&ouml;hensonne:</strong> auf 3.000 m brennt die Sonne auch im Dezember &ndash; eincremen!</p>
+                <p>&#x26A0;&#xFE0F; <strong>Lawinenlage:</strong> abseits der Piste nur mit Guide &ndash; lawinen.report checken</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Statischer Wetter-Guide als Kontext -->
+    <h3 class="weather-static-title">Klima-Ueberblick nach Region (typische Werte)</h3>
+    <div class="weather-grid">
+        <div class="weather-card">
+            <h3>&#x1F3D4;&#xFE0F; Kaunertaler Gletscher (2.150&ndash;3.113 m)</h3>
+            <p class="weather-period">27. Dez &ndash; 4. Jan</p>
+            <div class="weather-details">
+                <p>&#x1F321;&#xFE0F; <strong>-15 bis -5&deg;C</strong></p>
+                <p>&#x2744;&#xFE0F; Schneesicher &ndash; Gletscher!</p>
+                <p>&#x1F32C;&#xFE0F; Oben am Grat kann es st&uuml;rmen</p>
+            </div>
+            <p class="weather-tip">Tipp: Zwiebellook + Gesichtsschutz f&uuml;r kalte Liftfahrten!</p>
+        </div>
+        <div class="weather-card">
+            <h3>&#x1F3E0; Feichten im Tal (1.273 m)</h3>
+            <p class="weather-period">26. Dez &ndash; 3. Jan</p>
+            <div class="weather-details">
+                <p>&#x1F321;&#xFE0F; <strong>-10 bis 0&deg;C</strong></p>
+                <p>&#x1F328;&#xFE0F; Schnee gut m&ouml;glich, Winterlandschaft</p>
+                <p>&#x1F319; Nachts klar = richtig kalt</p>
+            </div>
+            <p class="weather-tip">Tipp: Warme Schuhe f&uuml;r abends &ndash; Sternenhimmel-Spaziergang!</p>
+        </div>
+        <div class="weather-card">
+            <h3>&#x26F7;&#xFE0F; Fendels (1.350&ndash;2.300 m)</h3>
+            <p class="weather-period">flexibel mit dem Skipass</p>
+            <div class="weather-details">
+                <p>&#x1F321;&#xFE0F; <strong>-8 bis -1&deg;C</strong></p>
+                <p>&#x2600;&#xFE0F; Sonniges, familienfreundliches Skigebiet</p>
+                <p>Sch&ouml;ne Alternative bei Wind am Gletscher</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- SPRACH-SPICKZETTEL -->
+<section class="section" id="sprachen">
+    <h2 class="section-title">Redst du Tirolerisch?</h2>
+    <p class="section-sub">Euer Spickzettel fuer Tirol &ndash; damit ihr die Einheimischen versteht (und sie euch!)</p>
+
+    <div class="french-grid">
+        <div class="french-card">
+            <h3>&#x1F44B; Basics</h3>
+            <div class="phrase"><span class="fr">Griass di / Griass enk</span><span class="de">Hallo (einer / mehrere)</span></div>
+            <div class="phrase"><span class="fr">Servus</span><span class="de">Hallo / Tsch&uuml;ss</span></div>
+            <div class="phrase"><span class="fr">Pfiat di</span><span class="de">Tsch&uuml;ss (beh&uuml;t dich)</span></div>
+            <div class="phrase"><span class="fr">Passt schon</span><span class="de">Alles gut / kein Problem</span></div>
+            <div class="phrase"><span class="fr">Gell?</span><span class="de">Oder? / Stimmt's?</span></div>
+            <div class="phrase"><span class="fr">Freilich</span><span class="de">Nat&uuml;rlich / klar</span></div>
+            <div class="phrase"><span class="fr">A bissl</span><span class="de">Ein bisschen</span></div>
+        </div>
+
+        <div class="french-card">
+            <h3>&#x1F3BF; Auf der Piste</h3>
+            <div class="phrase"><span class="fr">Es staubt!</span><span class="de">Pulverschnee!</span></div>
+            <div class="phrase"><span class="fr">De Brettln</span><span class="de">Die Ski</span></div>
+            <div class="phrase"><span class="fr">Einkehrschwung</span><span class="de">Stopp auf der H&uuml;tte</span></div>
+            <div class="phrase"><span class="fr">H&uuml;ttengaudi</span><span class="de">Party auf der H&uuml;tte</span></div>
+            <div class="phrase"><span class="fr">Mords-Gaudi</span><span class="de">Riesenspa&szlig;</span></div>
+            <div class="phrase"><span class="fr">Gamsig</span><span class="de">&Uuml;berm&uuml;tig / wild drauf</span></div>
+            <div class="phrase"><span class="fr">Ziach o!</span><span class="de">Gib Gas / fahr los!</span></div>
+        </div>
+
+        <div class="french-card">
+            <h3>&#x1F37D;&#xFE0F; Auf der H&uuml;tte</h3>
+            <div class="phrase"><span class="fr">Kasspatzln</span><span class="de">K&auml;sesp&auml;tzle</span></div>
+            <div class="phrase"><span class="fr">Tiroler Gr&ouml;stl</span><span class="de">Pfanne mit Kartoffeln, Fleisch &amp; Ei</span></div>
+            <div class="phrase"><span class="fr">Kaiserschmarrn</span><span class="de">S&uuml;&szlig;er zerrupfter Pfannkuchen</span></div>
+            <div class="phrase"><span class="fr">Germkn&ouml;del</span><span class="de">Hefekn&ouml;del mit Powidl &amp; Mohn</span></div>
+            <div class="phrase"><span class="fr">Skiwasser</span><span class="de">Himbeer-Zitronen-Schorle</span></div>
+            <div class="phrase"><span class="fr">A Halbe</span><span class="de">Ein halber Liter Bier</span></div>
+            <div class="phrase"><span class="fr">Jagatee</span><span class="de">Jagertee &ndash; Vorsicht, stark! &#x1F605;</span></div>
+        </div>
+
+        <div class="french-card">
+            <h3>&#x1F384; Festtage</h3>
+            <div class="phrase"><span class="fr">Frohe Weihnachten!</span><span class="de">24.12. &ndash; Bescherung am Abend!</span></div>
+            <div class="phrase"><span class="fr">An guatn Rutsch!</span><span class="de">Guten Rutsch ins neue Jahr</span></div>
+            <div class="phrase"><span class="fr">Prosit Neujahr!</span><span class="de">Frohes neues Jahr</span></div>
+            <div class="phrase"><span class="fr">Heilige Drei K&ouml;nige</span><span class="de">06.01. &ndash; Feiertag in &Ouml;sterreich!</span></div>
+            <div class="phrase"><span class="fr">Es schneibt</span><span class="de">Es schneit</span></div>
+        </div>
+
+        <div class="french-card">
+            <h3>&#x1F9EA; Der ultimative Test</h3>
+            <div class="phrase"><span class="fr">Oachkatzlschwoaf</span><span class="de">Eichh&ouml;rnchenschweif &ndash; wer's sagen kann, ist offiziell Tiroler! &#x1F43F;&#xFE0F;</span></div>
+            <div class="phrase"><span class="fr">I hu di gern</span><span class="de">Ich hab dich lieb</span></div>
+            <div class="phrase"><span class="fr">Wia geht's da?</span><span class="de">Wie geht es dir?</span></div>
+            <div class="phrase"><span class="fr">Woasch eh</span><span class="de">Wei&szlig;t du eh / du wei&szlig;t schon</span></div>
+        </div>
+    </div>
+</section>
+
+<!-- TAGES-TAGEBUCH -->
+<section class="section" id="tagebuch">
+    <h2 class="section-title">Reise-Tagebuch</h2>
+    <p class="section-sub">Schreibt eure Highlights, lustige Momente und Erinnerungen auf &ndash; fuer jeden Tag!</p>
+
+    <div class="diary-container" id="diaryContainer">
+        <!-- Filled by JS -->
+    </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+    <div class="footer-content">
+        <p class="footer-title">Berger Winter Tour 2026</p>
+        <p>Bangkok &rarr; M&uuml;nchen &rarr; N&uuml;rnberg &rarr; Hepberg &rarr; Bonn &rarr; Kaunertal &rarr; M&uuml;nchen &rarr; Bangkok &middot; 19. Dezember 2026 &ndash; 9. Januar 2027</p>
+        <p class="footer-countdown" id="countdownFooter"></p>
+        <p class="footer-small">Made with love (and snow) for the best winter ever &#x2744;&#xFE0F;</p>
+    </div>
+</footer>
+
+<script src="script.js?v=1"></script>
+</body>
+</html>

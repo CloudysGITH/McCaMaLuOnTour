@@ -1,0 +1,20 @@
+{
+    "name": "Berger Summer Tour 2026",
+    "short_name": "BST 26",
+    "start_url": "./",
+    "display": "standalone",
+    "background_color": "#0a0a0f",
+    "theme_color": "#7c5cfc",
+    "icons": [
+        {
+            "src": "icon-180.png?v=3",
+            "sizes": "180x180",
+            "type": "image/png"
+        },
+        {
+            "src": "icon-512.png?v=3",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ]
+}

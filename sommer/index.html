@@ -1,0 +1,2344 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Berger Summer Tour 2026</title>
+
+    <!-- Homescreen Icon -->
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png?v=3">
+    <link rel="icon" type="image/png" sizes="180x180" href="icon-180.png?v=3">
+    <link rel="manifest" href="manifest.json?v=3">
+    <meta name="theme-color" content="#7c5cfc">
+
+    <!-- Open Graph / WhatsApp Preview -->
+    <meta property="og:title" content="Berger Summer Tour 2026">
+    <meta property="og:description" content="Bangkok → Bordeaux → Île d'Oléron → Beaune → Sindelfingen → Mannheim → Bonn → München → Passau → Sindelfingen → Mannheim → Leipzig → Ingolstadt → Bangkok | 20. Juni – 5. August 2026">
+    <meta property="og:image" content="https://cloudysgith.github.io/McCaMaLuOnTour/sommer/og-image.png">
+    <meta property="og:url" content="https://cloudysgith.github.io/McCaMaLuOnTour/sommer/">
+    <meta property="og:type" content="website">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css?v=20260328h">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
+        import { getDatabase, ref, set, onValue, push } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAVWHSOEQCpavUEm8tCwB1zZcf8lvDiAFA",
+            authDomain: "bst2026-41f21.firebaseapp.com",
+            databaseURL: "https://bst2026-41f21-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "bst2026-41f21",
+            storageBucket: "bst2026-41f21.firebasestorage.app",
+            messagingSenderId: "120422502733",
+            appId: "1:120422502733:web:3c1a80948654892e96e704"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+        // Make available globally
+        window.fbDb = db;
+        window.fbRef = ref;
+        window.fbSet = set;
+        window.fbOnValue = onValue;
+        window.fbPush = push;
+        window.firebaseReady = true;
+        window.dispatchEvent(new Event('firebase-ready'));
+    </script>
+</head>
+<body>
+
+<!-- PASSWORD SCREEN -->
+<div class="lock-screen" id="lockScreen">
+    <div class="lock-content">
+        <div class="lock-emoji">&#x1F334;</div>
+        <h1 class="lock-title">Berger Summer Tour 2026</h1>
+        <p class="lock-sub">Familien-Bereich &ndash; bitte Codewort eingeben</p>
+        <form id="lockForm" onsubmit="return false;">
+            <input type="password" id="lockInput" class="lock-input" placeholder="Codewort..." autocomplete="off" autofocus>
+            <button type="submit" class="lock-btn" id="lockBtn">Rein da!</button>
+        </form>
+        <p class="lock-error" id="lockError"></p>
+    </div>
+</div>
+
+<!-- HERO -->
+<section class="hero" id="top">
+    <div class="hero-bg"></div>
+    <div class="hero-content">
+        <p class="hero-pre">familie berger presents</p>
+        <h1 class="hero-title">SUMMER<br>TOUR<br><span class="gradient-text">2026</span></h1>
+        <p class="hero-sub">Bangkok &rarr; Bordeaux &rarr; Ile d'Oleron &rarr; Beaune &rarr; Sindelfingen &rarr; Mannheim &rarr; Bonn &rarr; M&uuml;nchen &rarr; Passau &rarr; Sindelfingen &rarr; Mannheim &rarr; Leipzig &rarr; Ingolstadt &rarr; Bangkok</p>
+        <p class="hero-dates">20. Juni &ndash; 5. August 2026</p>
+        <div class="countdown" id="countdown"></div>
+        <a href="#timeline" class="scroll-btn">Los geht's &darr;</a>
+    </div>
+</section>
+
+<!-- NAV -->
+<nav class="sticky-nav" id="nav">
+    <div class="nav-inner">
+        <a href="#top" class="nav-logo">BST 26</a>
+        <button class="nav-toggle" id="navToggle" aria-label="Menu">&#x2630;</button>
+        <div class="nav-links" id="navLinks">
+            <a href="../">&#x2302; Mc CaMaLu</a>
+            <a href="#overview">Route</a>
+            <a href="#timeline">Tagesplan</a>
+            <a href="#hotels">Hotels</a>
+            <a href="#mobilitaet">Mobilit&auml;t</a>
+            <a href="#kosten">Kosten</a>
+            <a href="#sidequest">Side Quests</a>
+            <a href="#packliste">Packliste</a>
+            <a href="#francais">Francais</a>
+            <a href="#tagebuch">Tagebuch</a>
+            <a href="#todos">To-Dos</a>
+        </div>
+    </div>
+</nav>
+
+<!-- CREW -->
+<section class="section crew-section" id="crew">
+    <h2 class="section-title">Die Crew</h2>
+    <div class="crew-grid">
+        <div class="crew-card">
+            <div class="crew-emoji">&#x1F468;&#x200D;&#x1F4BC;</div>
+            <h3>Mark</h3>
+            <p class="crew-role">Papa / Navigator / Rotary-Networker</p>
+            <p class="crew-route">BKK &rarr; BOD &rarr; ... &rarr; MUC &rarr; BKK</p>
+            <span class="crew-badge">20.06. &ndash; 11.07.</span>
+        </div>
+        <div class="crew-card">
+            <div class="crew-emoji">&#x1F469;&#x200D;&#x1F4BB;</div>
+            <h3>Claudia</h3>
+            <p class="crew-role">Mama / Reise-CEO / Planungs-Genie</p>
+            <p class="crew-route">BKK &rarr; BOD &rarr; ... &rarr; Deutschland</p>
+            <span class="crew-badge">20.06. &ndash; ???</span>
+        </div>
+        <div class="crew-card">
+            <div class="crew-emoji">&#x1F31F;</div>
+            <h3>Carla</h3>
+            <p class="crew-role">Duale Studentin @ DHBW Mannheim & Fresenius</p>
+            <p class="crew-route">BKK &rarr; BOD &rarr; ... &rarr; Bad Homburg</p>
+            <span class="crew-badge badge-hot">27.07. Fresenius-Start!</span>
+        </div>
+        <div class="crew-card">
+            <div class="crew-emoji">&#x1F3B6;</div>
+            <h3>Luisa</h3>
+            <p class="crew-role">Vibes-Beauftragte / Playlist-Queen</p>
+            <p class="crew-route">BKK &rarr; BOD &rarr; ... &rarr; MUC &rarr; BKK</p>
+            <span class="crew-badge">Rueckflug 05.08. (mit Marlene)</span>
+        </div>
+        <div class="crew-card">
+            <div class="crew-emoji">&#x1F3D6;&#xFE0F;</div>
+            <h3>Marlene</h3>
+            <p class="crew-role">Oleron-Local / Beach-Guide</p>
+            <p class="crew-route">Oleron &rarr; ... &rarr; MUC &rarr; BKK</p>
+            <span class="crew-badge">Rueckflug 05.08. (mit Luisa)</span>
+        </div>
+    </div>
+</section>
+
+<!-- OVERVIEW MAP -->
+<section class="section" id="overview">
+    <h2 class="section-title">Die Route</h2>
+
+    <!-- LEAFLET MAP -->
+    <div id="route-map" style="height: 500px; border-radius: 16px; border: 1px solid rgba(136,136,160,0.15); overflow: hidden;"></div>
+    <script>
+    (function() {
+        var map = L.map('route-map', {
+            center: [48.5, 6],
+            zoom: 6,
+            zoomControl: true,
+            scrollWheelZoom: false
+        });
+
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/">CARTO</a>',
+            subdomains: 'abcd',
+            maxZoom: 19
+        }).addTo(map);
+
+        var stops = [
+            { name: 'Bangkok', lat: 13.75, lon: 100.5, color: '#fbbf24', info: 'START', r: 6 },
+            { name: 'Istanbul', lat: 41.01, lon: 28.98, color: '#f472b6', info: 'Umsteigen', r: 5 },
+            { name: 'Bordeaux', lat: 44.84, lon: -0.58, color: '#a78bfa', info: '20.06. \u2022 1 Nacht', r: 7 },
+            { name: 'Ile d\'Ol\u00e9ron', lat: 45.93, lon: -1.32, color: '#a78bfa', info: '9 N\u00e4chte \u{1F3D6}', r: 8 },
+            { name: 'Beaune', lat: 47.02, lon: 4.84, color: '#a78bfa', info: '30.06. \u2022 1 Nacht', r: 6 },
+            { name: 'Sindelfingen', lat: 48.71, lon: 9.0, color: '#34d399', info: 'Heimat \u{1F3E0}', r: 7 },
+            { name: 'Mannheim', lat: 49.49, lon: 8.47, color: '#34d399', info: 'DHBW + Wohnung', r: 6 },
+            { name: 'Bonn', lat: 50.73, lon: 7.1, color: '#f472b6', info: 'Oma & Opa \u2764', r: 8 },
+            { name: 'Ingolstadt', lat: 48.76, lon: 11.42, color: '#fbbf24', info: 'Freunde (Rueckweg)', r: 6 },
+            { name: 'M\u00fcnchen', lat: 48.14, lon: 11.58, color: '#fbbf24', info: 'Jochen & Rossi', r: 6 },
+            { name: 'Passau', lat: 48.57, lon: 13.47, color: '#fbbf24', info: 'M\u00e4dels-Woche', r: 6 },
+            { name: 'Leipzig', lat: 51.34, lon: 12.37, color: '#f472b6', info: 'Ella wird 4! \u{1F382}', r: 6 }
+        ];
+
+        // Emoji-Icon Helper
+        function emojiIcon(emoji, size) {
+            return L.divIcon({
+                html: '<span style="font-size:' + size + 'px">' + emoji + '</span>',
+                className: 'emoji-marker',
+                iconSize: [size, size],
+                iconAnchor: [size/2, size/2]
+            });
+        }
+
+        // Flugroute BKK → IST (gestrichelt, dezent)
+        L.polyline([
+            [13.75, 100.5], [30, 65], [41.01, 28.98]
+        ], { color: '#f472b6', weight: 2, opacity: 0.3, dashArray: '8,8' }).addTo(map);
+
+        // Flug IST → BOD (gestrichelt)
+        L.polyline([
+            [41.01, 28.98], [46, 14], [44.84, -0.58]
+        ], { color: '#f472b6', weight: 2, opacity: 0.3, dashArray: '8,8' }).addTo(map);
+
+        // Rueckflug MUC → IST (gestrichelt)
+        L.polyline([
+            [48.14, 11.58], [45, 20], [41.01, 28.98]
+        ], { color: '#f472b6', weight: 2, opacity: 0.3, dashArray: '8,8' }).addTo(map);
+
+        // Flugzeuge auf den Flugrouten
+        L.marker([37, 45], { icon: emojiIcon('\u2708\uFE0F', 20) }).addTo(map); // IST→BOD Mitte
+        L.marker([25, 80], { icon: emojiIcon('\u2708\uFE0F', 18) }).addTo(map); // BKK→IST
+        L.marker([45.5, 17], { icon: emojiIcon('\u2708\uFE0F', 18) }).addTo(map); // MUC→IST
+
+        // Roadtrip Frankreich (lila)
+        L.polyline([
+            [44.84, -0.58], [45.93, -1.32], [47.02, 4.84], [48.71, 9.0]
+        ], { color: '#a78bfa', weight: 3, opacity: 0.7 }).addTo(map);
+
+        // Roadtrip Deutschland (gruen)
+        L.polyline([
+            [48.71, 9.0], [49.49, 8.47], [50.73, 7.1]
+        ], { color: '#34d399', weight: 3, opacity: 0.7 }).addTo(map);
+
+        // Bonn → Muenchen → Passau (gold)
+        L.polyline([
+            [50.73, 7.1], [48.14, 11.58], [48.57, 13.47]
+        ], { color: '#fbbf24', weight: 3, opacity: 0.7 }).addTo(map);
+
+        // Spaetere Trips (gestrichelt): Passau → Sindelfingen (Abi-Ball) → Mannheim
+        L.polyline([
+            [48.57, 13.47], [48.71, 9.0], [49.49, 8.47]
+        ], { color: '#34d399', weight: 2, opacity: 0.4, dashArray: '6,6' }).addTo(map);
+        L.polyline([
+            [49.49, 8.47], [51.34, 12.37], [48.76, 11.42]
+        ], { color: '#f472b6', weight: 2, opacity: 0.4, dashArray: '6,6' }).addTo(map);
+
+        // Autos auf den Strassen
+        L.marker([46.5, 2.0], { icon: emojiIcon('\u{1F697}', 16) }).addTo(map);   // Frankreich
+        L.marker([49.1, 8.7], { icon: emojiIcon('\u{1F697}', 16) }).addTo(map);   // Deutschland
+        L.marker([49.5, 9.5], { icon: emojiIcon('\u{1F697}', 14) }).addTo(map);   // Bonn→Bayern
+
+        // Markers
+        stops.forEach(function(s, i) {
+            var marker = L.circleMarker([s.lat, s.lon], {
+                radius: s.r,
+                fillColor: s.color,
+                color: s.color,
+                weight: 2,
+                opacity: 0.8,
+                fillOpacity: 0.6
+            }).addTo(map);
+
+            marker.bindTooltip(
+                '<strong>' + s.name + '</strong><br><span style="opacity:0.7">' + s.info + '</span>',
+                { permanent: i !== 0 && i !== 1, direction: 'top', className: 'map-tooltip', offset: [0, -8] }
+            );
+        });
+
+        // Fit to Europe view
+        map.fitBounds([[44, -2], [52, 14]], { padding: [30, 30] });
+    })();
+    </script>
+
+</section>
+
+<!-- TIMELINE -->
+<section class="section timeline-section" id="timeline">
+    <h2 class="section-title">Der Tagesplan</h2>
+    <p class="section-sub">Alle 22+ Tage im Detail &ndash; von Bordeaux-Bummeln bis Bonn-Chillen</p>
+
+    <div class="phase-label">Sa. 20.06. &ndash; Di. 30.06. &middot; Frankreich (Bordeaux &amp; Ol&eacute;ron)</div>
+
+    <!-- TAG 1 -->
+    <div class="day-card" data-day="1">
+        <div class="day-header">
+            <div class="day-date">
+                <span class="day-weekday">SA</span>
+                <span class="day-number">20</span>
+                <span class="day-month">JUN</span>
+            </div>
+            <div class="day-title">
+                <h3>Anreisetag &ndash; Bangkok &rarr; Bordeaux</h3>
+                <div class="day-location">&#x1F4CD; Bangkok &rarr; Istanbul &rarr; Bordeaux</div>
+            </div>
+            <div class="day-weather">
+                <span class="weather-icon">&#x2600;&#xFE0F;</span>
+                <span class="weather-temp">26&deg;C</span>
+            </div>
+        </div>
+        <div class="day-content">
+            <div class="day-schedule">
+                <div class="schedule-item">
+                    <span class="time">06:40</span>
+                    <span class="activity">Abflug Bangkok (Suvarnabhumi) &ndash; TK59</span>
+                </div>
+                <div class="schedule-item">
+                    <span class="time">~13:00</span>
+                    <span class="activity">Umsteigen Istanbul Airport &ndash; TK1391</span>
+                </div>
+                <div class="schedule-item">
+                    <span class="time">17:55</span>
+                    <span class="activity">Ankunft Bordeaux-Merignac! Endlich da!</span>
+                </div>
+                <div class="schedule-item highlight">
+                    <span class="time">abends</span>
+                    <span class="activity">Stadtbummel Bordeaux &amp; Abendessen</span>
+                </div>
+            </div>
+            <div class="day-details">
+                <div class="detail-box flight-box">
+                    <h4>&#x2708;&#xFE0F; Flugdetails</h4>
+                    <p><strong>TK59</strong>: BKK &rarr; IST | <strong>TK1391</strong>: IST &rarr; BOD</p>
+                    <p>Reisedauer: 16h 15min | Economy Class</p>
+                    <p>Passagiere: Mark, Claudia, Carla &amp; Luisa</p>
+                    <p class="small">Reservierung Mark: T8KMNE | Luisa: RR36QI | Claudia: VKPYJG</p>
+                </div>
+                <div class="detail-box hotel-box">
+                    <h4>&#x1F3E8; Hotel Bordeaux Clemenceau by Happyculture</h4>
+                    <p>Stilvolles Boutique-Hotel im Herzen von Bordeaux, direkt am Place Gambetta. Modernes Design, gemixtmit Bordelaiser Charme. Perfekte Lage fuer einen Abendspaziergang entlang der Garonne!</p>
+                    <span class="status-badge booked">GEBUCHT</span>
+                </div>
+            </div>
+            <div class="day-tips">
+                <div class="tip">&#x1F37D;&#xFE0F; <strong>Restaurant-Tipp Bordeaux:</strong> Le Petit Commerce (Fischrestaurant, Rue du Parlement Saint-Pierre) &ndash; fantastische Meeresfruchte in der Altstadt. Oder: La Brasserie Bordelaise fuer regionale Kueche mit Entrecote Bordelaise.</div>
+                <div class="tip">&#x1F4A1; <strong>Tipp:</strong> Am Place de la Bourse den beruehmten Miroir d'Eau (Wasserspiegel) anschauen &ndash; perfektes Foto-Motiv bei Sonnenuntergang!</div>
+            </div>
+        </div>
+        <div class="day-rating" data-day="1">
+            <span class="rating-label">Tages-Rating:</span>
+            <div class="stars">
+                <span class="star" data-value="1">&#x2B50;</span>
+                <span class="star" data-value="2">&#x2B50;</span>
+                <span class="star" data-value="3">&#x2B50;</span>
+                <span class="star" data-value="4">&#x2B50;</span>
+                <span class="star" data-value="5">&#x2B50;</span>
+            </div>
+            <span class="rating-display"></span>
+        </div>
+    </div>
+
+    <!-- TAG 2 -->
+    <div class="day-card" data-day="2">
+        <div class="day-header">
+            <div class="day-date">
+                <span class="day-weekday">SO</span>
+                <span class="day-number">21</span>
+                <span class="day-month">JUN</span>
+            </div>
+            <div class="day-title">
+                <h3>Reunion auf Oleron!</h3>
+                <div class="day-location">&#x1F4CD; Bordeaux &rarr; Ile d'Oleron</div>
+            </div>
+            <div class="day-weather">
+                <span class="weather-icon">&#x1F324;&#xFE0F;</span>
+                <span class="weather-temp">24&deg;C</span>
+            </div>
+        </div>
+        <div class="day-content">
+            <div class="day-schedule">
+                <div class="schedule-item highlight">
+                    <span class="time">vormittags</span>
+                    <span class="activity">Fahrt nach Ile d'Oleron (~2h) &ndash; WIEDERSEHEN MIT MARLENE!</span>
+                </div>
+                <div class="schedule-item">
+                    <span class="time">nachmittags</span>
+                    <span class="activity">Supermarkt-Run: Fruehstueck, Snacks, Getraenke &amp; der erste Rose!</span>
+                </div>
+                <div class="schedule-item">
+                    <span class="time">abends</span>
+                    <span class="activity">Strandpicknick oder Bistro &rarr; Sonnenuntergang am Meer</span>
+                </div>
+            </div>
+            <div class="day-details">
+                <div class="detail-box place-box">
+                    <h4>&#x1F3DD;&#xFE0F; Ile d'Oleron &ndash; Euer Beach-HQ fuer 9 Tage</h4>
+                    <p>Die zweitgroesste Insel Frankreichs (nach Korsika) liegt an der Atlantikkueste, Region Nouvelle-Aquitaine. Verbunden mit dem Festland ueber eine 3km lange Bruecke. Bekannt fuer endlose Sandstraende, Austernzucht, Pinienwalder und den charmanten Leuchtturm von Chassiron.</p>
+                    <p><strong>Vibe:</strong> Entspannt, salzig, sonnig. Flip-Flops &gt; High Heels. Rose &gt; alles andere.</p>
+                </div>
+            </div>
+            <div class="day-tips">
+                <div class="tip special-tip">&#x1F49B; <strong>Motto des Tages:</strong> Keine Planung. Nur &bdquo;Wir sind da&ldquo;.</div>
+            </div>
+        </div>
+        <div class="day-rating" data-day="2">
+            <span class="rating-label">Tages-Rating:</span>
+            <div class="stars">
+                <span class="star" data-value="1">&#x2B50;</span>
+                <span class="star" data-value="2">&#x2B50;</span>
+                <span class="star" data-value="3">&#x2B50;</span>
+                <span class="star" data-value="4">&#x2B50;</span>
+                <span class="star" data-value="5">&#x2B50;</span>
+            </div>
+            <span class="rating-display"></span>
+        </div>
+    </div>
+
+    <!-- TAG 3 -->
+    <div class="day-card" data-day="3">
+        <div class="day-header">
+            <div class="day-date">
+                <span class="day-weekday">MO</span>
+                <span class="day-number">22</span>
+                <span class="day-month">JUN</span>
+            </div>
+            <div class="day-title">
+                <h3>Fahrrad-Tour &amp; Austern-Vibes</h3>
+                <div class="day-location">&#x1F4CD; Ile d'Oleron</div>
+            </div>
+            <div class="day-weather">
+                <span class="weather-icon">&#x2600;&#xFE0F;</span>
+                <span class="weather-temp">25&deg;C</span>
+            </div>
+        </div>
+        <div class="day-content">
+            <div class="day-schedule">
+                <div class="schedule-item">
+                    <span class="time">vormittags</span>
+                    <span class="activity">Fahrraeder leihen &rarr; Fahrt durch Pinienwalder &amp; Salzwiesen</span>
+                </div>
+                <div class="schedule-item highlight">
+                    <span class="time">Ziel</span>
+                    <span class="activity">Austernhafen La Baudissiere oder Fort Royer &ndash; frische Austern direkt vom Zuechter!</span>
+                </div>
+                <div class="schedule-item">
+                    <span class="time">nachmittags</span>
+                    <span class="activity">Strand oder Pool &ndash; Sonne tanken</span>
+                </div>
+                <div class="schedule-item">
+                    <span class="time">abends</span>
+                    <span class="activity">Selber kochen, Rose &amp; Terrasse &ndash; la dolce vita auf franzoesisch</span>
+                </div>
+            </div>
+            <div class="day-tips">
+                <div class="tip">&#x1F6B4; <strong>Fahrrad-Tipp:</strong> Oleron hat ueber 100km Radwege! Die Velo-Route entlang der Salzgaerten (Marais) ist wunderschoen und flach &ndash; perfekt fuer die ganze Familie.</div>
+                <div class="tip">&#x1F9AA; <strong>Austern-Tipp:</strong> Fort Royer ist ein historischer Austernhafen mit Degustations-Moeglichkeit. Unbedingt die &bdquo;Fines de Claire&ldquo; probieren &ndash; die mildeste und leckerste Sorte!</div>
+            </div>
+        </div>
+        <div class="day-rating" data-day="3">
+            <span class="rating-label">Tages-Rating:</span>
+            <div class="stars">
+                <span class="star" data-value="1">&#x2B50;</span>
+                <span class="star" data-value="2">&#x2B50;</span>
+                <span class="star" data-value="3">&#x2B50;</span>
+                <span class="star" data-value="4">&#x2B50;</span>
+                <span class="star" data-value="5">&#x2B50;</span>
+            </div>
+            <span class="rating-display"></span>
+        </div>
+    </div>
+
+    <!-- TAG 4 -->
+    <div class="day-card" data-day="4">
+        <div class="day-header">
+            <div class="day-date">
+                <span class="day-weekday">DI</span>
+                <span class="day-number">23</span>
+                <span class="day-month">JUN</span>
+            </div>
+            <div class="day-title">
+                <h3>La Rochelle &ndash; Hafenstadt-Vibes</h3>
+                <div class="day-location">&#x1F4CD; Ile d'Oleron &rarr; La Rochelle &rarr; zurueck</div>
+            </div>
+            <div class="day-weather">
+                <span class="weather-icon">&#x1F324;&#xFE0F;</span>
+                <span class="weather-temp">23&deg;C</span>
+            </div>
+        </div>
+        <div class="day-content">
+            <div class="day-schedule">
+                <div class="schedule-item">
+                    <span class="time">vormittags</span>
+                    <span class="activity">Fahrt nach La Rochelle (~45min) &ndash; Altstadt, Hafen, die beruehmten Tuerme</span>
+                </div>
+                <div class="schedule-item highlight">
+                    <span class="time">mittags</span>
+                    <span class="activity">Fischrestaurant oder Moules Frites am Hafen &ndash; LE KLASSIKER!</span>
+                </div>
+                <div class="schedule-item">
+                    <span class="time">nachmittags</span>
+                    <span class="activity">Hafenbummel &#x1F6A2;&#x2693;</span>
+                </div>
+                <div class="schedule-item">
+                    <span class="time">abends</span>
+                    <span class="activity">Rueckfahrt nach Oleron, ruhiger Abend</span>
+                </div>
+            </div>
+            <div class="day-details">
+                <div class="detail-box place-box">
+                    <h4>&#x1F3F0; La Rochelle &ndash; Die Schoene am Atlantik</h4>
+                    <p>Historische Hafenstadt mit den ikonischen drei Tuermen (Tour Saint-Nicolas, Tour de la Chaine, Tour de la Lanterne). Die Altstadt mit Arkadengaengen ist perfekt zum Bummeln. Der alte Hafen (Vieux Port) ist das Herzstueck der Stadt &ndash; hier sitzt man bei Cafe au Lait und schaut den Segelbooten zu.</p>
+                    <p><strong>Must-See fuer Teens:</strong> Das Aquarium von La Rochelle ist eines der groessten in Europa!</p>
+                </div>
+            </div>
+            <div class="day-tips">
+                <div class="tip">&#x1F37D;&#xFE0F; <strong>Restaurant-Tipp:</strong> Les Flots &ndash; direkt am Hafen, Blick aufs Meer, hervorragende Meeresfruechteplatten. Oder: Andre am alten Hafen fuer klassische Moules.</div>
+                <div class="tip">&#x1F4F8; <strong>Insta-Spot:</strong> Die bunten Tueren und Fensterlaeden in der Rue des Merciers sind mega fotogen!</div>
+            </div>
+        </div>
+        <div class="day-rating" data-day="4">
+            <span class="rating-label">Tages-Rating:</span>
+            <div class="stars">
+                <span class="star" data-value="1">&#x2B50;</span>
+                <span class="star" data-value="2">&#x2B50;</span>
+                <span class="star" data-value="3">&#x2B50;</span>
+                <span class="star" data-value="4">&#x2B50;</span>
+                <span class="star" data-value="5">&#x2B50;</span>
+            </div>
+            <span class="rating-display"></span>
+        </div>
+    </div>
+
+    <!-- TAG 5 -->
+    <div class="day-card" data-day="5">
+        <div class="day-header">
+            <div class="day-date">
+                <span class="day-weekday">MI</span>
+                <span class="day-number">24</span>
+                <span class="day-month">JUN</span>
+            </div>
+            <div class="day-title">
+                <h3>Markt-Tag &amp; Chill</h3>
+                <div class="day-location">&#x1F4CD; Dolus / Saint-Pierre d'Oleron</div>
+            </div>
+            <div class="day-weather">
+                <span class="weather-icon">&#x2600;&#xFE0F;</span>
+                <span class="weather-temp">26&deg;C</span>
+            </div>
+        </div>
+        <div class="day-content">
+            <div class="day-schedule">
+                <div class="schedule-item highlight">
+                    <span class="time">vormittags</span>
+                    <span class="activity">Grosser Markt in Dolus oder Saint-Pierre &ndash; Obst, Kaese, Brot, Patisserie &#x1F347;&#x1F9C0;</span>
+                </div>
+                <div class="schedule-item">
+                    <span class="time">nachmittags</span>
+                    <span class="activity">Strand, Pool, Siesta &ndash; die Kunst des Nichtstuns</span>
+                </div>
+                <div class="schedule-item">
+                    <span class="time">abends</span>
+                    <span class="activity">Grillen oder Essen gehen, ggf. mit Jean-Paul</span>
+                </div>
+            </div>
+            <div class="day-tips">
+                <div class="tip">&#x1F6D2; <strong>Markt-Tipp:</strong> Die Maerkte auf Oleron sind legendaer! Unbedingt probieren: Pineau des Charentes (suesser Aperitif), Ziegenkaese (Chabichou), frische Melonen und Galettes Charentaises (Butterkekse).</div>
+                <div class="tip">&#x1F4AC; <strong>Info:</strong> Falls Rotary-Treffen fuer Mark organisiert wird &ndash; Jean-Paul kontaktieren!</div>
+            </div>
+        </div>
+        <div class="day-rating" data-day="5">
+            <span class="rating-label">Tages-Rating:</span>
+            <div class="stars">
+                <span class="star" data-value="1">&#x2B50;</span>
+                <span class="star" data-value="2">&#x2B50;</span>
+                <span class="star" data-value="3">&#x2B50;</span>
+                <span class="star" data-value="4">&#x2B50;</span>
+                <span class="star" data-value="5">&#x2B50;</span>
+            </div>
+            <span class="rating-display"></span>
+        </div>
+    </div>
+
+    <!-- TAG 6 -->
+    <div class="day-card" data-day="6">
+        <div class="day-header">
+            <div class="day-date">
+                <span class="day-weekday">DO</span>
+                <span class="day-number">25</span>
+                <span class="day-month">JUN</span>
+            </div>
+            <div class="day-title">
+                <h3>Cognac &amp; Saintes &ndash; Kultur-Tour</h3>
+                <div class="day-location">&#x1F4CD; Cognac &rarr; Saintes &rarr; Oleron</div>
+            </div>
+            <div class="day-weather">
+                <span class="weather-icon">&#x2600;&#xFE0F;</span>
+                <span class="weather-temp">27&deg;C</span>
+            </div>
+        </div>
+        <div class="day-content">
+            <div class="day-schedule">
+                <div class="schedule-item">
+                    <span class="time">vormittags</span>
+                    <span class="activity">Fahrt nach Cognac (~1.5h) &ndash; Altstadt-Spaziergang</span>
+                </div>
+                <div class="schedule-item highlight">
+                    <span class="time">mittags</span>
+                    <span class="activity">Cognac-Haus Hennessy oder Martell besichtigen (auch fuer Teens spannend!)</span>
+                </div>
+                <div class="schedule-item">
+                    <span class="time">nachmittags</span>
+                    <span class="activity">Weiterfahrt nach Saintes (25 min) &ndash; roemisches Amphitheater, Altstadt, Cafes</span>
+                </div>
+                <div class="schedule-item">
+                    <span class="time">abends</span>
+                    <span class="activity">Zurueck auf Oleron &ndash; Relaxen</span>
+                </div>
+            </div>
+            <div class="day-details">
+                <div class="detail-box place-box">
+                    <h4>&#x1F943; Cognac &ndash; Mehr als nur ein Getraenk</h4>
+                    <p>Die kleine Stadt Cognac ist Heimat weltberuehmter Cognac-Haeuser wie Hennessy, Martell, Remy Martin und Courvoisier. Die Mauern der alten Lagerhaeuser sind schwarz vom &bdquo;Engelsanteil&ldquo; (Pilz, der vom verdunstenden Alkohol lebt). Die Fuehrungen bei Hennessy inklusive Bootsfahrt auf der Charente sind ein Erlebnis!</p>
+                </div>
+                <div class="detail-box place-box">
+                    <h4>&#x1F3DB;&#xFE0F; Saintes &ndash; Roemisches Erbe</h4>
+                    <p>Saintes war eine der wichtigsten Staedte des roemischen Galliens. Das Amphitheater (1. Jh. n. Chr.) ist beeindruckend gut erhalten. Der Germanicus-Bogen am Flussufer und die Abtei aux Dames sind weitere Highlights.</p>
+                </div>
+            </div>
+            <div class="day-tips">
+                <div class="tip">&#x1F37D;&#xFE0F; <strong>Restaurant-Tipp Cognac:</strong> Les Pigeons Blancs &ndash; Gourmet-Restaurant in einem ehemaligen Herrenhaus. Oder rustikaler: La Courtine direkt an der Charente.</div>
+            </div>
+        </div>
+        <div class="day-rating" data-day="6">
+            <span class="rating-label">Tages-Rating:</span>
+            <div class="stars">
+                <span class="star" data-value="1">&#x2B50;</span>
+                <span class="star" data-value="2">&#x2B50;</span>
+                <span class="star" data-value="3">&#x2B50;</span>
+                <span class="star" data-value="4">&#x2B50;</span>
+                <span class="star" data-value="5">&#x2B50;</span>
+            </div>
+            <span class="rating-display"></span>
+        </div>
+    </div>
+
+    <!-- TAG 7 -->
+    <div class="day-card" data-day="7">
+        <div class="day-header">
+            <div class="day-date">
+                <span class="day-weekday">FR</span>
+                <span class="day-number">26</span>
+                <span class="day-month">JUN</span>
+            </div>
+            <div class="day-title">
+                <h3>Char &agrave; Voile, Saint-Trojan &amp; Sundowner</h3>
+                <div class="day-location">&#x1F4CD; Grand-Village-Plage &amp; Saint-Trojan-les-Bains</div>
+            </div>
+            <div class="day-weather">
+                <span class="weather-icon">&#x2600;&#xFE0F;</span>
+                <span class="weather-temp">25&deg;C</span>
+            </div>
+        </div>
+        <div class="day-content">
+            <div class="day-schedule">
+                <div class="schedule-item highlight">
+                    <span class="time">vormittags</span>
+                    <span class="activity">&#x1F3CE;&#xFE0F; CHAR &Agrave; VOILE &ndash; Strandsegler rasen ueber den Sand bei Ol&eacute;ron Char &agrave; Voile (Grand-Village-Plage)! 1,5h Session, ab 10 Jahren, mega Adrenalin!</span>
+                </div>
+                <div class="schedule-item">
+                    <span class="time">nachmittags</span>
+                    <span class="activity">&#x1F682; P'tit Train de Saint-Trojan &ndash; Schmalspurbahn durch den Pinienwald zum wilden Plage de Maumusson. Baden am 5km-Traumstrand, der nur per Zug oder zu Fuss erreichbar ist!</span>
+                </div>
+                <div class="schedule-item highlight">
+                    <span class="time">abends</span>
+                    <span class="activity">&#x1F305; SUNDOWNER AM STRAND &ndash; Sonnenuntergang ca. 21:00 Uhr an der Grande Plage Saint-Trojan. Danach Crepes bei einer der Creperies im Ort.</span>
+                </div>
+            </div>
+            <div class="day-details">
+                <div class="detail-box place-box">
+                    <h4>&#x1F3CE;&#xFE0F; Ol&eacute;ron Char &agrave; Voile</h4>
+                    <p>Boulevard de la Plage, Le Grand-Village-Plage. Strandsegler sind dreiraeadrige Segelfahrzeuge, die ueber den nassen Sand fliegen &ndash; bis zu 60 km/h! Die 1,5-Stunden-Session ist easy zu lernen (Bremsen, Lenken, Segel stellen) und das Gefuehl ist unglaublich: Wind im Gesicht, Speed, weiter Strand. Gibt's so nirgendwo in Suedostasien! Lange Hose + geschlossene Schuhe mitbringen, Sonnenbrille empfohlen.</p>
+                </div>
+            </div>
+            <div class="day-tips">
+                <div class="tip">&#x1F682; <strong>P'tit Train Tipp:</strong> Die Bahn faehrt ab Bahnhof Saint-Trojan, 12 km Rundfahrt durch den Wald mit Halt an Plage de Gatseau und Plage de Maumusson (wildester Strand Olerons!). Ende Juni bereits regelmaessig &ndash; Fahrplan vor Ort checken. Kein Reservieren noetig.</div>
+                <div class="tip">&#x1F37D;&#xFE0F; <strong>Abendessen:</strong> In Saint-Trojan gibt es gute Creperies direkt im Ortskern. Alternativ zurueck nach La Cotiniere und bei <strong>La Sardinerie</strong> die besten Fish &amp; Chips der Insel holen (ruhige Seitenstrasse am Hafen).</div>
+            </div>
+        </div>
+        <div class="day-rating" data-day="7">
+            <span class="rating-label">Tages-Rating:</span>
+            <div class="stars">
+                <span class="star" data-value="1">&#x2B50;</span>
+                <span class="star" data-value="2">&#x2B50;</span>
+                <span class="star" data-value="3">&#x2B50;</span>
+                <span class="star" data-value="4">&#x2B50;</span>
+                <span class="star" data-value="5">&#x2B50;</span>
+            </div>
+            <span class="rating-display"></span>
+        </div>
+    </div>
+
+    <!-- TAG 8 -->
+    <div class="day-card" data-day="8">
+        <div class="day-header">
+            <div class="day-date">
+                <span class="day-weekday">SA</span>
+                <span class="day-number">27</span>
+                <span class="day-month">JUN</span>
+            </div>
+            <div class="day-title">
+                <h3>SURFKURS &amp; Chateau d'Ol&eacute;ron</h3>
+                <div class="day-location">&#x1F4CD; Vert Bois &amp; Le Ch&acirc;teau-d'Ol&eacute;ron</div>
+            </div>
+            <div class="day-weather">
+                <span class="weather-icon">&#x1F30A;</span>
+                <span class="weather-temp">24&deg;C</span>
+            </div>
+        </div>
+        <div class="day-content">
+            <div class="day-schedule">
+                <div class="schedule-item highlight">
+                    <span class="time">vormittags</span>
+                    <span class="activity">&#x1F3C4; SURFKURS bei Drop'in Surf Academy &ndash; 3h Kurs an der Westkueste (Vert Bois / Saint-Trojan). Neopren + Board inklusive, ab 35 EUR/Person!</span>
+                </div>
+                <div class="schedule-item">
+                    <span class="time">nachmittags</span>
+                    <span class="activity">&#x1F3A8; Couleurs Cabanes am Ch&acirc;teau d'Ol&eacute;ron &ndash; bunt angemalte Austernhuetten voller Kuenstler-Ateliers, Schmuck, Keramik, Glaskunst. Danach Eis am Hafen mit Blick auf die Zitadelle!</span>
+                </div>
+                <div class="schedule-item highlight">
+                    <span class="time">abends</span>
+                    <span class="activity">&#x1F355; BBQ auf der Terrasse in La Cotiniere! Surfkurs-Verlierer kocht. Alternativ: <strong>L'Ecailler</strong> am Hafen &ndash; frischer Fisch direkt vom Kutter.</span>
+                </div>
+            </div>
+            <div class="day-details">
+                <div class="detail-box place-box">
+                    <h4>&#x1F3A8; Couleurs Cabanes &ndash; Ch&acirc;teau d'Ol&eacute;ron</h4>
+                    <p>Am Hafen des Ch&acirc;teau d'Ol&eacute;ron, gegenueber der Vauban-Zitadelle, stehen rund 30 knallbunte ehemalige Austernhuetten. Seit 2004 haben sich Kuenstler und Kunsthandwerker hier eingerichtet: Schmuckdesigner, Keramiker, Glasblaeser, Messerschmiede. Jede Huette ist ein eigenes Mini-Universum. Perfekt zum Durchstoebern und fuer einzigartige Mitbringsel &ndash; kein Touristenkitsch, sondern echtes Handwerk!</p>
+                </div>
+            </div>
+            <div class="day-tips">
+                <div class="tip">&#x1F3C4; <strong>Surf-Buchung:</strong> Drop'in Surf Academy (Saint-Pierre-d'Ol&eacute;ron) &ndash; 3h Kurs ab 35 EUR, eco-zertifiziert. Alternative: Ol&eacute;ron Surf Club, 1,5h ab 40 EUR. Beide haben Top-Bewertungen. Frueh buchen &ndash; Samstag-Slots sind beliebt!</div>
+                <div class="tip special-tip">&#x1F525; <strong>Side Quest freigeschaltet:</strong> &bdquo;Wer steht am laengsten auf dem Board?&ldquo; &ndash; Familien-Wettbewerb!</div>
+            </div>
+        </div>
+        <div class="day-rating" data-day="8">
+            <span class="rating-label">Tages-Rating:</span>
+            <div class="stars">
+                <span class="star" data-value="1">&#x2B50;</span>
+                <span class="star" data-value="2">&#x2B50;</span>
+                <span class="star" data-value="3">&#x2B50;</span>
+                <span class="star" data-value="4">&#x2B50;</span>
+                <span class="star" data-value="5">&#x2B50;</span>
+            </div>
+            <span class="rating-display"></span>
+        </div>
+    </div>
+
+    <!-- TAG 9 -->
+    <div class="day-card" data-day="9">
+        <div class="day-header">
+            <div class="day-date">
+                <span class="day-weekday">SO</span>
+                <span class="day-number">28</span>
+                <span class="day-month">JUN</span>
+            </div>
+            <div class="day-title">
+                <h3>Fort Boyard &amp; Ile d'Aix Abenteuer</h3>
+                <div class="day-location">&#x1F4CD; Boyardville &amp; Ile d'Aix</div>
+            </div>
+            <div class="day-weather">
+                <span class="weather-icon">&#x2600;&#xFE0F;</span>
+                <span class="weather-temp">25&deg;C</span>
+            </div>
+        </div>
+        <div class="day-content">
+            <div class="day-schedule">
+                <div class="schedule-item highlight">
+                    <span class="time">vormittags</span>
+                    <span class="activity">&#x1F6A2; Bootstour ab Boyardville &ndash; Compagnie Inter&icirc;les: Fort Boyard hautnah umrunden + Tagestrip auf die autofreie Ile d'Aix! Die TV-Festung aus naechster Naehe sehen!</span>
+                </div>
+                <div class="schedule-item">
+                    <span class="time">nachmittags</span>
+                    <span class="activity">&#x1F3DD;&#xFE0F; Ile d'Aix erkunden &ndash; winzige Insel (nur 3 km lang!), keine Autos, nur Fahrraeder. Baden an menschenleeren Straenden, Napoleon-Museum, Eis am kleinen Hafen. Rueckfahrt ca. 17:00.</span>
+                </div>
+                <div class="schedule-item">
+                    <span class="time">abends</span>
+                    <span class="activity">&#x1F990; Abendessen bei <strong>L'Amiral</strong> am Hafen von La Cotiniere &ndash; Curry Moules-Frites oder Meeresfruchte-Platte verdient nach dem Seetag!</span>
+                </div>
+            </div>
+            <div class="day-details">
+                <div class="detail-box place-box">
+                    <h4>&#x1F3F0; Fort Boyard &ndash; Die TV-Legende</h4>
+                    <p>Die ikonische Seefestung steht mitten im Meer zwischen Oleron und Ile d'Aix. 1801-1857 gebaut, wurde sie durch die gleichnamige franzoesische TV-Gameshow weltberuehmt. Man kann nicht rein (Privatbesitz), aber die Boote fahren nur wenige Meter dran vorbei &ndash; perfektes Foto-Motiv! Die Compagnie Inter&icirc;les bietet ab Boyardville eine kommentierte Umrundung + Weiterfahrt zur Ile d'Aix fuer einen ganzen Tag auf der Mini-Insel. Preis ca. 25-28 EUR/Erwachsener.</p>
+                </div>
+            </div>
+            <div class="day-tips">
+                <div class="tip">&#x1F6A2; <strong>Buchung:</strong> Compagnie Inter&icirc;les ab Boyardville (ca. 25 Min. Fahrt von La Cotiniere). Frueh am Hafen sein! Tickets am besten 1-2 Tage vorher online oder im Hafenbuero kaufen. Sonntags beliebt!</div>
+                <div class="tip">&#x1F6B2; <strong>Ile d'Aix Tipp:</strong> Am Hafen auf Ile d'Aix kann man Fahrraeder leihen (ca. 8 EUR). Die Insel ist in 1 Stunde komplett umrundet &ndash; perfekt fuer Teens!</div>
+            </div>
+        </div>
+        <div class="day-rating" data-day="9">
+            <span class="rating-label">Tages-Rating:</span>
+            <div class="stars">
+                <span class="star" data-value="1">&#x2B50;</span>
+                <span class="star" data-value="2">&#x2B50;</span>
+                <span class="star" data-value="3">&#x2B50;</span>
+                <span class="star" data-value="4">&#x2B50;</span>
+                <span class="star" data-value="5">&#x2B50;</span>
+            </div>
+            <span class="rating-display"></span>
+        </div>
+    </div>
+
+    <!-- TAG 10 -->
+    <div class="day-card" data-day="10">
+        <div class="day-header">
+            <div class="day-date">
+                <span class="day-weekday">MO</span>
+                <span class="day-number">29</span>
+                <span class="day-month">JUN</span>
+            </div>
+            <div class="day-title">
+                <h3>Letzter Tag &ndash; Chassiron &amp; Farewell Sunset</h3>
+                <div class="day-location">&#x1F4CD; Nordspitze Oleron &amp; La Cotiniere</div>
+            </div>
+            <div class="day-weather">
+                <span class="weather-icon">&#x1F305;</span>
+                <span class="weather-temp">25&deg;C</span>
+            </div>
+        </div>
+        <div class="day-content">
+            <div class="day-schedule">
+                <div class="schedule-item">
+                    <span class="time">vormittags</span>
+                    <span class="activity">&#x1F9F3; Koffer vorpacken + Haus aufklaren (Abreise morgen frueh!). Dann: Phare de Chassiron &ndash; 224 Stufen rauf auf den Leuchtturm an der Nordspitze, Panorama ueber Ile de Re, La Rochelle und den Atlantik!</span>
+                </div>
+                <div class="schedule-item">
+                    <span class="time">nachmittags</span>
+                    <span class="activity">&#x1F41a; Ecluses &agrave; Poissons bei Chassiron &ndash; uralte Steinmauer-Fischfallen im Meer erkunden bei Ebbe! Danach: letztes Baden an der Plage des Huttes (Saint-Denis) &ndash; DER Surf-Strand mit Beach-Bar.</span>
+                </div>
+                <div class="schedule-item highlight">
+                    <span class="time">abends</span>
+                    <span class="activity">&#x1F37E; FAREWELL DINNER in La Cotiniere &ndash; Abschiedsabend am Hafen bei <strong>Restaurant Local</strong>. Austern, Paella, Fisch des Tages. Letzter Sonnenuntergang ueber dem Atlantik (ca. 21:00)!</span>
+                </div>
+            </div>
+            <div class="day-details">
+                <div class="detail-box place-box">
+                    <h4>&#x1F9ED; Phare de Chassiron &amp; Ecluses &agrave; Poissons</h4>
+                    <p>Der schwarz-weiss gestreifte Leuchtturm von Chassiron (46m, Baujahr 1826) steht an der aeussersten Nordspitze Olerons. Oben angekommen: 360-Grad-Panorama bis zur Ile de Re! Direkt darunter liegen die Ecluses &agrave; Poissons &ndash; halbkreisfoermige Steinmauern aus dem Mittelalter, die bei Flut Fische einfangen und bei Ebbe freilegen. Bei Niedrigwasser kann man durch die Fischfallen laufen und Krebse, Muscheln und Algen entdecken. GEZEITENKALENDER CHECKEN &ndash; nur bei Ebbe begehbar!</p>
+                </div>
+            </div>
+            <div class="day-tips">
+                <div class="tip">&#x1F30A; <strong>Gezeiten-Check:</strong> Die Ecluses sind nur bei Ebbe begehbar! Gezeitenkalender (maree.info) fuer den 29.06. pruefen und den Chassiron-Besuch um die Niedrigwasser-Zeit planen.</div>
+                <div class="tip">&#x1F37D;&#xFE0F; <strong>Farewell Dinner:</strong> <strong>Restaurant Local</strong> direkt am Hafen La Cotiniere (4,5 Sterne, 648 Bewertungen). Unbedingt reservieren &ndash; Montag Abend ist machbar, aber im Sommer ist La Cotiniere immer voll! Alternativ: <strong>L'Amiral</strong> (Boulevard du Capitaine Leclerc).</div>
+                <div class="tip special-tip">&#x1F4F8; <strong>Erinnerungsfoto:</strong> Letztes Familienfoto am Leuchtturm Chassiron &ndash; das ikonische Oleron-Motiv! Und abends: Fuesse im Sand, letzter Atlantik-Sundowner. Morgen geht's Richtung Beaune!</div>
+            </div>
+        </div>
+        <div class="day-rating" data-day="10">
+            <span class="rating-label">Tages-Rating:</span>
+            <div class="stars">
+                <span class="star" data-value="1">&#x2B50;</span>
+                <span class="star" data-value="2">&#x2B50;</span>
+                <span class="star" data-value="3">&#x2B50;</span>
+                <span class="star" data-value="4">&#x2B50;</span>
+                <span class="star" data-value="5">&#x2B50;</span>
+            </div>
+            <span class="rating-display"></span>
+        </div>
+    </div>
+
+    <div class="phase-label">Di. 30.06. &ndash; Do. 02.07. &middot; Beaune &amp; Sindelfingen</div>
+
+    <!-- TAG 11 -->
+    <div class="day-card" data-day="11">
+        <div class="day-header">
+            <div class="day-date">
+                <span class="day-weekday">DI</span>
+                <span class="day-number">30</span>
+                <span class="day-month">JUN</span>
+            </div>
+            <div class="day-title">
+                <h3>Road Trip &rarr; Beaune (Burgund)</h3>
+                <div class="day-location">&#x1F4CD; Ile d'Oleron &rarr; Beaune (~5h 45min)</div>
+            </div>
+            <div class="day-weather">
+                <span class="weather-icon">&#x26C5;</span>
+                <span class="weather-temp">25&deg;C</span>
+            </div>
+        </div>
+        <div class="day-content">
+            <div class="day-schedule">
+                <div class="schedule-item">
+                    <span class="time">vormittags</span>
+                    <span class="activity">Abfahrt von Oleron Richtung Osten &ndash; Tschuess Atlantik!</span>
+                </div>
+                <div class="schedule-item">
+                    <span class="time">unterwegs</span>
+                    <span class="activity">ca. 5h 45min Fahrt durch Frankreich &ndash; Playlist an, Snacks raus!</span>
+                </div>
+                <div class="schedule-item highlight">
+                    <span class="time">~17:30</span>
+                    <span class="activity">Ankunft in Beaune &ndash; Koffer rein, direkt los zum Hotel-Dieu (letzter Einlass 18:30!)</span>
+                </div>
+                <div class="schedule-item">
+                    <span class="time">~18:00</span>
+                    <span class="activity">Hospices de Beaune besichtigen &ndash; die bunten Dachziegel sind ikonisch (9&euro; / 3&euro; Jugend)</span>
+                </div>
+                <div class="schedule-item">
+                    <span class="time">~19:30</span>
+                    <span class="activity">Bummel durch die Altstadt zum Abendessen</span>
+                </div>
+                <div class="schedule-item">
+                    <span class="time">~21:30</span>
+                    <span class="activity">Eis bei Fabrice Gillotte oder Amorino auf der Rue Carnot</span>
+                </div>
+                <div class="schedule-item highlight">
+                    <span class="time">~22:00</span>
+                    <span class="activity">Lumi&egrave;res &agrave; Beaune &ndash; kostenlose Lichtshow an 7 Geb&auml;uden in der Altstadt!</span>
+                </div>
+            </div>
+            <div class="day-details">
+                <div class="detail-box place-box">
+                    <h4>&#x1F3F0; Hospices de Beaune (Hotel-Dieu)</h4>
+                    <p>DAS Wahrzeichen Beaunes &ndash; ein gotisches Hospiz aus dem 15. Jahrhundert mit dem beruehmten bunten Burgunder-Ziegeldach. Im Sommer geoeffnet bis 19:30 (letzter Einlass 18:30). Lohnt sich absolut reinzugehen &ndash; nur 5 Minuten Fussweg von eurer Wohnung!</p>
+                </div>
+                <div class="detail-box place-box">
+                    <h4>&#x2728; Lumi&egrave;res &agrave; Beaune</h4>
+                    <p>Jeden Abend vom 21. Juni bis 20. September: monumentale Lichtprojektionen auf 7 historische Geb&auml;ude (Hotel-Dieu, Coll&eacute;giale Notre-Dame, u.a.). Ein markierter Rundweg mit 150+ farbigen Lichtern verbindet alle Stationen. Komplett kostenlos! Startet nach Einbruch der Dunkelheit (~22:00 Ende Juni). Perfektes Abendprogramm!</p>
+                </div>
+                <div class="detail-box place-box">
+                    <h4>&#x1F3F0; Tour des Remparts</h4>
+                    <p>2,5 km Spaziergang auf den mittelalterlichen Stadtmauern &ndash; 17 Stationen mit T&uuml;rmen, Bastionen und Toren. Infotafeln mit QR-Codes. Kann man super vor oder nach dem Essen machen (~1h). Kostenlos, Start direkt bei euch an der Rue d'Alsace!</p>
+                </div>
+                <div class="detail-box hotel-box">
+                    <h4>&#x1F3E8; Beaune Residence appartement</h4>
+                    <p>34 rue d'Alsace, 21200 Beaune &ndash; direkt an den Remparts, alles in der Altstadt zu Fuss erreichbar. Check-in ab 15:00 (Lockbox &ndash; Code kommt per Nachricht). Ankunft geplant: 17:00&ndash;18:00.</p>
+                    <span class="status-badge booked">GEBUCHT</span>
+                </div>
+            </div>
+            <div class="day-tips">
+                <div class="tip">&#x1F37D;&#xFE0F; <strong>Caves Madeleine</strong> (8 Rue du Faubourg Madeleine) &ndash; entspanntes Weinbar-Restaurant, Michelin-gelistet aber nicht steif. Lokale Produkte, tolle Weine. Unbedingt reservieren!</div>
+                <div class="tip">&#x1F354; <strong>La Caravane</strong> (Place Madeleine) &ndash; Plan B wenn die Kids platt sind: gute Burger, Pizza, Salate. Terrasse auf dem Platz, keine Reservierung noetig.</div>
+                <div class="tip">&#x1F366; <strong>Eis-Tipp:</strong> Fabrice Gillotte (33 Rue Carnot) &ndash; Meilleur Ouvrier de France, handgemachtes Eis + unfassbare Schokolade. Oder Amorino (23 Rue Carnot) &ndash; Instagram-wuerdige Rosen-Waffeln.</div>
+                <div class="tip">&#x1F697; <strong>Parken:</strong> Parking R&eacute;publique ist kostenlos (Parkscheibe, 3h). F&uuml;r &uuml;ber Nacht: freie Strassenplaetze rund um die Rue d'Alsace an den Remparts.</div>
+            </div>
+        </div>
+        <div class="day-rating" data-day="11">
+            <span class="rating-label">Tages-Rating:</span>
+            <div class="stars">
+                <span class="star" data-value="1">&#x2B50;</span>
+                <span class="star" data-value="2">&#x2B50;</span>
+                <span class="star" data-value="3">&#x2B50;</span>
+                <span class="star" data-value="4">&#x2B50;</span>
+                <span class="star" data-value="5">&#x2B50;</span>
+            </div>
+            <span class="rating-display"></span>
+        </div>
+    </div>
+
+    <!-- TAG 12-13 -->
+    <div class="day-card" data-day="12">
+        <div class="day-header">
+            <div class="day-date">
+                <span class="day-weekday">MI-FR</span>
+                <span class="day-number">01-03</span>
+                <span class="day-month">JUL</span>
+            </div>
+            <div class="day-title">
+                <h3>Sindelfingen &ndash; Ankommen in Deutschland</h3>
+                <div class="day-location">&#x1F4CD; Sindelfingen (bei Stuttgart)</div>
+            </div>
+            <div class="day-weather">
+                <span class="weather-icon">&#x26C5;</span>
+                <span class="weather-temp">24&deg;C</span>
+            </div>
+        </div>
+        <div class="day-content">
+            <div class="day-schedule">
+                <div class="schedule-item">
+                    <span class="time">01.07. morgens</span>
+                    <span class="activity">Mittwochs-Markt Beaune (Place de la Halle, ab 7:00) &ndash; K&auml;se, Saucisson &amp; Obst f&uuml;r die Fahrt!</span>
+                </div>
+                <div class="schedule-item">
+                    <span class="time">01.07. ~10:00</span>
+                    <span class="activity">Weiterfahrt Beaune &rarr; Sindelfingen (~4,5h via Mulhouse/Freiburg)</span>
+                </div>
+                <div class="schedule-item">
+                    <span class="time">01.07. nachmittags</span>
+                    <span class="activity">Check-in Hotel, Umgebung erkunden</span>
+                </div>
+                <div class="schedule-item">
+                    <span class="time">02.07.</span>
+                    <span class="activity">Freier Tag in Sindelfingen/Stuttgart-Region</span>
+                </div>
+            </div>
+            <div class="day-details">
+                <div class="detail-box hotel-box">
+                    <h4>&#x1F3E8; City Vibes Hotel</h4>
+                    <p>Wurmbergstrasse 32, 71063 Sindelfingen</p>
+                    <p>Modernes Hotel mit urbanem Flair. 2 Naechte, 2 Zimmer.</p>
+                    <p><strong>Kosten:</strong> 282,- EUR (bereits bezahlt)</p>
+                    <span class="status-badge booked">GEBUCHT &amp; BEZAHLT</span>
+                </div>
+            </div>
+            <div class="day-tips">
+                <div class="tip">&#x1F3E0; <strong>Home Sweet Home!</strong> Sindelfingen ist euer Zuhause &ndash; endlich wieder daheim! Freunde treffen, Nachbarn besuchen, durchatmen. Zwei Tage Ankommen in der Heimat, bevor es weitergeht.</div>
+            </div>
+        </div>
+        <div class="day-rating" data-day="12">
+            <span class="rating-label">Tages-Rating:</span>
+            <div class="stars">
+                <span class="star" data-value="1">&#x2B50;</span>
+                <span class="star" data-value="2">&#x2B50;</span>
+                <span class="star" data-value="3">&#x2B50;</span>
+                <span class="star" data-value="4">&#x2B50;</span>
+                <span class="star" data-value="5">&#x2B50;</span>
+            </div>
+            <span class="rating-display"></span>
+        </div>
+    </div>
+
+    <div class="phase-label">Fr. 03.07. &middot; Mannheim &ndash; Schl&uuml;sselbergabe &amp; Shopping</div>
+
+    <!-- TAG 14: MANNHEIM TAGSUEBER, ABENDS BONN -->
+    <div class="day-card" data-day="14">
+        <div class="day-header">
+            <div class="day-date">
+                <span class="day-weekday">FR</span>
+                <span class="day-number">03</span>
+                <span class="day-month">JUL</span>
+            </div>
+            <div class="day-title">
+                <h3>Mannheim &ndash; Schl&uuml;sselbergabe &amp; Shopping (alle zusammen!)</h3>
+                <div class="day-location">&#x1F4CD; Sindelfingen &rarr; Mannheim &rarr; Bonn</div>
+            </div>
+            <div class="day-weather">
+                <span class="weather-icon">&#x2600;&#xFE0F;</span>
+                <span class="weather-temp">26&deg;C</span>
+            </div>
+        </div>
+        <div class="day-content">
+            <div class="day-schedule">
+                <div class="schedule-item">
+                    <span class="time">03.07. morgens</span>
+                    <span class="activity">Abfahrt aus Sindelfingen &rarr; Mannheim (~1,5h)</span>
+                </div>
+                <div class="schedule-item highlight">
+                    <span class="time">03.07. vormittags</span>
+                    <span class="activity">&#x1F511; Schl&uuml;sselbergabe Studentenwohnheim (ggf.) &ndash; Carlas erste eigene Bude!</span>
+                </div>
+                <div class="schedule-item highlight">
+                    <span class="time">03.07. mittags</span>
+                    <span class="activity">Mannheim erkunden &ndash; alle zusammen ein erster Eindruck von Carlas k&uuml;nftiger Stadt: DHBW Campus, Jungbusch, Neckar, Quadratestadt</span>
+                </div>
+                <div class="schedule-item highlight">
+                    <span class="time">03.07. nachmittags</span>
+                    <span class="activity">&#x1F6CB;&#xFE0F; Erste Shopping-Tour: M&ouml;bel &amp; Einrichtung f&uuml;r Carlas Zimmer (IKEA &amp; Co.)</span>
+                </div>
+                <div class="schedule-item highlight">
+                    <span class="time">03.07. abends</span>
+                    <span class="activity">Weiterfahrt nach Bonn (~3,5h) &ndash; ENDLICH bei Oma &amp; Opa!</span>
+                </div>
+            </div>
+            <div class="day-details">
+                <div class="detail-box place-box">
+                    <h4>&#x1F393; DHBW Mannheim</h4>
+                    <p>Carlas zuk&uuml;nftige Uni &ndash; zentral in der Quadratestadt. Hier wird sie studieren, Praxisphasen bei Fresenius in Bad Homburg.</p>
+                    <p><strong>Mannheim-Vibes:</strong> Jungbusch ist DAS Kreativviertel &ndash; Street Art, Caf&eacute;s, Bars.</p>
+                </div>
+                <div class="detail-box place-box">
+                    <h4>&#x1F389; Wohnung steht!</h4>
+                    <p>Carla hat das Studentenwohnheim zugesagt bekommen &ndash; Mietvertrag unterschrieben! Heute eventuell Schl&uuml;sselbergabe und gemeinsam erste M&ouml;bel &amp; Einrichtungssachen besorgen.</p>
+                </div>
+            </div>
+            <div class="day-tips">
+                <div class="tip">&#x1F37D;&#xFE0F; <strong>Mannheim Mittagspause:</strong> Caf&eacute; Vienna (Jungbusch) oder Komb&uuml;ese am Hafen mit Neckar-Blick.</div>
+                <div class="tip special-tip">&#x1F4D0; <strong>Mass nehmen!</strong> Vor dem IKEA-Trip Zimmer ausmessen &ndash; Bett, Schreibtisch, Schrank-Ma&szlig;e checken!</div>
+                <div class="tip special-tip">&#x1F697; <strong>Lange Etappe abends:</strong> Mannheim &rarr; Bonn sind ~3,5h &ndash; Snacks &amp; Playlist nicht vergessen!</div>
+            </div>
+        </div>
+        <div class="day-rating" data-day="14">
+            <span class="rating-label">Tages-Rating:</span>
+            <div class="stars">
+                <span class="star" data-value="1">&#x2B50;</span>
+                <span class="star" data-value="2">&#x2B50;</span>
+                <span class="star" data-value="3">&#x2B50;</span>
+                <span class="star" data-value="4">&#x2B50;</span>
+                <span class="star" data-value="5">&#x2B50;</span>
+            </div>
+            <span class="rating-display"></span>
+        </div>
+    </div>
+
+    <div class="phase-label">Fr. 03.07. &ndash; Di. 07.07. &middot; Bonn bei Oma &amp; Opa</div>
+
+    <!-- BONN: 03.-07.07. -->
+    <div class="day-card" data-day="16">
+        <div class="day-header">
+            <div class="day-date">
+                <span class="day-weekday">FR-DI</span>
+                <span class="day-number">03-07</span>
+                <span class="day-month">JUL</span>
+            </div>
+            <div class="day-title">
+                <h3>Bonn &ndash; Quality Time bei Oma &amp; Opa</h3>
+                <div class="day-location">&#x1F4CD; Bonn (4 N&auml;chte)</div>
+            </div>
+            <div class="day-weather">
+                <span class="weather-icon">&#x1F324;&#xFE0F;</span>
+                <span class="weather-temp">23&deg;C</span>
+            </div>
+        </div>
+        <div class="day-content">
+            <div class="day-schedule">
+                <div class="schedule-item highlight">
+                    <span class="time">Best of</span>
+                    <span class="activity">Familie! Oma &amp; Opa, Kuchen, Geschichten, Zusammensein</span>
+                </div>
+                <div class="schedule-item highlight">
+                    <span class="time">Terrasse!</span>
+                    <span class="activity">&#x2615; Beisammensein auf der Terrasse &ndash; DAS Herzstuck der Bonn-Tage!</span>
+                </div>
+                <div class="schedule-item">
+                    <span class="time">Programm</span>
+                    <span class="activity">Oma hat bestimmt schon was Tolles geplant &ndash; sie weiss immer, was gut ist!</span>
+                </div>
+            </div>
+            <div class="day-tips">
+                <div class="tip special-tip">&#x1F495; <strong>Wichtig:</strong> Einfach da sein. Terrasse, Kuchen, Geschichten, lachen. Oma macht das Programm &ndash; und das ist immer perfekt.</div>
+                <div class="tip special-tip">&#x1F455; <strong>OUTFIT-ALARM f&uuml;r Carla!</strong> Shopping-Mission mit Oma &ndash; B&uuml;romaus-Klamotten f&uuml;r Fresenius finden! SEND HELP!</div>
+            </div>
+        </div>
+        <div class="day-rating" data-day="16">
+            <span class="rating-label">Tages-Rating:</span>
+            <div class="stars">
+                <span class="star" data-value="1">&#x2B50;</span>
+                <span class="star" data-value="2">&#x2B50;</span>
+                <span class="star" data-value="3">&#x2B50;</span>
+                <span class="star" data-value="4">&#x2B50;</span>
+                <span class="star" data-value="5">&#x2B50;</span>
+            </div>
+            <span class="rating-display"></span>
+        </div>
+    </div>
+
+    <div class="phase-label">Di. 07.07. &ndash; Fr. 10.07. &middot; Mannheim &ndash; Wohnung einrichten (Vorab-Mission)</div>
+
+    <!-- MANNHEIM 07.-10.07.: Wohnung einrichten + erkunden -->
+    <div class="day-card" data-day="mannheim-pre1">
+        <div class="day-header">
+            <div class="day-date">
+                <span class="day-weekday">DI</span>
+                <span class="day-number">07</span>
+                <span class="day-month">JUL</span>
+            </div>
+            <div class="day-title">
+                <h3>&#x1F6CF;&#xFE0F; Bett-Mission: Bonn &rarr; Mannheim</h3>
+                <div class="day-location">&#x1F4CD; Bonn &rarr; Mannheim (Mercure Hotel + Carlas Wohnung)</div>
+            </div>
+            <div class="day-weather">
+                <span class="weather-icon">&#x2600;&#xFE0F;</span>
+                <span class="weather-temp">25&deg;C</span>
+            </div>
+        </div>
+        <div class="day-content">
+            <div class="day-schedule">
+                <div class="schedule-item">
+                    <span class="time">fr&uuml;h</span>
+                    <span class="activity">Abreise Bonn &rarr; Mannheim (~3h, A565/A61/A6) &ndash; alle zu f&uuml;nft im Auto</span>
+                </div>
+                <div class="schedule-item highlight">
+                    <span class="time">mittags</span>
+                    <span class="activity">&#x1F3D7;&#xFE0F; <strong>Mission BETT!</strong> IKEA Walldorf (~20 min) oder XXL Lutz Mannheim &ndash; Bettgestell + Matratze + Lattenrost direkt mitnehmen. M&auml;dels schlafen ab heute Nacht in Carlas Wohnung!</span>
+                </div>
+                <div class="schedule-item">
+                    <span class="time">15:00</span>
+                    <span class="activity">Check-in Mercure Hotel Mannheim am Friedensplatz (Mark + Claudia)</span>
+                </div>
+                <div class="schedule-item highlight">
+                    <span class="time">nachmittags</span>
+                    <span class="activity">&#x1F527; Bett aufbauen in Carlas Wohnung &ndash; Tagesziel! Akku-Schrauber nicht vergessen.</span>
+                </div>
+                <div class="schedule-item">
+                    <span class="time">abends</span>
+                    <span class="activity">Einweihungs-Pizza in der noch leeren Wohnung &ndash; Carla, Luisa, Marlene erste Nacht im neuen Zuhause</span>
+                </div>
+            </div>
+            <div class="day-tips">
+                <div class="tip">&#x1F4CB; <strong>Pack-Check vor Abfahrt:</strong> Bettw&auml;sche + Kissen aus Sindelfingen mitgenommen? Sonst auf der IKEA-Liste!</div>
+                <div class="tip special-tip">&#x1F37D;&#xFE0F; <strong>Abend-Tipp:</strong> Falls Pizza-Strategie nicht zieht &ndash; <em>Hans im Gl&uuml;ck</em> Mannheim Q7 oder <em>Coffee Fellows</em> im Quadrat O7 sind 5 Min vom Hotel.</div>
+                <div class="tip">&#x1F4B6; <strong>Geld:</strong> Bett + Matratze realistisch 300&ndash;600 &euro;. Wer zahlt was?</div>
+            </div>
+        </div>
+        <div class="day-rating" data-day="mannheim-pre1">
+            <span class="rating-label">Tages-Rating:</span>
+            <div class="stars">
+                <span class="star" data-value="1">&#x2B50;</span>
+                <span class="star" data-value="2">&#x2B50;</span>
+                <span class="star" data-value="3">&#x2B50;</span>
+                <span class="star" data-value="4">&#x2B50;</span>
+                <span class="star" data-value="5">&#x2B50;</span>
+            </div>
+            <span class="rating-display"></span>
+        </div>
+    </div>
+
+    <!-- MI 08.07. -->
+    <div class="day-card" data-day="mannheim-pre2">
+        <div class="day-header">
+            <div class="day-date">
+                <span class="day-weekday">MI</span>
+                <span class="day-number">08</span>
+                <span class="day-month">JUL</span>
+            </div>
+            <div class="day-title">
+                <h3>&#x1F6D2; Einrichten + Mannheim entdecken</h3>
+                <div class="day-location">&#x1F4CD; Mannheim &ndash; Quadratestadt</div>
+            </div>
+            <div class="day-weather">
+                <span class="weather-icon">&#x1F324;&#xFE0F;</span>
+                <span class="weather-temp">24&deg;C</span>
+            </div>
+        </div>
+        <div class="day-content">
+            <div class="day-schedule">
+                <div class="schedule-item">
+                    <span class="time">vormittags</span>
+                    <span class="activity">IKEA-Run 2.0 &ndash; was noch fehlt: Schreibtisch, Stuhl, Lampe, Regal, K&uuml;chen-Basics, Vorh&auml;nge</span>
+                </div>
+                <div class="schedule-item">
+                    <span class="time">mittags</span>
+                    <span class="activity">&#x1F37D;&#xFE0F; <strong>Markthalle Mannheim</strong> (am Marktplatz) &ndash; Streetfood, alle picken sich was Eigenes</span>
+                </div>
+                <div class="schedule-item highlight">
+                    <span class="time">nachmittags</span>
+                    <span class="activity">&#x1F30A; <strong>Mannheim-Walk:</strong> Wasserturm &rarr; Friedrichsplatz &rarr; durch die Quadrate &rarr; Kunsthalle (von au&szlig;en) &rarr; Neckaruferbebauung &ndash; Carlas neue Hood checken</span>
+                </div>
+                <div class="schedule-item">
+                    <span class="time">abends</span>
+                    <span class="activity">&#x1F37A; Jungbusch erkunden &ndash; <em>Murphy's Law</em>, <em>Hagestolz</em>, oder am Hafen sitzen</span>
+                </div>
+            </div>
+            <div class="day-tips">
+                <div class="tip special-tip">&#x1F393; <strong>DHBW pr&uuml;fen:</strong> Carlas Campus (Coblitzallee + Kaeferthaler Stra&szlig;e) heute kurz abchecken &ndash; wie kommt sie hin? Bahn? Rad?</div>
+                <div class="tip">&#x1F6B2; <strong>Push-Idee:</strong> Bei VRN-Nextbike anmelden &ndash; Mannheim ist flach, fahrradfreundlich, und Carla braucht eh ein Setup.</div>
+                <div class="tip">&#x1F6D2; <strong>Geheimtipp Einrichten:</strong> Sostrene Grene (P5) oder TK Maxx (Q6) f&uuml;r Deko ohne IKEA-Look.</div>
+            </div>
+        </div>
+        <div class="day-rating" data-day="mannheim-pre2">
+            <span class="rating-label">Tages-Rating:</span>
+            <div class="stars">
+                <span class="star" data-value="1">&#x2B50;</span>
+                <span class="star" data-value="2">&#x2B50;</span>
+                <span class="star" data-value="3">&#x2B50;</span>
+                <span class="star" data-value="4">&#x2B50;</span>
+                <span class="star" data-value="5">&#x2B50;</span>
+            </div>
+            <span class="rating-display"></span>
+        </div>
+    </div>
+
+    <!-- DO 09.07. -->
+    <div class="day-card" data-day="mannheim-pre3">
+        <div class="day-header">
+            <div class="day-date">
+                <span class="day-weekday">DO</span>
+                <span class="day-number">09</span>
+                <span class="day-month">JUL</span>
+            </div>
+            <div class="day-title">
+                <h3>&#x1F3A8; Feinschliff &amp; Umgebung</h3>
+                <div class="day-location">&#x1F4CD; Mannheim + evtl. Heidelberg</div>
+            </div>
+            <div class="day-weather">
+                <span class="weather-icon">&#x2600;&#xFE0F;</span>
+                <span class="weather-temp">26&deg;C</span>
+            </div>
+        </div>
+        <div class="day-content">
+            <div class="day-schedule">
+                <div class="schedule-item">
+                    <span class="time">vormittags</span>
+                    <span class="activity">Letzte Einricht-Runde: Bilder aufh&auml;ngen, K&uuml;che einr&auml;umen, Klamottenschrank, Bad-Setup</span>
+                </div>
+                <div class="schedule-item highlight">
+                    <span class="time">mittags</span>
+                    <span class="activity">&#x1F687; <strong>Tagestrip Heidelberg</strong> (15 min mit S-Bahn ab Mannheim Hbf) &ndash; Altstadt, Schloss, Philosophenweg, Neckar</span>
+                </div>
+                <div class="schedule-item">
+                    <span class="time">nachmittags</span>
+                    <span class="activity">Eis am Marktplatz Heidelberg, dann zur&uuml;ck nach Mannheim</span>
+                </div>
+                <div class="schedule-item">
+                    <span class="time">abends</span>
+                    <span class="activity">&#x1F954; Letzter gemeinsamer Abend vor M&uuml;nchen-Etappe &ndash; vielleicht <em>Luisenpark</em> Sundowner oder im Jungbusch</span>
+                </div>
+            </div>
+            <div class="day-tips">
+                <div class="tip special-tip">&#x1F4F8; <strong>Push-Foto:</strong> Heidelberger Schloss von der Alten Br&uuml;cke ist Klischee, aber f&uuml;rs Familienalbum Pflicht &ndash; einer fotografiert, alle drauf.</div>
+                <div class="tip">&#x1F3D5;&#xFE0F; <strong>Alternative:</strong> Wenn alle Einricht-m&uuml;de sind &ndash; <em>Strandbad Mannheim</em> oder <em>Stollenw&ouml;rthsee</em> f&uuml;r Chill-Modus.</div>
+                <div class="tip">&#x1F4E6; <strong>Pack-Check:</strong> Morgen geht's nach M&uuml;nchen &ndash; was bleibt in Mannheim, was kommt mit?</div>
+            </div>
+        </div>
+        <div class="day-rating" data-day="mannheim-pre3">
+            <span class="rating-label">Tages-Rating:</span>
+            <div class="stars">
+                <span class="star" data-value="1">&#x2B50;</span>
+                <span class="star" data-value="2">&#x2B50;</span>
+                <span class="star" data-value="3">&#x2B50;</span>
+                <span class="star" data-value="4">&#x2B50;</span>
+                <span class="star" data-value="5">&#x2B50;</span>
+            </div>
+            <span class="rating-display"></span>
+        </div>
+    </div>
+
+    <div class="phase-label">Fr. 10.07. &ndash; Sa. 11.07. &middot; M&uuml;nchen &amp; Marks R&uuml;ckflug</div>
+
+    <!-- MUENCHEN BEI JOCHEN & ROSSI -->
+    <div class="day-card" data-day="bayern1">
+        <div class="day-header">
+            <div class="day-date">
+                <span class="day-weekday">FR-SA</span>
+                <span class="day-number">10-11</span>
+                <span class="day-month">JUL</span>
+            </div>
+            <div class="day-title">
+                <h3>&#x1F3D4;&#xFE0F; M&uuml;nchen &ndash; bei Jochen &amp; Rossi</h3>
+                <div class="day-location">&#x1F4CD; Mannheim &rarr; M&uuml;nchen (Jochen &amp; Rossi) &rarr; MUC Flughafen</div>
+            </div>
+        </div>
+        <div class="day-content">
+            <div class="day-schedule">
+                <div class="schedule-item">
+                    <span class="time">10.07. tags&uuml;ber</span>
+                    <span class="activity">Check-out Mercure bis 12:00, Abreise Mannheim &rarr; M&uuml;nchen (~3,5h, A6/A8) &ndash; deutlich entspannter als Bonn&ndash;M&uuml;nchen w&auml;re!</span>
+                </div>
+                <div class="schedule-item highlight">
+                    <span class="time">10.07. abends</span>
+                    <span class="activity">Eingeladen bei Jochen &amp; Rossi &ndash; gemeinsamer Abend, &Uuml;bernachtung. Letzter Abend mit Mark!</span>
+                </div>
+                <div class="schedule-item highlight">
+                    <span class="time">11.07. mittags</span>
+                    <span class="activity">Mark zum Flughafen MUC &ndash; Tsch&uuml;ss Papa! &#x1F622;</span>
+                </div>
+                <div class="schedule-item">
+                    <span class="time">11.07. nachmittags</span>
+                    <span class="activity">M&auml;dels weiter nach Passau (~2,5h) &ndash; M&auml;dels-Modus on!</span>
+                </div>
+            </div>
+            <div class="day-details">
+                <div class="detail-box flight-box">
+                    <h4>&#x2708;&#xFE0F; R&uuml;ckflug Mark &ndash; Sa 11. Juli</h4>
+                    <p><strong>TK1634</strong>: MUC 15:20 &rarr; IST</p>
+                    <p><strong>TK64</strong>: IST &rarr; BKK 09:45 (n&auml;chster Tag)</p>
+                    <p>Reisedauer: 13h 25min | Economy Class (T)</p>
+                </div>
+            </div>
+        </div>
+        <div class="day-rating" data-day="bayern1">
+            <span class="rating-label">Tages-Rating:</span>
+            <div class="stars">
+                <span class="star" data-value="1">&#x2B50;</span>
+                <span class="star" data-value="2">&#x2B50;</span>
+                <span class="star" data-value="3">&#x2B50;</span>
+                <span class="star" data-value="4">&#x2B50;</span>
+                <span class="star" data-value="5">&#x2B50;</span>
+            </div>
+            <span class="rating-display"></span>
+        </div>
+    </div>
+
+    <div class="phase-label">Sa. 11.07. &ndash; Do. 16.07. &middot; Passau (M&auml;dels-Zeit)</div>
+
+    <!-- PASSAU -->
+    <div class="day-card" data-day="passau">
+        <div class="day-header">
+            <div class="day-date">
+                <span class="day-weekday">SA-DO</span>
+                <span class="day-number">11-16</span>
+                <span class="day-month">JUL</span>
+            </div>
+            <div class="day-title">
+                <h3>&#x1F3D4;&#xFE0F; Passau &ndash; Die M&auml;dels</h3>
+                <div class="day-location">&#x1F4CD; Passau (Claudia, Carla, Luisa &amp; Marlene)</div>
+            </div>
+        </div>
+        <div class="day-content">
+            <div class="day-schedule">
+                <div class="schedule-item">
+                    <span class="time">11.07. abends</span>
+                    <span class="activity">Ankunft in Passau bei Freunden &ndash; angekommen!</span>
+                </div>
+                <div class="schedule-item highlight">
+                    <span class="time">12.-15.07.</span>
+                    <span class="activity">Dreifl&uuml;ssestadt bei Mandy, Basti und den Jungs zu Besuch!</span>
+                </div>
+                <div class="schedule-item">
+                    <span class="time">16.07. morgens</span>
+                    <span class="activity">Abreise Passau &rarr; Ingolstadt (~1,5h) &ndash; Anett, Robert, Nela &amp; Sina warten!</span>
+                </div>
+            </div>
+        </div>
+        <div class="day-rating" data-day="passau">
+            <span class="rating-label">Tages-Rating:</span>
+            <div class="stars">
+                <span class="star" data-value="1">&#x2B50;</span>
+                <span class="star" data-value="2">&#x2B50;</span>
+                <span class="star" data-value="3">&#x2B50;</span>
+                <span class="star" data-value="4">&#x2B50;</span>
+                <span class="star" data-value="5">&#x2B50;</span>
+            </div>
+            <span class="rating-display"></span>
+        </div>
+    </div>
+
+    <div class="phase-label">Do. 16.07. &ndash; Fr. 17.07. &middot; Ingolstadt bei Anett (Hinweg)</div>
+
+    <!-- INGOLSTADT 16.-17.07. (HINWEG) -->
+    <div class="day-card" data-day="ingo-hin">
+        <div class="day-header">
+            <div class="day-date">
+                <span class="day-weekday">DO-FR</span>
+                <span class="day-number">16-17</span>
+                <span class="day-month">JUL</span>
+            </div>
+            <div class="day-title">
+                <h3>Ingolstadt &ndash; bei Anett &amp; Familie (Hinweg)</h3>
+                <div class="day-location">&#x1F4CD; Passau &rarr; Ingolstadt (Claudia, Carla, Luisa &amp; Marlene)</div>
+            </div>
+        </div>
+        <div class="day-content">
+            <div class="day-schedule">
+                <div class="schedule-item">
+                    <span class="time">16.07. morgens</span>
+                    <span class="activity">Fahrt Passau &rarr; Ingolstadt (~1,5h)</span>
+                </div>
+                <div class="schedule-item highlight">
+                    <span class="time">16.07. tags&uuml;ber/abends</span>
+                    <span class="activity">Wiedersehen mit Anett, Robert, Nela &amp; Sina &ndash; Quality Time!</span>
+                </div>
+                <div class="schedule-item">
+                    <span class="time">17.07. morgens</span>
+                    <span class="activity">Abfahrt Ingolstadt &rarr; Sindelfingen (~3h)</span>
+                </div>
+            </div>
+            <div class="day-tips">
+                <div class="tip special-tip">&#x1F46D; <strong>Doppel-Familie:</strong> 5 M&auml;dels (Carla, Luisa, Marlene + Nela &amp; Sina) und 2 M&uuml;tter (Claudia + Anett) &ndash; Robert ist der einzige Typ im Haus, der Arme!</div>
+            </div>
+        </div>
+        <div class="day-rating" data-day="ingo-hin">
+            <span class="rating-label">Tages-Rating:</span>
+            <div class="stars">
+                <span class="star" data-value="1">&#x2B50;</span>
+                <span class="star" data-value="2">&#x2B50;</span>
+                <span class="star" data-value="3">&#x2B50;</span>
+                <span class="star" data-value="4">&#x2B50;</span>
+                <span class="star" data-value="5">&#x2B50;</span>
+            </div>
+            <span class="rating-display"></span>
+        </div>
+    </div>
+
+    <div class="phase-label">Fr. 17.07. &middot; Sindelfingen &ndash; Carlas Abi-Ball!</div>
+
+    <!-- 17.07. ABI-BALL CARLA IN SINDELFINGEN -->
+    <div class="day-card" data-day="abiball">
+        <div class="day-header">
+            <div class="day-date">
+                <span class="day-weekday">FR</span>
+                <span class="day-number">17</span>
+                <span class="day-month">JUL</span>
+            </div>
+            <div class="day-title">
+                <h3>&#x1F393; Sindelfingen &ndash; Carlas GGS Abi-Ball!</h3>
+                <div class="day-location">&#x1F4CD; Ingolstadt &rarr; Sindelfingen</div>
+            </div>
+        </div>
+        <div class="day-content">
+            <div class="day-schedule">
+                <div class="schedule-item">
+                    <span class="time">17.07. morgens</span>
+                    <span class="activity">Abfahrt Ingolstadt &rarr; Sindelfingen (~3h)</span>
+                </div>
+                <div class="schedule-item">
+                    <span class="time">17.07. nachmittags</span>
+                    <span class="activity">Ankunft Sindelfingen &ndash; Carla glamour-ready machen!</span>
+                </div>
+                <div class="schedule-item highlight">
+                    <span class="time">17.07. abends</span>
+                    <span class="activity">&#x1F389; Carla zum Abi-Ball ihrer alten GGS-Klasse &ndash; Wiedersehen mit den alten Schulfreunden!</span>
+                </div>
+            </div>
+            <div class="day-tips">
+                <div class="tip special-tip">&#x1F484; <strong>GGS-Reunion!</strong> Carla feiert mit ihrer alten Klasse den Abi-Ball &ndash; Erinnerungen, Selfies, Tanzen bis tief in die Nacht!</div>
+                <div class="tip">&#x1F4F8; <strong>Bitte Fotos!</strong> Mama-Pflicht: Vorher-Foto vor der Tuer.</div>
+            </div>
+        </div>
+        <div class="day-rating" data-day="abiball">
+            <span class="rating-label">Tages-Rating:</span>
+            <div class="stars">
+                <span class="star" data-value="1">&#x2B50;</span>
+                <span class="star" data-value="2">&#x2B50;</span>
+                <span class="star" data-value="3">&#x2B50;</span>
+                <span class="star" data-value="4">&#x2B50;</span>
+                <span class="star" data-value="5">&#x2B50;</span>
+            </div>
+            <span class="rating-display"></span>
+        </div>
+    </div>
+
+    <div class="phase-label">Sa. 18.07. &ndash; Mo. 27.07. &middot; Mannheim &ndash; Wohnung einrichten</div>
+
+    <!-- SPLIT: 18.-27. Juli -->
+    <div class="day-card" data-day="split1" style="border: none; background: none; box-shadow: none;">
+        <div class="day-header">
+            <div class="day-date">
+                <span class="day-weekday">SA-MO</span>
+                <span class="day-number">18-27</span>
+                <span class="day-month">JUL</span>
+            </div>
+            <div class="day-title">
+                <h3>Familie splittet sich auf!</h3>
+                <div class="day-location">&#x1F4CD; Bangkok / Mannheim / ???</div>
+            </div>
+        </div>
+    </div>
+    <div class="split-grid" style="max-width: 1200px; margin: 0 auto 2rem; padding: 0 1rem;">
+        <div class="split-card">
+            <div class="split-icon">&#x1F30F;</div>
+            <h3>Mark</h3>
+            <div class="split-location">Bangkok</div>
+            <div class="split-members">Zur&uuml;ck seit 11.07. &ndash; arbeiten &amp; M&auml;dels vermissen</div>
+            <span class="split-status set">IN BKK</span>
+        </div>
+        <div class="split-card">
+            <div class="split-icon">&#x1F3E0;</div>
+            <h3>Carla &amp; Claudia</h3>
+            <div class="split-location">Mannheim (18.&ndash;27.07.)</div>
+            <div class="split-members">Wohnung einrichten, IKEA-Runs, Mannheim entdecken, Bad Homburg vorab anschauen &ndash; alles bereit f&uuml;r Carlas Start!</div>
+            <span class="split-status set">STEHT</span>
+        </div>
+        <div class="split-card">
+            <div class="split-icon">&#x1F30A;</div>
+            <h3>Marlene</h3>
+            <div class="split-location">Ile d'Ol&eacute;ron (18.&ndash;25.07.)</div>
+            <div class="split-members">Re-Trip zu ihrer Rotary-Gastfamilie! Sa 18.07. Direktzug Mannheim&rarr;Bordeaux (07:30&rarr;14:40), Sa 25.07. zur&uuml;ck mit Direktzug. Atlantik-Herz schlaegt weiter!</div>
+            <span class="split-status idea">IDEE</span>
+        </div>
+        <div class="split-card">
+            <div class="split-icon">&#x1F46F;</div>
+            <h3>Luisa</h3>
+            <div class="split-location">noch offen</div>
+            <div class="split-members">Idee: Bonn alleine zu Oma &amp; Opa? Oder Mannheim mit Carla?</div>
+            <span class="split-status open">OFFEN</span>
+        </div>
+    </div>
+
+    <div class="mobility-card" style="margin-top: 0;">
+        <div class="mobility-status" style="background: rgba(52, 211, 153, 0.15); color: var(--green);">&#x1F31F; SOMMER-DIREKTZUG ENTDECKT</div>
+        <h3>&#x1F687; TGV Direkt Mannheim &harr; Bordeaux (Sommer 2026)</h3>
+        <p class="mobility-tagline">An 8 Samstagen im Juli &amp; August faehrt der TGV Duplex direkt &ndash; ohne Paris-Umstieg!</p>
+        <div class="mobility-plan">
+            <h4>Marlenes Re-Trip Sa &rarr; Sa</h4>
+            <ul>
+                <li><strong>Sa 18.07. Hinfahrt:</strong> Mannheim Hbf ~07:30 &rarr; Bordeaux St-Jean 14:40 (7h 10min, 1 Zug, kein Umstieg!)</li>
+                <li><strong>7 Tage Ol&eacute;ron</strong> bei der Rotary-Gastfamilie &ndash; Atlantik-Reunion!</li>
+                <li><strong>Sa 25.07. R&uuml;ckfahrt:</strong> Bordeaux St-Jean 15:58 &rarr; Mannheim Hbf ~22:30, dann zur&uuml;ck zu den anderen.</li>
+                <li><strong>Halte unterwegs:</strong> Karlsruhe, Strassburg, Poitiers, Angoul&ecirc;me &ndash; nur 4 Stops!</li>
+                <li><strong>Tickets:</strong> ab 109 EUR Hinfahrt / 90 EUR R&uuml;ckfahrt (ohne BahnCard)</li>
+            </ul>
+        </div>
+        <div class="mobility-questions">
+            <h4>&#x2728; Warum perfekt</h4>
+            <ul>
+                <li>Genau die Sa&rarr;Sa-Kombi ist eine der 8 Direktzug-Wochen 2026</li>
+                <li>Kein nerviger Umstieg in Paris (Montparnasse&rarr;Gare de l'Est)</li>
+                <li>Marlene kann allein reisen, kein Begleitstress</li>
+                <li>7 volle Tage in Ol&eacute;ron, perfekte L&auml;nge</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="phase-label phase-label-milestone">Mo. 27.07. &middot; Carlas 1. Tag bei Fresenius! &#x1F389;</div>
+
+    <!-- 27.07. FRESENIUS START -->
+    <div class="day-card milestone-card" data-day="fresenius1">
+        <div class="day-header">
+            <div class="day-date milestone-date">
+                <span class="day-weekday">MO</span>
+                <span class="day-number">27</span>
+                <span class="day-month">JUL</span>
+            </div>
+            <div class="day-title">
+                <h3>&#x1F389; Carlas 1. Tag bei Fresenius in Bad Homburg!</h3>
+                <div class="day-location">&#x1F4CD; Mannheim &rarr; Bad Homburg (1. Praxisphase Duales Studium)</div>
+            </div>
+        </div>
+        <div class="day-content">
+            <div class="day-schedule">
+                <div class="schedule-item highlight">
+                    <span class="time">27.07. morgens</span>
+                    <span class="activity">&#x1F4BC; Erster Arbeitstag bei Fresenius &ndash; Begr&uuml;&szlig;ung, Onboarding, Team kennenlernen!</span>
+                </div>
+            </div>
+            <div class="day-tips">
+                <div class="tip special-tip">&#x1F389; <strong>Meilenstein!</strong> Carla startet ihr Berufsleben &ndash; und das Duale Studium an der DHBW Mannheim. Stolz-Moment-Maximum!</div>
+                <div class="tip">&#x1F30A; <strong>Pendel-Frage:</strong> Wie kommt Carla von Mannheim nach Bad Homburg? Bahn &amp; Verbindungen vorab pr&uuml;fen.</div>
+            </div>
+        </div>
+        <div class="day-rating" data-day="fresenius1">
+            <span class="rating-label">Tages-Rating:</span>
+            <div class="stars">
+                <span class="star" data-value="1">&#x2B50;</span>
+                <span class="star" data-value="2">&#x2B50;</span>
+                <span class="star" data-value="3">&#x2B50;</span>
+                <span class="star" data-value="4">&#x2B50;</span>
+                <span class="star" data-value="5">&#x2B50;</span>
+            </div>
+            <span class="rating-display"></span>
+        </div>
+    </div>
+
+    <div class="phase-label">Di. 28.07. &ndash; Fr. 31.07. &middot; Familie verteilt sich</div>
+
+    <!-- 28.-31.07. FAMILIE VERTEILT -->
+    <div class="day-card" data-day="split2" style="border: none; background: none; box-shadow: none;">
+        <div class="day-header">
+            <div class="day-date">
+                <span class="day-weekday">DI-FR</span>
+                <span class="day-number">28-31</span>
+                <span class="day-month">JUL</span>
+            </div>
+            <div class="day-title">
+                <h3>Jeder macht sein Ding</h3>
+                <div class="day-location">&#x1F4CD; Bad Homburg / Mannheim / Bonn? / Ol&eacute;ron?</div>
+            </div>
+        </div>
+    </div>
+    <div class="split-grid" style="max-width: 1200px; margin: 0 auto 2rem; padding: 0 1rem;">
+        <div class="split-card">
+            <div class="split-icon">&#x1F4BC;</div>
+            <h3>Carla</h3>
+            <div class="split-location">Bad Homburg / Mannheim</div>
+            <div class="split-members">Erste Arbeitswoche bei Fresenius &ndash; Pendeln, Eindruecke sammeln, ankommen!</div>
+            <span class="split-status set">FRESENIUS</span>
+        </div>
+        <div class="split-card">
+            <div class="split-icon">&#x1F4CD;</div>
+            <h3>Claudia</h3>
+            <div class="split-location">Mannheim?</div>
+            <div class="split-members">Bei Carla bleiben, Mama-Support fuer die erste Arbeitswoche? Oder eigene Plaene?</div>
+            <span class="split-status open">OFFEN</span>
+        </div>
+        <div class="split-card">
+            <div class="split-icon">&#x1F3E0;</div>
+            <h3>Luisa</h3>
+            <div class="split-location">Bonn?</div>
+            <div class="split-members">Idee: nochmal alleine zu Oma &amp; Opa &ndash; Quality Time mit den Grosseltern!</div>
+            <span class="split-status idea">IDEE</span>
+        </div>
+        <div class="split-card">
+            <div class="split-icon">&#x2728;</div>
+            <h3>Marlene</h3>
+            <div class="split-location">zur&uuml;ck (ab 25.07.)</div>
+            <div class="split-members">Nach Ol&eacute;ron-Re-Trip wieder bei der Familie &ndash; Mannheim? Bonn zu Luisa? Sindelfingen?</div>
+            <span class="split-status open">OFFEN</span>
+        </div>
+    </div>
+
+    <div class="phase-label">Sa. 01.08. &ndash; Mo. 03.08. &middot; Leipzig (Ella wird 4!) &#x1F382;</div>
+
+    <!-- LEIPZIG 01-03 AUG -->
+    <div class="day-card" data-day="leipzig">
+        <div class="day-header">
+            <div class="day-date">
+                <span class="day-weekday">SA-MO</span>
+                <span class="day-number">01-03</span>
+                <span class="day-month">AUG</span>
+            </div>
+            <div class="day-title">
+                <h3>&#x1F382; Leipzig &ndash; Ella wird 4!</h3>
+                <div class="day-location">&#x1F4CD; Leipzig</div>
+            </div>
+        </div>
+        <div class="day-content">
+            <div class="day-schedule">
+                <div class="schedule-item highlight">
+                    <span class="time">01.-03.08.</span>
+                    <span class="activity">Cousine Ella feiert ihren 4. Geburtstag! Familienzeit in Leipzig.</span>
+                </div>
+            </div>
+            <div class="day-tips">
+                <div class="tip special-tip">&#x2708;&#xFE0F; <strong>Achtung Carla:</strong> Von Leipzig alleine weiter nach Bad Homburg zur Einarbeitung bei Fresenius.</div>
+                <div class="tip">&#x1F697; <strong>Am 03.08.:</strong> Claudia, Luisa &amp; Marlene fahren weiter nach Ingolstadt zu Anett, Robert, Nela &amp; Sina.</div>
+            </div>
+        </div>
+        <div class="day-rating" data-day="leipzig">
+            <span class="rating-label">Tages-Rating:</span>
+            <div class="stars">
+                <span class="star" data-value="1">&#x2B50;</span>
+                <span class="star" data-value="2">&#x2B50;</span>
+                <span class="star" data-value="3">&#x2B50;</span>
+                <span class="star" data-value="4">&#x2B50;</span>
+                <span class="star" data-value="5">&#x2B50;</span>
+            </div>
+            <span class="rating-display"></span>
+        </div>
+    </div>
+
+    <div class="phase-label">Mo. 03.08. &ndash; Mi. 05.08. &middot; Ingolstadt (R&uuml;ckweg)</div>
+
+    <!-- INGOLSTADT 03-05 AUG -->
+    <div class="day-card" data-day="ingolstadt">
+        <div class="day-header">
+            <div class="day-date">
+                <span class="day-weekday">MO-MI</span>
+                <span class="day-number">03-05</span>
+                <span class="day-month">AUG</span>
+            </div>
+            <div class="day-title">
+                <h3>Ingolstadt &ndash; bei Anett &amp; Familie</h3>
+                <div class="day-location">&#x1F4CD; Ingolstadt (Claudia, Luisa &amp; Marlene)</div>
+            </div>
+        </div>
+        <div class="day-content">
+            <div class="day-schedule">
+                <div class="schedule-item">
+                    <span class="time">03.-05.08.</span>
+                    <span class="activity">Bei Anett, Robert, Nela &amp; Sina in Ingolstadt &ndash; Freunde-Zeit!</span>
+                </div>
+                <div class="schedule-item highlight">
+                    <span class="time">05.08.</span>
+                    <span class="activity">Marlene &amp; Luisa: Rueckflug MUC &rarr; BKK</span>
+                </div>
+            </div>
+            <div class="day-tips">
+            </div>
+        </div>
+        <div class="day-rating" data-day="ingolstadt">
+            <span class="rating-label">Tages-Rating:</span>
+            <div class="stars">
+                <span class="star" data-value="1">&#x2B50;</span>
+                <span class="star" data-value="2">&#x2B50;</span>
+                <span class="star" data-value="3">&#x2B50;</span>
+                <span class="star" data-value="4">&#x2B50;</span>
+                <span class="star" data-value="5">&#x2B50;</span>
+            </div>
+            <span class="rating-display"></span>
+        </div>
+    </div>
+
+    <div class="phase-label">Mi. 05.08. &middot; R&uuml;ckflug Marlene &amp; Luisa</div>
+
+    <!-- MARLENE + LUISA RUECKFLUG -->
+    <div class="day-card departure-card" data-day="final">
+        <div class="day-header">
+            <div class="day-date">
+                <span class="day-weekday">MI</span>
+                <span class="day-number">05</span>
+                <span class="day-month">AUG</span>
+            </div>
+            <div class="day-title">
+                <h3>&#x2708;&#xFE0F; Marlene &amp; Luisa fliegen zurueck</h3>
+                <div class="day-location">&#x1F4CD; Muenchen &rarr; Bangkok</div>
+            </div>
+        </div>
+        <div class="day-content">
+            <div class="day-details">
+                <div class="detail-box flight-box">
+                    <h4>&#x2708;&#xFE0F; R&uuml;ckflug Marlene &amp; Luisa &ndash; Mi 05. August</h4>
+                    <p><strong>TK1634</strong>: MUC 15:20 &rarr; IST</p>
+                    <p><strong>TK64</strong>: IST &rarr; BKK 09:45 (n&auml;chster Tag)</p>
+                    <p>Reisedauer: 13h 25min | Ende eines epischen Sommers!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- HOTELS UEBERSICHT -->
+<section class="section" id="hotels">
+    <h2 class="section-title">Unterkuenfte</h2>
+    <div class="hotel-grid">
+        <div class="hotel-card">
+            <div class="hotel-status booked">GEBUCHT</div>
+            <h3>Hotel Bordeaux Clemenceau by Happyculture</h3>
+            <p class="hotel-location">&#x1F4CD; Bordeaux</p>
+            <p class="hotel-dates">20.06.2026 &ndash; 1 Nacht</p>
+            <p>Stilvolles Boutique-Hotel, zentrale Lage am Place Gambetta. Perfekt fuer die Ankunftsnacht.</p>
+        </div>
+        <div class="hotel-card">
+            <div class="hotel-status booked">GEBUCHT &amp; ANGEZAHLT</div>
+            <h3>La Cabane de peche de la Cotiniere</h3>
+            <p class="hotel-location">&#x1F4CD; Avenue Des Pins 58, 17310 Saint-Pierre-d'Oleron</p>
+            <p class="hotel-dates">21.06. &ndash; 30.06.2026 &ndash; 9 Naechte</p>
+            <p>Ganzes Ferienhaus, 3 Schlafzimmer, 2 Erw. + 3 Kinder. Terrasse, Garten, Grill, Kueche, Waschmaschine, Kaffeemaschine &ndash; alles da! Preis: 1.786,25 EUR (inkl. Reinigung).</p>
+        </div>
+        <div class="hotel-card">
+            <div class="hotel-status booked">GEBUCHT</div>
+            <h3>Beaune Residence appartement</h3>
+            <p class="hotel-location">&#x1F4CD; 34 rue d'Alsace, 21200 Beaune</p>
+            <p class="hotel-dates">30.06. &ndash; 01.07.2026 &ndash; 1 Nacht</p>
+            <p>Appartement, 2 Erw. + 3 Kinder. Check-in ab 15:00 (Lockbox), Check-out bis 10:00. Ankunft geplant 17:00&ndash;18:00.</p>
+        </div>
+        <div class="hotel-card">
+            <div class="hotel-status booked">GEBUCHT &amp; BEZAHLT</div>
+            <h3>City Vibes Hotel</h3>
+            <p class="hotel-location">&#x1F4CD; Wurmbergstr. 32, 71063 Sindelfingen</p>
+            <p class="hotel-dates">01.07. &ndash; 03.07.2026 &ndash; 2 Naechte</p>
+            <p>2 Zimmer, 282,- EUR (bezahlt). Modernes Hotel mit urbanem Flair.</p>
+        </div>
+        <div class="hotel-card">
+            <div class="hotel-status family">BEI FAMILIE</div>
+            <h3>Bei Oma &amp; Opa</h3>
+            <p class="hotel-location">&#x1F4CD; Bonn</p>
+            <p class="hotel-dates">03.07. &ndash; 07.07.2026 &ndash; 4 Naechte</p>
+            <p>Das beste Hotel der Welt &ndash; mit Kuchen-Flatrate und Liebe inklusive.</p>
+        </div>
+        <div class="hotel-card">
+            <div class="hotel-status booked">GEBUCHT</div>
+            <h3>Mercure Hotel Mannheim am Friedensplatz</h3>
+            <p class="hotel-location">&#x1F4CD; Am Friedensplatz 1, 68165 Mannheim</p>
+            <p class="hotel-dates">07.07. &ndash; 10.07.2026 &ndash; 3 N&auml;chte</p>
+            <p>4-Sterne, Genius. Standard Doppelzimmer f&uuml;r Mark &amp; Claudia (274,79 &euro;). Die M&auml;dels schlafen in Carlas neuer Wohnung. Check-in ab 15:00, Check-out bis 12:00.</p>
+        </div>
+    </div>
+</section>
+
+<!-- MOBILITAET -->
+<section class="section" id="mobilitaet">
+    <h2 class="section-title">Mobilit&auml;t</h2>
+    <p class="section-sub">Wie kommen wir von A nach B &ndash; und was kostet das?</p>
+
+    <div class="mobility-card">
+        <div class="mobility-status">NEUER PLAN &ndash; EIGENES AUTO! &Uuml;BERF&Uuml;HRUNG ORGANISIEREN</div>
+        <h3>&#x1F697; Unser MB E 250 T-Modell (schwarz, EI-CB 1604) f&auml;hrt die ganze Tour!</h3>
+        <p class="mobility-tagline">Das Auto steht aktuell bei Familie Jantz in Hepberg und wird vor dem 20.06. professionell nach Bordeaux &uuml;berf&uuml;hrt &ndash; damit sind wir die GESAMTE Tour mobil. Kein Mietwagen, kein Zug-Umstieg in Paris mit Marlenes Gep&auml;ck!</p>
+
+        <div class="mobility-plan">
+            <h4>So l&auml;uft es</h4>
+            <ul>
+                <li><strong>Bis ~18.06.:</strong> Professionelle Fahrzeug&uuml;berf&uuml;hrung Hepberg &rarr; Bordeaux (Spedition oder &Uuml;berf&uuml;hrungsfahrer) &ndash; &Uuml;bergabe/Stellplatz nahe Hotel Clemenceau oder Flughafen BOD.</li>
+                <li><strong>20.06. ~18:00:</strong> Landung Bordeaux &ndash; das eigene Auto steht bereit! &#x1F389;</li>
+                <li><strong>21. &ndash; 30.06.:</strong> Mit dem E 250 T auf Oleron unterwegs (La Rochelle, Cognac, Saintes &hellip;).</li>
+                <li><strong>30.06.:</strong> Entspannt mit dem Auto nach Beaune &ndash; die Beaune-Buchung bleibt! &ndash; und am 01.07. weiter nach Sindelfingen.</li>
+                <li><strong>Juli/August:</strong> Gesamte Deutschland-Tour im eigenen Auto. Ende der Tour: Auto zur&uuml;ck zu Familie Jantz nach Hepberg (Ingolstadt liegt eh auf der Route!).</li>
+            </ul>
+        </div>
+
+        <div class="mobility-cost-grid">
+            <div class="mobility-cost-box">
+                <span class="mobility-cost-label">&Uuml;berf&uuml;hrung Hepberg &rarr; Bordeaux (~1.350 km)</span>
+                <span class="mobility-cost-amount">~800 &ndash; 1.800 &euro;</span>
+                <span class="mobility-cost-note">Spedition/LKW ~800&ndash;1.300 &euro; (3&ndash;5 Werktage) oder &Uuml;berf&uuml;hrungsfahrer ~1.300&ndash;1.800 &euro; (1&ndash;2 Tage, inkl. Maut &amp; R&uuml;ckreise)</span>
+            </div>
+            <div class="mobility-cost-box">
+                <span class="mobility-cost-label">Sprit &amp; Maut ganze Tour (~3.500 km)</span>
+                <span class="mobility-cost-amount">~500 &ndash; 700 &euro;</span>
+                <span class="mobility-cost-note">Frankreich-Maut Bordeaux&rarr;Beaune ~60&ndash;80 &euro;, Rest Sprit</span>
+            </div>
+            <div class="mobility-cost-box mobility-cost-total">
+                <span class="mobility-cost-label">Mobilit&auml;t gesamt (eigenes Auto)</span>
+                <span class="mobility-cost-amount">~1.300 &ndash; 2.500 &euro;</span>
+                <span class="mobility-cost-note">&Auml;hnlich wie Mietwagen-Plan &ndash; aber f&uuml;r die GESAMTE Tour mobil + kein Gep&auml;ck-Stress im TGV</span>
+            </div>
+        </div>
+
+        <div class="mobility-questions">
+            <h4>&#x2757; DRINGEND zu erledigen (Ankunft 20.06.!)</h4>
+            <ul>
+                <li><strong>&Uuml;berf&uuml;hrung SOFORT anfragen &amp; buchen</strong> &ndash; Plattformen: clicktrans.de (Angebots-Vergleich), pkwtransport24.com, automove24.de (Fahrer-Service). Abholung in Hepberg sp&auml;testens ~15.06.</li>
+                <li><strong>&Uuml;bergabe in Bordeaux festlegen:</strong> Stellplatz/Parkhaus nahe Hotel Clemenceau (Parking Gambetta) oder Flughafen BOD &ndash; Schl&uuml;ssel&uuml;bergabe kl&auml;ren (Hotelrezeption?).</li>
+                <li><strong>Mit Familie Jantz koordinieren:</strong> Schl&uuml;ssel, Zulassungsbescheinigung Teil I (muss ins/zum Auto!), Vollmacht f&uuml;r den Fahrer.</li>
+                <li><strong>Crit'Air-Vignette f&uuml;r Frankreich bestellen</strong> (certificat-air.gouv.fr, ~5 &euro;, Lieferung dauert Wochen &ndash; JETZT bestellen; gilt f&uuml;rs deutsche Kennzeichen).</li>
+                <li><strong>Frankreich-Pflichtausstattung ins Auto:</strong> Warnwesten f&uuml;r alle, Warndreieck.</li>
+                <li><strong>Versicherung checken:</strong> Vollkasko bei &Uuml;berf&uuml;hrung durch Fremdfahrer? Schutzbrief/Pannendienst Ausland?</li>
+                <li><strong>Beaune bleibt!</strong> &#x2705; Mit dem Auto ist die Zwischen&uuml;bernachtung am 30.06. wieder genau richtig.</li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+<!-- KOSTEN-TRACKER -->
+<section class="section" id="kosten">
+    <h2 class="section-title">Kosten-Tracker</h2>
+    <p class="section-sub">Was bisher ausgegeben wurde &ndash; und was noch kommt</p>
+    <div class="cost-summary">
+        <div class="cost-total">
+            <span class="cost-label">Fl&uuml;ge &amp; Unterk&uuml;nfte</span>
+            <span class="cost-amount cost-amount-fixed" id="costFixed">0 &euro;</span>
+        </div>
+        <div class="cost-total">
+            <span class="cost-label">Reisekasse on the go</span>
+            <span class="cost-amount cost-amount-go" id="costOnTheGo">0 &euro;</span>
+        </div>
+        <div class="cost-total cost-total-grand">
+            <span class="cost-label">Gesamt</span>
+            <span class="cost-amount cost-amount-grand" id="costTotal">0 &euro;</span>
+        </div>
+    </div>
+    <div class="cost-table-wrap">
+        <table class="cost-table">
+            <thead>
+                <tr>
+                    <th>Was</th>
+                    <th>Wann</th>
+                    <th>Status</th>
+                    <th>Betrag</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Flug Mark</strong><br><span class="cost-sub">BKK&rarr;BOD + MUC&rarr;BKK &bull; TK59/TK1391 + TK1634/TK64</span></td>
+                    <td>20.06. / 11.07.</td>
+                    <td><span class="cost-status paid">BEZAHLT</span></td>
+                    <td class="cost-val" data-amount="946.03">946,03 &euro;<br><span class="cost-sub">34.540 &#3647;</span></td>
+                </tr>
+                <tr>
+                    <td><strong>Flug Claudia + Carla</strong><br><span class="cost-sub">BKK&rarr;BOD &bull; TK59/TK1391 (nur Hinflug)</span></td>
+                    <td>20.06.</td>
+                    <td><span class="cost-status paid">BEZAHLT</span></td>
+                    <td class="cost-val" data-amount="881.92">881,92 &euro;<br><span class="cost-sub">32.190 &#3647;</span></td>
+                </tr>
+                <tr>
+                    <td><strong>Flug Luisa</strong><br><span class="cost-sub">BKK&rarr;BOD + MUC&rarr;BKK &bull; TK59/TK1391 + TK1634/TK64</span></td>
+                    <td>20.06. / 05.08.</td>
+                    <td><span class="cost-status paid">BEZAHLT</span></td>
+                    <td class="cost-val" data-amount="992.88">992,88 &euro;<br><span class="cost-sub">36.240 &#3647;</span></td>
+                </tr>
+                <tr>
+                    <td><strong>Hotel Bordeaux Clemenceau</strong><br><span class="cost-sub">1 Nacht, Boutique-Hotel</span></td>
+                    <td>20.06.</td>
+                    <td><span class="cost-status booked">GEBUCHT</span></td>
+                    <td class="cost-val" data-amount="230.30">230,30 &euro;</td>
+                </tr>
+                <tr>
+                    <td><strong>La Cabane de p&ecirc;che, Ol&eacute;ron</strong><br><span class="cost-sub">9 N&auml;chte, Ferienhaus, 3 SZ</span></td>
+                    <td>21.&ndash;30.06.</td>
+                    <td><span class="cost-status paid">BEZAHLT</span></td>
+                    <td class="cost-val" data-amount="1786.25">1.786,25 &euro;</td>
+                </tr>
+                <tr>
+                    <td><strong>Beaune Residence appartement</strong><br><span class="cost-sub">1 Nacht, 34 rue d'Alsace</span></td>
+                    <td>30.06.</td>
+                    <td><span class="cost-status booked">GEBUCHT</span></td>
+                    <td class="cost-val" data-amount="166.76">166,76 &euro;</td>
+                </tr>
+                <tr>
+                    <td><strong>City Vibes Hotel Sindelfingen</strong><br><span class="cost-sub">2 N&auml;chte, 2 Zimmer</span></td>
+                    <td>01.&ndash;03.07.</td>
+                    <td><span class="cost-status paid">BEZAHLT</span></td>
+                    <td class="cost-val" data-amount="282">282,00 &euro;</td>
+                </tr>
+                <tr>
+                    <td><strong>Mercure Mannheim am Friedensplatz</strong><br><span class="cost-sub">3 N&auml;chte, Doppelzimmer (Mark + Claudia)</span></td>
+                    <td>07.&ndash;10.07.</td>
+                    <td><span class="cost-status booked">GEBUCHT</span></td>
+                    <td class="cost-val" data-amount="274.79">274,79 &euro;</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <p style="text-align:center; color: var(--text-dim); font-size: 0.8rem; margin-top: 1rem;">Fl&uuml;ge umgerechnet mit 1 &euro; = 36,5 &#3647;</p>
+
+    <!-- LIVE AUSGABEN-TRACKER -->
+    <div class="expense-tracker" id="expenseTracker">
+        <h3 class="expense-title">Reisekasse</h3>
+        <p class="expense-sub">Ausgaben unterwegs &ndash; einfach eintragen, alle sehen alles</p>
+
+        <div class="expense-summary-row">
+            <div class="expense-summary-box">
+                <span class="expense-summary-label">Ausgaben unterwegs</span>
+                <span class="expense-summary-amount" id="expenseTotal">0,00 &euro;</span>
+            </div>
+        </div>
+
+        <div class="expense-form" id="expenseForm">
+            <div class="expense-form-row">
+                <select id="expCat" class="expense-input">
+                    <option value="">Kategorie...</option>
+                    <option value="restaurant">&#x1F37D; Restaurant</option>
+                    <option value="eis">&#x1F366; Eis</option>
+                    <option value="sprit">&#x26FD; Sprit</option>
+                    <option value="maut">&#x1F6E3; Maut</option>
+                    <option value="supermarkt">&#x1F6D2; Supermarkt</option>
+                    <option value="aktivitaet">&#x1F3C4; Aktivit&auml;t</option>
+                    <option value="parken">&#x1F17F; Parken</option>
+                    <option value="sonstiges">&#x1F4B6; Sonstiges</option>
+                </select>
+                <input type="number" id="expAmount" class="expense-input" placeholder="Betrag &euro;" step="0.01" min="0">
+            </div>
+            <div class="expense-form-row">
+                <input type="text" id="expDesc" class="expense-input expense-desc" placeholder="Was? z.B. Pizza am Hafen">
+                <input type="date" id="expDate" class="expense-input">
+            </div>
+            <div class="expense-form-row">
+                <button id="expSubmit" class="expense-btn">Eintragen</button>
+            </div>
+        </div>
+
+        <div class="expense-list" id="expenseList">
+            <!-- filled by JS -->
+        </div>
+    </div>
+</section>
+
+<!-- SIDE QUESTS -->
+<section class="section sidequest-section" id="sidequest">
+    <h2 class="section-title">Side Quests</h2>
+    <p class="section-sub">Familien-Challenges fuer den ultimativen Sommer! Wer sammelt die meisten Punkte?</p>
+
+    <div class="quest-grid">
+        <div class="quest-card" data-quest="1">
+            <div class="quest-difficulty easy">EASY</div>
+            <h3>&#x1F366; Eis-Degustation</h3>
+            <p>Probiert in JEDER Stadt mindestens eine Eisdiele. Bewertet von 1-10. Wer findet das beste Eis des Sommers?</p>
+            <div class="quest-reward">+10 XP pro Eis</div>
+            <label class="quest-check"><input type="checkbox"> Erledigt!</label>
+        </div>
+        <div class="quest-card" data-quest="2">
+            <div class="quest-difficulty medium">MEDIUM</div>
+            <h3>&#x1F3C4; Surf Champion</h3>
+            <p>Wer steht beim Surfkurs am laengsten auf dem Board? Loser muss abends kochen!</p>
+            <div class="quest-reward">+50 XP</div>
+            <label class="quest-check"><input type="checkbox"> Erledigt!</label>
+        </div>
+        <div class="quest-card" data-quest="3">
+            <div class="quest-difficulty easy">EASY</div>
+            <h3>&#x1F4F8; Golden Hour Challenge</h3>
+            <p>Jeden Abend um Sonnenuntergang: Jeder macht EIN Foto. Am Ende des Urlaubs wird abgestimmt &ndash; bestes Foto gewinnt!</p>
+            <div class="quest-reward">+5 XP pro Foto</div>
+            <label class="quest-check"><input type="checkbox"> Erledigt!</label>
+        </div>
+        <div class="quest-card" data-quest="4">
+            <div class="quest-difficulty hard">HARD</div>
+            <h3>&#x1F9C0; Kaese-Connoisseur</h3>
+            <p>Probiert 10 verschiedene franzoesische Kaesesorten und merkt euch die Namen! Quiz am Ende.</p>
+            <div class="quest-reward">+100 XP</div>
+            <label class="quest-check"><input type="checkbox"> Erledigt!</label>
+        </div>
+        <div class="quest-card" data-quest="5">
+            <div class="quest-difficulty medium">MEDIUM</div>
+            <h3>&#x1F5E3;&#xFE0F; Parlez-vous francais?</h3>
+            <p>Bestellt mindestens einmal komplett auf Franzoesisch in einem Restaurant. Bonus: ohne dass der Kellner auf Englisch wechselt!</p>
+            <div class="quest-reward">+75 XP</div>
+            <label class="quest-check"><input type="checkbox"> Erledigt!</label>
+        </div>
+        <div class="quest-card" data-quest="6">
+            <div class="quest-difficulty hard">HARD</div>
+            <h3>&#x1F6B4; Tour de Oleron</h3>
+            <p>Schafft die komplette Insel-Umrundung per Fahrrad (~65km). Respect fuer alle, die es schaffen!</p>
+            <div class="quest-reward">+200 XP</div>
+            <label class="quest-check"><input type="checkbox"> Erledigt!</label>
+        </div>
+        <div class="quest-card" data-quest="7">
+            <div class="quest-difficulty easy">EASY</div>
+            <h3>&#x1F305; Sonnenuntergangs-Streak</h3>
+            <p>5 Tage am Stueck den Sonnenuntergang live sehen (kein Handy waehrenddessen!)</p>
+            <div class="quest-reward">+30 XP</div>
+            <label class="quest-check"><input type="checkbox"> Erledigt!</label>
+        </div>
+        <div class="quest-card" data-quest="8">
+            <div class="quest-difficulty medium">MEDIUM</div>
+            <h3>&#x1F455; Outfit des Sommers</h3>
+            <p>Carla muss vor dem 27. Juli ein Outfit fuer den ersten Tag im Dualen Studium bei Fresenius finden. Shopping-Mission mit Oma in Bonn! Die Familie darf beraten. Veto-Recht fuer alle!</p>
+            <div class="quest-reward">+50 XP + Selbstvertrauen</div>
+            <label class="quest-check"><input type="checkbox"> Erledigt!</label>
+        </div>
+    </div>
+
+    <div class="xp-tracker">
+        <h3>XP-Tracker</h3>
+        <div class="xp-bars">
+            <div class="xp-person">
+                <span>Mark</span>
+                <div class="xp-bar"><div class="xp-fill" id="xp-mark" style="width:0%"></div></div>
+                <span class="xp-value" id="xp-mark-val">0 XP</span>
+            </div>
+            <div class="xp-person">
+                <span>Claudia</span>
+                <div class="xp-bar"><div class="xp-fill" id="xp-claudia" style="width:0%"></div></div>
+                <span class="xp-value" id="xp-claudia-val">0 XP</span>
+            </div>
+            <div class="xp-person">
+                <span>Carla</span>
+                <div class="xp-bar"><div class="xp-fill" id="xp-carla" style="width:0%"></div></div>
+                <span class="xp-value" id="xp-carla-val">0 XP</span>
+            </div>
+            <div class="xp-person">
+                <span>Luisa</span>
+                <div class="xp-bar"><div class="xp-fill" id="xp-luisa" style="width:0%"></div></div>
+                <span class="xp-value" id="xp-luisa-val">0 XP</span>
+            </div>
+            <div class="xp-person">
+                <span>Marlene</span>
+                <div class="xp-bar"><div class="xp-fill" id="xp-marlene" style="width:0%"></div></div>
+                <span class="xp-value" id="xp-marlene-val">0 XP</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- PACKLISTE -->
+<section class="section" id="packliste">
+    <h2 class="section-title">Packliste</h2>
+    <p class="section-sub">Check check &ndash; habt ihr alles?</p>
+    <div class="pack-grid">
+        <div class="pack-category">
+            <h3>&#x1F45A; Kleidung</h3>
+            <label><input type="checkbox"> Badeklamotten (mind. 2)</label>
+            <label><input type="checkbox"> Sonnenhut / Cap</label>
+            <label><input type="checkbox"> Sonnenbrille</label>
+            <label><input type="checkbox"> Leichte Sommerklamotten</label>
+            <label><input type="checkbox"> 1x Pulli/Jacke (Abende am Meer)</label>
+            <label><input type="checkbox"> Bequeme Schuhe / Sneaker</label>
+            <label><input type="checkbox"> Flip-Flops / Sandalen</label>
+            <label><input type="checkbox"> Regenjacke (Atlantik!)</label>
+        </div>
+        <div class="pack-category">
+            <h3>&#x1F9F4; Hygiene & Pflege</h3>
+            <label><input type="checkbox"> Sonnencreme (LSF 50!)</label>
+            <label><input type="checkbox"> After-Sun</label>
+            <label><input type="checkbox"> Mueckenschutz</label>
+            <label><input type="checkbox"> Reiseapotheke</label>
+            <label><input type="checkbox"> Zahnbuerste & Co</label>
+        </div>
+        <div class="pack-category">
+            <h3>&#x1F4F1; Tech</h3>
+            <label><input type="checkbox"> Reiseadapter (Thailand &rarr; EU)</label>
+            <label><input type="checkbox"> Powerbank</label>
+            <label><input type="checkbox"> Kopfhoerer</label>
+            <label><input type="checkbox"> Ladekabel</label>
+            <label><input type="checkbox"> Kamera</label>
+        </div>
+        <div class="pack-category">
+            <h3>&#x1F4C4; Dokumente</h3>
+            <label><input type="checkbox"> Reisepaesse</label>
+            <label><input type="checkbox"> Flugtickets (digital/Print)</label>
+            <label><input type="checkbox"> Hotel-Buchungen</label>
+            <label><input type="checkbox"> Fuehrerschein (Mietwagen!)</label>
+            <label><input type="checkbox"> Kreditkarte</label>
+            <label><input type="checkbox"> Auslandskrankenversicherung</label>
+        </div>
+        <div class="pack-category">
+            <h3>&#x1F3D6;&#xFE0F; Strand & Fun</h3>
+            <label><input type="checkbox"> Strandtuch / Sarong</label>
+            <label><input type="checkbox"> Wasserflasche</label>
+            <label><input type="checkbox"> Kartenspiele / Brettspiele</label>
+            <label><input type="checkbox"> Buecher / Kindle</label>
+            <label><input type="checkbox"> Schnorchelmaske</label>
+        </div>
+    </div>
+</section>
+
+<!-- TO-DOs -->
+<section class="section" id="todos">
+    <h2 class="section-title">To-Do Liste</h2>
+    <p class="section-sub">Was noch erledigt werden muss vor der Abreise!</p>
+    <div class="todo-list">
+        <div class="todo-item urgent">
+            <label><input type="checkbox"> <strong>Fahrzeug&uuml;berf&uuml;hrung Hepberg &rarr; Bordeaux buchen</strong> &ndash; MB E 250 T (EI-CB 1604), muss bis 19.06. vor Ort sein! Angebote: clicktrans / pkwtransport24 / automove24</label>
+        </div>
+        <div class="todo-item">
+            <label><input type="checkbox"> <strong>Ol&eacute;ron: Bettw&auml;sche, Handt&uuml;cher &amp; Fahrr&auml;der</strong> &ndash; bei Unterkunft anfragen/organisieren</label>
+        </div>
+        <div class="todo-item">
+            <label><input type="checkbox"> <strong>M&uuml;nchen 10.&ndash;11.07.</strong> &ndash; bei Jochen &amp; Rossi (1 Nacht) abstimmen</label>
+        </div>
+        <div class="todo-item">
+            <label><input type="checkbox"> <strong>Passau 11.&ndash;17.07.</strong> &ndash; mit Freunden abstimmen (Abreise 17.07. morgens nach Sindelfingen)</label>
+        </div>
+        <div class="todo-item urgent">
+            <label><input type="checkbox"> <strong>Carla Abi-Ball 17.07.</strong> &ndash; Outfit, Frisur, Anreise zur GGS organisieren!</label>
+        </div>
+        <div class="todo-item">
+            <label><input type="checkbox"> <strong>Leipzig 01.&ndash;03.08.</strong> &ndash; Unterkunft/Anreise mit Familie abstimmen (Ella's Geburtstag!)</label>
+        </div>
+        <div class="todo-item">
+            <label><input type="checkbox"> <strong>Jean-Paul kontaktieren</strong> &ndash; Rotary-Treffen fuer Mark organisieren</label>
+        </div>
+        <div class="todo-item">
+            <label><input type="checkbox"> <strong>Surfkurs buchen</strong> &ndash; Westkueste Oleron, 27. Juni</label>
+        </div>
+        <div class="todo-item">
+            <label><input type="checkbox"> <strong>Carla: Leipzig &rarr; Bad Homburg</strong> &ndash; Zugticket/Verbindung buchen (03.08.)</label>
+        </div>
+        <div class="todo-item">
+            <label><input type="checkbox"> <strong>DHBW Mannheim</strong> &ndash; Kontakte/Fuehrung organisieren?</label>
+        </div>
+        <div class="todo-item">
+            <label><input type="checkbox"> <strong>Bad Homburg</strong> &ndash; Stadtfuehrung/Insights organisieren?</label>
+        </div>
+        <div class="todo-item">
+            <label><input type="checkbox"> <strong>Carla Mannheim:</strong> Zimmer ausmessen, IKEA-Liste machen (Bett, Schreibtisch, Schrank, Lampe, Bettw&auml;sche &hellip;)</label>
+        </div>
+    </div>
+</section>
+
+<!-- LIVE WETTER -->
+<section class="section" id="wetter">
+    <h2 class="section-title">Wetter &amp; Gezeiten</h2>
+    <p class="section-sub">Live-Daten &ndash; 3-Tage-Vorschau fuer euren aktuellen Reise-Ort</p>
+
+    <!-- Live Forecast (filled by JS) -->
+    <div id="liveWeather" class="live-weather-container">
+        <div class="live-weather-loading">Wetterdaten werden geladen...</div>
+    </div>
+
+    <!-- Gezeiten (nur sichtbar waehrend Atlantik-Phase) -->
+    <div id="tidesSection" class="tides-section" style="display:none;">
+        <div class="tides-card">
+            <h3>&#x1F30A; Gezeiten &ndash; Ile d'Oleron / La Cotiniere</h3>
+            <p>Am Atlantik sind die Gezeiten wichtig! Ebbe und Flut bestimmen, wann der Strand am groessten ist, wann man Austern sammeln kann und wann das Baden am besten ist.</p>
+            <div class="tides-links">
+                <a href="https://maree.info/82" target="_blank" rel="noopener" class="tide-link">&#x1F30A; Gezeiten La Cotiniere (maree.info)</a>
+                <a href="https://maree.info/82?d=7" target="_blank" rel="noopener" class="tide-link">&#x1F4C5; 7-Tage Gezeiten-Kalender</a>
+                <a href="https://maree.info/79" target="_blank" rel="noopener" class="tide-link">&#x1F3D6;&#xFE0F; Gezeiten Ile d'Oleron (Boyardville)</a>
+            </div>
+            <div class="tides-tips">
+                <p><strong>Gut zu wissen:</strong></p>
+                <p>&#x2B06;&#xFE0F; <strong>Flut (maree haute):</strong> Wasser kommt &ndash; weniger Strand, aber besser zum Schwimmen</p>
+                <p>&#x2B07;&#xFE0F; <strong>Ebbe (maree basse):</strong> Wasser geht &ndash; riesiger Strand, Muscheln sammeln, Austernbaenke sichtbar</p>
+                <p>&#x26A0;&#xFE0F; <strong>Koeffizient &gt; 90:</strong> Starke Gezeiten! Vorsicht beim Baden, aber super zum Muschelsammeln bei Ebbe</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Statischer Wetter-Guide als Kontext -->
+    <h3 class="weather-static-title">Klima-Ueberblick nach Region</h3>
+    <div class="weather-grid">
+        <div class="weather-card">
+            <h3>&#x1F1EB;&#x1F1F7; Bordeaux &amp; Oleron</h3>
+            <p class="weather-period">20. Juni &ndash; 30. Juni</p>
+            <div class="weather-details">
+                <p>&#x1F321;&#xFE0F; <strong>22-28&deg;C</strong> (Luft)</p>
+                <p>&#x1F30A; <strong>18-20&deg;C</strong> (Atlantik)</p>
+                <p>&#x2600;&#xFE0F; Ca. 9-10h Sonnenschein/Tag</p>
+                <p>&#x1F32C;&#xFE0F; Atlantikwind &ndash; am Strand weht es!</p>
+            </div>
+            <p class="weather-tip">Tipp: Abends am Meer wird es kuehl &ndash; Pulli mitnehmen!</p>
+        </div>
+        <div class="weather-card">
+            <h3>&#x1F1EB;&#x1F1F7; Beaune (Burgund)</h3>
+            <p class="weather-period">30. Juni</p>
+            <div class="weather-details">
+                <p>&#x1F321;&#xFE0F; <strong>24-30&deg;C</strong></p>
+                <p>&#x2600;&#xFE0F; Sonnig &amp; warm</p>
+                <p>Kontinentales Klima &ndash; waermer als am Atlantik!</p>
+            </div>
+        </div>
+        <div class="weather-card">
+            <h3>&#x1F1E9;&#x1F1EA; Deutschland</h3>
+            <p class="weather-period">1. Juli &ndash; 11. Juli+</p>
+            <div class="weather-details">
+                <p>&#x1F321;&#xFE0F; <strong>22-28&deg;C</strong></p>
+                <p>&#x1F326;&#xFE0F; Wechselhaft moeglich</p>
+                <p>Juli = bester Sommermonat in DE!</p>
+            </div>
+            <p class="weather-tip">Tipp: Immer Regenjacke dabei &ndash; man weiss ja nie in DE!</p>
+        </div>
+    </div>
+</section>
+
+<!-- FRANZOESISCH SPICKZETTEL -->
+<section class="section" id="francais">
+    <h2 class="section-title">Parlez-vous francais?</h2>
+    <p class="section-sub">Euer Spickzettel fuer Frankreich &ndash; damit ihr nicht nur mit Haenden und Fuessen reden muesst</p>
+
+    <div class="french-grid">
+        <div class="french-card">
+            <h3>&#x1F44B; Basics</h3>
+            <div class="phrase"><span class="fr">Bonjour</span><span class="de">Guten Tag</span></div>
+            <div class="phrase"><span class="fr">Bonsoir</span><span class="de">Guten Abend</span></div>
+            <div class="phrase"><span class="fr">Merci (beaucoup)</span><span class="de">Danke (vielmals)</span></div>
+            <div class="phrase"><span class="fr">S'il vous plait</span><span class="de">Bitte</span></div>
+            <div class="phrase"><span class="fr">Excusez-moi</span><span class="de">Entschuldigung</span></div>
+            <div class="phrase"><span class="fr">Pardon</span><span class="de">Verzeihung</span></div>
+            <div class="phrase"><span class="fr">Au revoir</span><span class="de">Auf Wiedersehen</span></div>
+            <div class="phrase"><span class="fr">Bonne journee!</span><span class="de">Schoenen Tag noch!</span></div>
+            <div class="phrase"><span class="fr">Oui / Non</span><span class="de">Ja / Nein</span></div>
+        </div>
+
+        <div class="french-card">
+            <h3>&#x1F37D;&#xFE0F; Im Restaurant</h3>
+            <div class="phrase"><span class="fr">Une table pour cinq, s'il vous plait</span><span class="de">Einen Tisch fuer fuenf, bitte</span></div>
+            <div class="phrase"><span class="fr">La carte, s'il vous plait</span><span class="de">Die Karte, bitte</span></div>
+            <div class="phrase"><span class="fr">Je voudrais...</span><span class="de">Ich haette gerne...</span></div>
+            <div class="phrase"><span class="fr">L'addition, s'il vous plait</span><span class="de">Die Rechnung, bitte</span></div>
+            <div class="phrase"><span class="fr">C'etait delicieux!</span><span class="de">Das war koestlich!</span></div>
+            <div class="phrase"><span class="fr">Une carafe d'eau</span><span class="de">Eine Karaffe Wasser</span></div>
+            <div class="phrase"><span class="fr">Un cafe / un the</span><span class="de">Einen Kaffee / einen Tee</span></div>
+            <div class="phrase"><span class="fr">Un verre de rose</span><span class="de">Ein Glas Rose</span></div>
+        </div>
+
+        <div class="french-card">
+            <h3>&#x1F6D2; Auf dem Markt / im Laden</h3>
+            <div class="phrase"><span class="fr">Combien ca coute?</span><span class="de">Wie viel kostet das?</span></div>
+            <div class="phrase"><span class="fr">C'est combien?</span><span class="de">Was macht das?</span></div>
+            <div class="phrase"><span class="fr">Je prends celui-la</span><span class="de">Ich nehme das da</span></div>
+            <div class="phrase"><span class="fr">Un kilo de peches</span><span class="de">Ein Kilo Pfirsiche</span></div>
+            <div class="phrase"><span class="fr">Une baguette, s'il vous plait</span><span class="de">Ein Baguette, bitte</span></div>
+            <div class="phrase"><span class="fr">C'est tout, merci</span><span class="de">Das ist alles, danke</span></div>
+            <div class="phrase"><span class="fr">Vous acceptez la carte?</span><span class="de">Nehmen Sie Karte?</span></div>
+        </div>
+
+        <div class="french-card">
+            <h3>&#x1F3D6;&#xFE0F; Am Strand &amp; unterwegs</h3>
+            <div class="phrase"><span class="fr">Ou est la plage?</span><span class="de">Wo ist der Strand?</span></div>
+            <div class="phrase"><span class="fr">On peut se baigner ici?</span><span class="de">Kann man hier schwimmen?</span></div>
+            <div class="phrase"><span class="fr">A quelle heure est la maree haute?</span><span class="de">Wann ist Flut?</span></div>
+            <div class="phrase"><span class="fr">A quelle heure est la maree basse?</span><span class="de">Wann ist Ebbe?</span></div>
+            <div class="phrase"><span class="fr">Ou sont les toilettes?</span><span class="de">Wo sind die Toiletten?</span></div>
+            <div class="phrase"><span class="fr">Il fait beau aujourd'hui!</span><span class="de">Schoenes Wetter heute!</span></div>
+            <div class="phrase"><span class="fr">On peut louer des velos?</span><span class="de">Kann man Fahrraeder leihen?</span></div>
+        </div>
+
+        <div class="french-card">
+            <h3>&#x1F9C0; Essen &amp; Trinken (Vokabeln)</h3>
+            <div class="phrase"><span class="fr">Les huitres</span><span class="de">Austern</span></div>
+            <div class="phrase"><span class="fr">Les moules(-frites)</span><span class="de">Miesmuscheln (mit Pommes)</span></div>
+            <div class="phrase"><span class="fr">Le fromage</span><span class="de">Kaese</span></div>
+            <div class="phrase"><span class="fr">Le pain</span><span class="de">Brot</span></div>
+            <div class="phrase"><span class="fr">Les fruits de mer</span><span class="de">Meeresfruechte</span></div>
+            <div class="phrase"><span class="fr">Le poisson</span><span class="de">Fisch</span></div>
+            <div class="phrase"><span class="fr">La glace</span><span class="de">Eis</span></div>
+            <div class="phrase"><span class="fr">Le gateau</span><span class="de">Kuchen</span></div>
+            <div class="phrase"><span class="fr">La creme solaire</span><span class="de">Sonnencreme</span></div>
+        </div>
+
+        <div class="french-card">
+            <h3>&#x1F198; Wenn's mal klemmt</h3>
+            <div class="phrase"><span class="fr">Je ne comprends pas</span><span class="de">Ich verstehe nicht</span></div>
+            <div class="phrase"><span class="fr">Vous parlez anglais?</span><span class="de">Sprechen Sie Englisch?</span></div>
+            <div class="phrase"><span class="fr">Pouvez-vous repeter?</span><span class="de">Koennen Sie wiederholen?</span></div>
+            <div class="phrase"><span class="fr">Plus lentement, s'il vous plait</span><span class="de">Langsamer, bitte</span></div>
+            <div class="phrase"><span class="fr">Je suis perdu(e)</span><span class="de">Ich habe mich verlaufen</span></div>
+            <div class="phrase"><span class="fr">Pouvez-vous m'aider?</span><span class="de">Koennen Sie mir helfen?</span></div>
+        </div>
+    </div>
+</section>
+
+<!-- TAGES-TAGEBUCH -->
+<section class="section" id="tagebuch">
+    <h2 class="section-title">Reise-Tagebuch</h2>
+    <p class="section-sub">Schreibt eure Highlights, lustige Momente und Erinnerungen auf &ndash; fuer jeden Tag!</p>
+
+    <div class="diary-container" id="diaryContainer">
+        <!-- Filled by JS -->
+    </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+    <div class="footer-content">
+        <p class="footer-title">Berger Summer Tour 2026</p>
+        <p>Bangkok &rarr; Bordeaux &rarr; Ile d'Oleron &rarr; Beaune &rarr; Sindelfingen &rarr; Mannheim &rarr; Bonn &rarr; M&uuml;nchen &rarr; Passau &rarr; Sindelfingen &rarr; Mannheim &rarr; Leipzig &rarr; Ingolstadt &rarr; Bangkok</p>
+        <p class="footer-countdown" id="countdown"></p>
+        <p class="footer-small">Made with love for the best summer ever</p>
+    </div>
+</footer>
+
+<script src="script.js?v=20260328e"></script>
+</body>
+</html>
