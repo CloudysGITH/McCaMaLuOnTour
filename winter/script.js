@@ -117,11 +117,11 @@ document.querySelectorAll('.day-header').forEach(header => {
 const MEMBER_KEY = 'bwt26_member';
 const MEMBERS = ['Mark', 'Claudia', 'Carla', 'Luisa', 'Marlene'];
 const MEMBER_ICONS = {
-    'Mark': '👨‍💼',
+    'Mark': '⛷️',
     'Claudia': '👩‍💻',
-    'Carla': '🌟',
-    'Luisa': '🎶',
-    'Marlene': '⛸️'
+    'Carla': '🐰',
+    'Luisa': '🥞',
+    'Marlene': '🏎️'
 };
 
 function getCurrentMember() {
