@@ -24,37 +24,36 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
-    <!--
-    Firebase SDK - TODO: eigenes Firebase-Projekt fuer die Winter Tour anlegen
-    (wie bst2026 im Sommer) und Config hier eintragen. Solange die Config fehlt,
-    laufen Tagebuch, Ratings & Reisekasse im Platzhalter-Modus.
-
+    <!-- Firebase: nur Login (gemeinsam mit Hub + Sommer-Tour, gleiches Projekt & gleiche Origin).
+         Die Winter-DB (Tagebuch/Ratings/Reisekasse) ist noch NICHT angebunden und laeuft
+         weiter im Platzhalter-Modus - hier wird bewusst kein window.firebaseReady gesetzt. -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
-        import { getDatabase, ref, set, onValue, push } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-database.js";
+        import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
 
         const firebaseConfig = {
-            apiKey: "TODO",
-            authDomain: "TODO.firebaseapp.com",
-            databaseURL: "https://TODO.firebasedatabase.app",
-            projectId: "TODO",
-            storageBucket: "TODO.firebasestorage.app",
-            messagingSenderId: "TODO",
-            appId: "TODO"
+            apiKey: "AIzaSyAVWHSOEQCpavUEm8tCwB1zZcf8lvDiAFA",
+            authDomain: "bst2026-41f21.firebaseapp.com",
+            databaseURL: "https://bst2026-41f21-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "bst2026-41f21",
+            storageBucket: "bst2026-41f21.firebasestorage.app",
+            messagingSenderId: "120422502733",
+            appId: "1:120422502733:web:3c1a80948654892e96e704"
         };
-
         const app = initializeApp(firebaseConfig);
-        const db = getDatabase(app);
+        const auth = getAuth(app);
+        const CREW_EMAIL = "crew@bst2026.app";
 
-        window.fbDb = db;
-        window.fbRef = ref;
-        window.fbSet = set;
-        window.fbOnValue = onValue;
-        window.fbPush = push;
-        window.firebaseReady = true;
-        window.dispatchEvent(new Event('firebase-ready'));
+        window.fbSignIn = (codeword) =>
+            signInWithEmailAndPassword(auth, CREW_EMAIL, String(codeword).toLowerCase().trim());
+
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                window.crewAuthed = true;
+                window.dispatchEvent(new Event('crew-authed'));
+            }
+        });
     </script>
-    -->
 </head>
 <body>
 

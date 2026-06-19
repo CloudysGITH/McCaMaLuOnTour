@@ -2,48 +2,54 @@
 // Geruest-Version: Struktur wie Summer Tour 2026.
 // TODO sobald Daten da sind: Abflugdatum, Tagebuch-Tage, Wetter-Orte, Firebase-Config.
 
-// --- Password Lock ---
+// --- Codewort-Login (Firebase, gemeinsam mit Hub + Sommer-Tour) ---
 (function() {
-    const UNLOCK_KEY = 'mccamalu_unlocked'; // gemeinsamer Unlock fuer Hub + beide Touren
-
-    function checkCode(str) {
-        // Ein Codewort fuer die ganze Mc CaMaLu Seite
-        return str.toLowerCase().trim() === 'gruenesblatt';
-    }
-
     const lockScreen = document.getElementById('lockScreen');
     const lockInput = document.getElementById('lockInput');
     const lockError = document.getElementById('lockError');
     const lockBtn = document.getElementById('lockBtn');
+    if (!lockScreen) return;
 
-    // Check if already unlocked this session
-    if (sessionStorage.getItem(UNLOCK_KEY) === 'true') {
+    document.body.classList.add('locked');
+
+    function unlock() {
         lockScreen.classList.add('unlocked');
         document.body.classList.remove('locked');
-    } else {
-        document.body.classList.add('locked');
+        lockError.textContent = '';
+    }
+
+    if (window.crewAuthed) unlock();
+    window.addEventListener('crew-authed', unlock);
+
+    function whenSignInReady(cb) {
+        if (window.fbSignIn) return cb();
+        const t = setInterval(() => { if (window.fbSignIn) { clearInterval(t); cb(); } }, 50);
+    }
+
+    function tryUnlock() {
+        const code = lockInput.value;
+        if (!code) return;
+        lockBtn.disabled = true;
+        const prevLabel = lockBtn.textContent;
+        lockBtn.textContent = 'Pruefe...';
+        lockError.textContent = '';
+        whenSignInReady(() => {
+            window.fbSignIn(code)
+                .catch(() => {
+                    lockError.textContent = 'Falsches Codewort! Versuch es nochmal.';
+                    lockInput.value = '';
+                    lockInput.focus();
+                    lockScreen.style.animation = 'shake 0.4s ease';
+                    setTimeout(() => lockScreen.style.animation = '', 400);
+                })
+                .finally(() => { lockBtn.disabled = false; lockBtn.textContent = prevLabel; });
+        });
     }
 
     lockBtn.addEventListener('click', tryUnlock);
     lockInput.addEventListener('keydown', function(e) {
-        if (e.key === 'Enter') tryUnlock();
+        if (e.key === 'Enter') { e.preventDefault(); tryUnlock(); }
     });
-
-    function tryUnlock() {
-        const value = lockInput.value;
-        if (checkCode(value)) {
-            sessionStorage.setItem(UNLOCK_KEY, 'true');
-            lockScreen.classList.add('unlocked');
-            document.body.classList.remove('locked');
-            lockError.textContent = '';
-        } else {
-            lockError.textContent = 'Falsches Codewort! Versuch es nochmal.';
-            lockInput.value = '';
-            lockInput.focus();
-            lockScreen.style.animation = 'shake 0.4s ease';
-            setTimeout(() => lockScreen.style.animation = '', 400);
-        }
-    }
 })();
 
 // --- Schneefall ---

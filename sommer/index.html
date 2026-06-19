@@ -29,6 +29,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
         import { getDatabase, ref, set, onValue, push } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-database.js";
+        import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyAVWHSOEQCpavUEm8tCwB1zZcf8lvDiAFA",
@@ -42,15 +43,31 @@
 
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
+        const auth = getAuth(app);
 
-        // Make available globally
+        // Gemeinsamer Familien-Account; Codewort = dessen Passwort (in der Firebase-Konsole gesetzt)
+        const CREW_EMAIL = "crew@bst2026.app";
+
+        // DB-Helfer global verfuegbar machen
         window.fbDb = db;
         window.fbRef = ref;
         window.fbSet = set;
         window.fbOnValue = onValue;
         window.fbPush = push;
-        window.firebaseReady = true;
-        window.dispatchEvent(new Event('firebase-ready'));
+
+        // Login per Codewort - wird von der Lock-Screen aufgerufen
+        window.fbSignIn = (codeword) =>
+            signInWithEmailAndPassword(auth, CREW_EMAIL, String(codeword).toLowerCase().trim());
+
+        // Erst nach erfolgreichem Login: Seite entsperren UND DB-Funktionen starten
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                window.crewAuthed = true;
+                window.firebaseReady = true;
+                window.dispatchEvent(new Event('crew-authed'));
+                window.dispatchEvent(new Event('firebase-ready'));
+            }
+        });
     </script>
 </head>
 <body>
@@ -543,7 +560,7 @@
             </div>
             <div class="day-tips">
                 <div class="tip">&#x1F6D2; <strong>Markt-Tipp:</strong> Die Maerkte auf Oleron sind legendaer! Unbedingt probieren: Pineau des Charentes (suesser Aperitif), Ziegenkaese (Chabichou), frische Melonen und Galettes Charentaises (Butterkekse).</div>
-                <div class="tip">&#x1F4AC; <strong>Rotary ist fix!</strong> Morgen 19:00 Clubabend mit Wimpeltausch, &uuml;bermorgen 19:00 Langoustinade &ndash; Jean-Paul &amp; Pr&auml;sident Marc Gilles freuen sich.</div>
+                <div class="tip">&#x1F4AC; <strong>Rotary ist fix &ndash; Zusage raus!</strong> Mark hat am 03.06. beide Einladungen offiziell zugesagt: morgen 19:00 Clubabend mit Wimpeltausch, &uuml;bermorgen 19:30 Langoustinade &ndash; Jean-Paul &amp; Pr&auml;sident Marc Gilles freuen sich.</div>
             </div>
         </div>
         <div class="day-rating" data-day="5">
@@ -651,8 +668,8 @@
                     <span class="activity">&#x1F682; P'tit Train de Saint-Trojan &ndash; Schmalspurbahn durch den Pinienwald zum wilden Plage de Maumusson. Baden am 5km-Traumstrand, der nur per Zug oder zu Fuss erreichbar ist!</span>
                 </div>
                 <div class="schedule-item highlight">
-                    <span class="time">19:00</span>
-                    <span class="activity">&#x1F990; LANGOUSTINADE in La Cotini&egrave;re &ndash; Rotary-Benefizessen zugunsten der Familien der Seeleute von La Cotini&egrave;re. Ort, Preis &amp; Bezahlung: Details folgen von Jean-Paul.</span>
+                    <span class="time">19:30</span>
+                    <span class="activity">&#x1F990; LANGOUSTINADE &ndash; Rotary-Benefizessen mit Ap&eacute;ritif gourmand zugunsten der auf See verungl&uuml;ckten Seeleute (&laquo;p&eacute;ris en mer&raquo;) des Hafens La Cotini&egrave;re. Ort: Cabane du Rotary, Baie de Marecareuil, Bourcefranc-le-Chapus. 35 &euro;/Erw., 10 &euro;/Kind &lt;12.</span>
                 </div>
             </div>
             <div class="day-details">
@@ -663,7 +680,7 @@
             </div>
             <div class="day-tips">
                 <div class="tip">&#x1F682; <strong>P'tit Train Tipp:</strong> Die Bahn faehrt ab Bahnhof Saint-Trojan, 12 km Rundfahrt durch den Wald mit Halt an Plage de Gatseau und Plage de Maumusson (wildester Strand Olerons!). Ende Juni bereits regelmaessig &ndash; Fahrplan vor Ort checken. Kein Reservieren noetig.</div>
-                <div class="tip">&#x1F990; <strong>Langoustinade:</strong> Abendessen ist damit gesetzt &ndash; Langustinen f&uuml;r den guten Zweck! Sp&auml;testens ~17:30 vom P'tit Train zur&uuml;ck. Den Sundowner gibt's danach: Sonnenuntergang ist erst ca. 21:30 &ndash; perfekt nach dem Essen am Hafen.</div>
+                <div class="tip">&#x1F990; <strong>Langoustinade:</strong> Abendessen ist damit gesetzt &ndash; Langustinen f&uuml;r den guten Zweck! Beginn 19:30, sp&auml;testens ~17:30 vom P'tit Train zur&uuml;ck. Den Sundowner gibt's danach: Sonnenuntergang ist erst ca. 21:30 &ndash; perfekt nach dem Essen am Hafen.</div>
             </div>
         </div>
         <div class="day-rating" data-day="7">
@@ -1394,41 +1411,68 @@
         </div>
     </div>
 
-    <div class="phase-label">Do. 16.07. &ndash; Fr. 17.07. &middot; Ingolstadt bei Anett (Hinweg)</div>
+    <div class="phase-label">Do. 16.07. &ndash; Fr. 24.07. &middot; Aufteilung: Abi-Ball &amp; Hepberg</div>
 
-    <!-- INGOLSTADT 16.-17.07. (HINWEG) -->
-    <div class="day-card" data-day="ingo-hin">
+    <!-- 16.-24.07. AUFTEILUNG AB PASSAU -->
+    <div class="day-card" data-day="split-abi" style="border: none; background: none; box-shadow: none;">
         <div class="day-header">
             <div class="day-date">
                 <span class="day-weekday">DO-FR</span>
-                <span class="day-number">16-17</span>
+                <span class="day-number">16-24</span>
                 <span class="day-month">JUL</span>
             </div>
             <div class="day-title">
-                <h3>Ingolstadt &ndash; bei Anett &amp; Familie (Hinweg)</h3>
-                <div class="day-location">&#x1F4CD; Passau &rarr; Ingolstadt (Claudia, Carla, Luisa &amp; Marlene)</div>
+                <h3>Ab Passau trennen sich die Wege</h3>
+                <div class="day-location">&#x1F4CD; Sindelfingen (Carla) &amp; Hepberg (Claudia, Luisa &amp; Marlene)</div>
+            </div>
+        </div>
+    </div>
+    <div class="split-grid" style="max-width: 1200px; margin: 0 auto 2rem; padding: 0 1rem;">
+        <div class="split-card">
+            <div class="split-icon">&#x1F393;</div>
+            <h3>Carla</h3>
+            <div class="split-location">Sindelfingen (17.&ndash;24.07.)</div>
+            <div class="split-members">F&auml;hrt am 17.07. alleine nach SiFi zum GGS-Abi-Ball &ndash; und bleibt bis 24.07. bei ihren Freunden.</div>
+            <span class="split-status set">STEHT</span>
+        </div>
+        <div class="split-card">
+            <div class="split-icon">&#x1F3E1;</div>
+            <h3>Claudia, Luisa &amp; Marlene</h3>
+            <div class="split-location">Hepberg bei Annett &amp; Robert (bis 24.07.)</div>
+            <div class="split-members">Von Passau zu Annett, Robert, Nela &amp; Sina &ndash; alles abgestimmt!</div>
+            <span class="split-status set">STEHT</span>
+        </div>
+    </div>
+
+    <!-- HEPBERG 16.-24.07. -->
+    <div class="day-card" data-day="hepberg-stay">
+        <div class="day-header">
+            <div class="day-date">
+                <span class="day-weekday">DO-FR</span>
+                <span class="day-number">16-24</span>
+                <span class="day-month">JUL</span>
+            </div>
+            <div class="day-title">
+                <h3>Hepberg &ndash; bei Annett &amp; Robert</h3>
+                <div class="day-location">&#x1F4CD; Passau &rarr; Hepberg (Claudia, Luisa &amp; Marlene)</div>
             </div>
         </div>
         <div class="day-content">
             <div class="day-schedule">
                 <div class="schedule-item">
-                    <span class="time">16.07. morgens</span>
-                    <span class="activity">Fahrt Passau &rarr; Ingolstadt (~1,5h)</span>
+                    <span class="time">16./17.07.</span>
+                    <span class="activity">Fahrt Passau &rarr; Hepberg &ndash; Wiedersehen mit Annett, Robert, Nela &amp; Sina!</span>
                 </div>
                 <div class="schedule-item highlight">
-                    <span class="time">16.07. tags&uuml;ber/abends</span>
-                    <span class="activity">Wiedersehen mit Anett, Robert, Nela &amp; Sina &ndash; Quality Time!</span>
-                </div>
-                <div class="schedule-item">
-                    <span class="time">17.07. morgens</span>
-                    <span class="activity">Abfahrt Ingolstadt &rarr; Sindelfingen (~3h)</span>
+                    <span class="time">bis 24.07.</span>
+                    <span class="activity">Quality Time bei Annett &amp; Robert &ndash; Freunde-Zeit, bevor's weiter nach Mannheim geht.</span>
                 </div>
             </div>
             <div class="day-tips">
-                <div class="tip special-tip">&#x1F46D; <strong>Doppel-Familie:</strong> 5 M&auml;dels (Carla, Luisa, Marlene + Nela &amp; Sina) und 2 M&uuml;tter (Claudia + Anett) &ndash; Robert ist der einzige Typ im Haus, der Arme!</div>
+                <div class="tip special-tip">&#x1F46D; <strong>M&auml;dels-Haus:</strong> Luisa, Marlene + Nela &amp; Sina und die M&uuml;tter Claudia + Annett &ndash; Robert ist der einzige Typ im Haus, der Arme!</div>
             </div>
         </div>
-        <div class="day-rating" data-day="ingo-hin">
+        <div class="day-rating" data-day="hepberg-stay">
             <span class="rating-label">Tages-Rating:</span>
             <div class="stars">
                 <span class="star" data-value="1">&#x2B50;</span>
@@ -1453,18 +1497,18 @@
             </div>
             <div class="day-title">
                 <h3>&#x1F393; Sindelfingen &ndash; Carlas GGS Abi-Ball!</h3>
-                <div class="day-location">&#x1F4CD; Ingolstadt &rarr; Sindelfingen</div>
+                <div class="day-location">&#x1F4CD; Carla solo in Sindelfingen</div>
             </div>
         </div>
         <div class="day-content">
             <div class="day-schedule">
                 <div class="schedule-item">
-                    <span class="time">17.07. morgens</span>
-                    <span class="activity">Abfahrt Ingolstadt &rarr; Sindelfingen (~3h)</span>
+                    <span class="time">17.07. tags&uuml;ber</span>
+                    <span class="activity">Carla reist alleine nach Sindelfingen zu ihren Freunden</span>
                 </div>
                 <div class="schedule-item">
                     <span class="time">17.07. nachmittags</span>
-                    <span class="activity">Ankunft Sindelfingen &ndash; Carla glamour-ready machen!</span>
+                    <span class="activity">Bei den Freundinnen ankommen &amp; gemeinsam glamour-ready machen!</span>
                 </div>
                 <div class="schedule-item highlight">
                     <span class="time">17.07. abends</span>
@@ -1473,7 +1517,7 @@
             </div>
             <div class="day-tips">
                 <div class="tip special-tip">&#x1F484; <strong>GGS-Reunion!</strong> Carla feiert mit ihrer alten Klasse den Abi-Ball &ndash; Erinnerungen, Selfies, Tanzen bis tief in die Nacht!</div>
-                <div class="tip">&#x1F4F8; <strong>Bitte Fotos!</strong> Mama-Pflicht: Vorher-Foto vor der Tuer.</div>
+                <div class="tip">&#x1F4F8; <strong>Bitte Fotos!</strong> Vorher-Foto an Mama schicken (die ist mit Luisa &amp; Marlene in Hepberg)!</div>
             </div>
         </div>
         <div class="day-rating" data-day="abiball">
@@ -1489,50 +1533,90 @@
         </div>
     </div>
 
-    <div class="phase-label">Sa. 18.07. &ndash; Mo. 27.07. &middot; Mannheim &ndash; Wohnung einrichten</div>
+    <div class="phase-label">Fr. 24.07. &middot; Wieder vereint in Mannheim</div>
 
-    <!-- SPLIT: 18.-27. Juli -->
+    <!-- 24.07. ALLE NACH MANNHEIM -->
+    <div class="day-card" data-day="reunion-mannheim">
+        <div class="day-header">
+            <div class="day-date">
+                <span class="day-weekday">FR</span>
+                <span class="day-number">24</span>
+                <span class="day-month">JUL</span>
+            </div>
+            <div class="day-title">
+                <h3>&#x1F46A; Wieder vereint in Mannheim</h3>
+                <div class="day-location">&#x1F4CD; Hepberg &amp; Sindelfingen &rarr; Mannheim</div>
+            </div>
+        </div>
+        <div class="day-content">
+            <div class="day-schedule">
+                <div class="schedule-item">
+                    <span class="time">24.07.</span>
+                    <span class="activity">Claudia, Luisa &amp; Marlene fahren von Hepberg nach Mannheim.</span>
+                </div>
+                <div class="schedule-item highlight">
+                    <span class="time">24.07.</span>
+                    <span class="activity">Carla kommt aus Sindelfingen dazu &ndash; alle wieder zusammen in Carlas neuer Stadt!</span>
+                </div>
+            </div>
+        </div>
+        <div class="day-rating" data-day="reunion-mannheim">
+            <span class="rating-label">Tages-Rating:</span>
+            <div class="stars">
+                <span class="star" data-value="1">&#x2B50;</span>
+                <span class="star" data-value="2">&#x2B50;</span>
+                <span class="star" data-value="3">&#x2B50;</span>
+                <span class="star" data-value="4">&#x2B50;</span>
+                <span class="star" data-value="5">&#x2B50;</span>
+            </div>
+            <span class="rating-display"></span>
+        </div>
+    </div>
+
+    <div class="phase-label">Sa. 25.07. &ndash; Mo. 27.07. &middot; Mannheim &amp; Marlene &rarr; Ol&eacute;ron</div>
+
+    <!-- SPLIT: 25.-27. Juli -->
     <div class="day-card" data-day="split1" style="border: none; background: none; box-shadow: none;">
         <div class="day-header">
             <div class="day-date">
                 <span class="day-weekday">SA-MO</span>
-                <span class="day-number">18-27</span>
+                <span class="day-number">25-27</span>
                 <span class="day-month">JUL</span>
             </div>
             <div class="day-title">
-                <h3>Familie splittet sich auf!</h3>
-                <div class="day-location">&#x1F4CD; Bangkok / Mannheim / ???</div>
+                <h3>Mannheim ankommen &ndash; und Marlene zieht's ans Meer</h3>
+                <div class="day-location">&#x1F4CD; Mannheim / Ile d'Ol&eacute;ron / Bangkok</div>
             </div>
         </div>
     </div>
     <div class="split-grid" style="max-width: 1200px; margin: 0 auto 2rem; padding: 0 1rem;">
         <div class="split-card">
-            <div class="split-icon">&#x1F30F;</div>
-            <h3>Mark</h3>
-            <div class="split-location">Bangkok</div>
-            <div class="split-members">Zur&uuml;ck seit 11.07. &ndash; arbeiten &amp; M&auml;dels vermissen</div>
-            <span class="split-status set">IN BKK</span>
+            <div class="split-icon">&#x1F30A;</div>
+            <h3>Marlene</h3>
+            <div class="split-location">Ile d'Ol&eacute;ron (25.07.&ndash;01.08.)</div>
+            <div class="split-members">Sa 25.07. mit dem Zug bis Bordeaux, weiter nach Ol&eacute;ron zur Rotary-Gastfamilie. Zugticket muss noch gebucht werden!</div>
+            <span class="split-status idea">TICKET FEHLT</span>
         </div>
         <div class="split-card">
             <div class="split-icon">&#x1F3E0;</div>
-            <h3>Carla &amp; Claudia</h3>
-            <div class="split-location">Mannheim (18.&ndash;27.07.)</div>
-            <div class="split-members">Wohnung einrichten, IKEA-Runs, Mannheim entdecken, Bad Homburg vorab anschauen &ndash; alles bereit f&uuml;r Carlas Start!</div>
+            <h3>Carla, Luisa &amp; Claudia</h3>
+            <div class="split-location">Mannheim</div>
+            <div class="split-members">Wohnung einrichten, IKEA-Runs, ankommen &ndash; Carla startet am 27.07. bei Fresenius!</div>
             <span class="split-status set">STEHT</span>
-        </div>
-        <div class="split-card">
-            <div class="split-icon">&#x1F30A;</div>
-            <h3>Marlene</h3>
-            <div class="split-location">Ile d'Ol&eacute;ron (18.&ndash;25.07.)</div>
-            <div class="split-members">Re-Trip zu ihrer Rotary-Gastfamilie! Sa 18.07. Direktzug Mannheim&rarr;Bordeaux (07:30&rarr;14:40), Sa 25.07. zur&uuml;ck mit Direktzug. Atlantik-Herz schlaegt weiter!</div>
-            <span class="split-status idea">IDEE</span>
         </div>
         <div class="split-card">
             <div class="split-icon">&#x1F46F;</div>
             <h3>Luisa</h3>
-            <div class="split-location">noch offen</div>
-            <div class="split-members">Idee: Bonn alleine zu Oma &amp; Opa? Oder Mannheim mit Carla?</div>
+            <div class="split-location">Mannheim / Bonn?</div>
+            <div class="split-members">Evtl. nochmal alleine nach Bonn zu Oma &amp; Opa &ndash; muss noch besprochen werden.</div>
             <span class="split-status open">OFFEN</span>
+        </div>
+        <div class="split-card">
+            <div class="split-icon">&#x1F30F;</div>
+            <h3>Mark</h3>
+            <div class="split-location">Bangkok</div>
+            <div class="split-members">Zur&uuml;ck seit 11.07. &ndash; arbeiten &amp; die M&auml;dels vermissen.</div>
+            <span class="split-status set">IN BKK</span>
         </div>
     </div>
 
@@ -1543,11 +1627,12 @@
         <div class="mobility-plan">
             <h4>Marlenes Re-Trip Sa &rarr; Sa</h4>
             <ul>
-                <li><strong>Sa 18.07. Hinfahrt:</strong> Mannheim Hbf ~07:30 &rarr; Bordeaux St-Jean 14:40 (7h 10min, 1 Zug, kein Umstieg!)</li>
+                <li><strong>Sa 25.07. Hinfahrt:</strong> Mannheim Hbf ~07:30 &rarr; Bordeaux St-Jean 14:40 (7h 10min, 1 Zug, kein Umstieg!)</li>
                 <li><strong>7 Tage Ol&eacute;ron</strong> bei der Rotary-Gastfamilie &ndash; Atlantik-Reunion!</li>
-                <li><strong>Sa 25.07. R&uuml;ckfahrt:</strong> Bordeaux St-Jean 15:58 &rarr; Mannheim Hbf ~22:30, dann zur&uuml;ck zu den anderen.</li>
+                <li><strong>Sa 01.08. R&uuml;ckfahrt:</strong> Bordeaux St-Jean 15:58 &rarr; Mannheim Hbf ~22:30.</li>
                 <li><strong>Halte unterwegs:</strong> Karlsruhe, Strassburg, Poitiers, Angoul&ecirc;me &ndash; nur 4 Stops!</li>
-                <li><strong>Tickets:</strong> ab 109 EUR Hinfahrt / 90 EUR R&uuml;ckfahrt (ohne BahnCard)</li>
+                <li><strong>Tickets:</strong> ab 109 EUR Hinfahrt / 90 EUR R&uuml;ckfahrt (ohne BahnCard) &ndash; <strong>noch zu buchen!</strong></li>
+                <li>&#x26A0;&#xFE0F; <strong>Offen:</strong> Nach Ankunft Mannheim am 01.08. (~22:30) muss Marlene bis sp&auml;testens 02.08. nach Leipzig &ndash; Anschluss noch ungekl&auml;rt.</li>
             </ul>
         </div>
         <div class="mobility-questions">
@@ -1640,11 +1725,11 @@
             <span class="split-status idea">IDEE</span>
         </div>
         <div class="split-card">
-            <div class="split-icon">&#x2728;</div>
+            <div class="split-icon">&#x1F30A;</div>
             <h3>Marlene</h3>
-            <div class="split-location">zur&uuml;ck (ab 25.07.)</div>
-            <div class="split-members">Nach Ol&eacute;ron-Re-Trip wieder bei der Familie &ndash; Mannheim? Bonn zu Luisa? Sindelfingen?</div>
-            <span class="split-status open">OFFEN</span>
+            <div class="split-location">Ile d'Ol&eacute;ron (bis 01.08.)</div>
+            <div class="split-members">Noch bei der Rotary-Gastfamilie am Atlantik &ndash; R&uuml;ckfahrt nach Mannheim erst Sa 01.08.</div>
+            <span class="split-status set">OL&Eacute;RON</span>
         </div>
     </div>
 
@@ -1671,6 +1756,7 @@
                 </div>
             </div>
             <div class="day-tips">
+                <div class="tip">&#x26A0;&#xFE0F; <strong>Marlene-Logistik (offen):</strong> R&uuml;ckkehr aus Bordeaux am 01.08. (~22:30 Mannheim), muss bis sp&auml;testens 02.08. nach Leipzig &ndash; Anreise noch zu kl&auml;ren.</div>
                 <div class="tip special-tip">&#x2708;&#xFE0F; <strong>Achtung Carla:</strong> Von Leipzig alleine weiter nach Bad Homburg zur Einarbeitung bei Fresenius.</div>
                 <div class="tip">&#x1F697; <strong>Am 03.08.:</strong> Claudia, Luisa &amp; Marlene fahren weiter nach Ingolstadt zu Anett, Robert, Nela &amp; Sina.</div>
             </div>
@@ -1855,6 +1941,12 @@
                     <td class="cost-val" data-amount="992.88">992,88 &euro;<br><span class="cost-sub">36.240 &#3647;</span></td>
                 </tr>
                 <tr>
+                    <td><strong>Sitzplatz-Auswahl Turkish Airlines</strong><br><span class="cost-sub">Check-in 19.06. &bull; 153,70 + 37,12 + 116,57 &euro;</span></td>
+                    <td>19.06.</td>
+                    <td><span class="cost-status paid">BEZAHLT</span></td>
+                    <td class="cost-val" data-amount="307.39">307,39 &euro;</td>
+                </tr>
+                <tr>
                     <td><strong>Hotel Bordeaux Clemenceau</strong><br><span class="cost-sub">1 Nacht, Boutique-Hotel</span></td>
                     <td>20.06.</td>
                     <td><span class="cost-status booked">GEBUCHT</span></td>
@@ -1883,6 +1975,12 @@
                     <td>07.&ndash;10.07.</td>
                     <td><span class="cost-status booked">GEBUCHT</span></td>
                     <td class="cost-val" data-amount="274.79">274,79 &euro;</td>
+                </tr>
+                <tr>
+                    <td><strong>Langoustinade (Rotary-Benefiz)</strong><br><span class="cost-sub">Reise-Aktivit&auml;t &bull; 5 Pers. &times; 35 &euro; + 5 &euro; HelloAsso</span></td>
+                    <td>26.06.</td>
+                    <td><span class="cost-status paid">BEZAHLT</span></td>
+                    <td class="cost-val" data-amount="180">180,00 &euro;</td>
                 </tr>
             </tbody>
         </table>
@@ -2031,51 +2129,69 @@
 <section class="section" id="packliste">
     <h2 class="section-title">Packliste</h2>
     <p class="section-sub">Check check &ndash; habt ihr alles?</p>
+    <h3 class="pack-group-title">&#x1F9D2; F&uuml;r die Kinder <span class="pack-group-sub">&middot; pro Kind</span></h3>
     <div class="pack-grid">
         <div class="pack-category">
-            <h3>&#x1F45A; Kleidung</h3>
-            <label><input type="checkbox"> Badeklamotten (mind. 2)</label>
-            <label><input type="checkbox"> Sonnenhut / Cap</label>
-            <label><input type="checkbox"> Sonnenbrille</label>
-            <label><input type="checkbox"> Leichte Sommerklamotten</label>
-            <label><input type="checkbox"> 1x Pulli/Jacke (Abende am Meer)</label>
-            <label><input type="checkbox"> Bequeme Schuhe / Sneaker</label>
-            <label><input type="checkbox"> Flip-Flops / Sandalen</label>
-            <label><input type="checkbox"> Regenjacke (Atlantik!)</label>
+            <h3>&#x1F455; Kleidung</h3>
+            <label><input type="checkbox"> Unterw&auml;sche (10x)</label>
+            <label><input type="checkbox"> Socken</label>
+            <label><input type="checkbox"> T-Shirts (8x)</label>
+            <label><input type="checkbox"> Kurze Hosen o. Kleider (3x)</label>
+            <label><input type="checkbox"> Lange Hosen (2x)</label>
+            <label><input type="checkbox"> Pullover (2x)</label>
+            <label><input type="checkbox"> Pyjama (2x)</label>
+            <label><input type="checkbox"> 1x schickes Outfit (Fine Dining)</label>
+        </div>
+        <div class="pack-category">
+            <h3>&#x1F3D6;&#xFE0F; Strand & Schuhe</h3>
+            <label><input type="checkbox"> Badesachen (mind. 2x)</label>
+            <label><input type="checkbox"> Strandtuch / Sarong</label>
+            <label><input type="checkbox"> Sonnenschutz-Hemd (UV-Shirt)</label>
+            <label><input type="checkbox"> K&auml;ppi / Cap</label>
+            <label><input type="checkbox"> Schnorchelmaske</label>
+            <label><input type="checkbox"> Flip-Flops</label>
+            <label><input type="checkbox"> Sandalen</label>
         </div>
         <div class="pack-category">
             <h3>&#x1F9F4; Hygiene & Pflege</h3>
-            <label><input type="checkbox"> Sonnencreme (LSF 50!)</label>
-            <label><input type="checkbox"> After-Sun</label>
-            <label><input type="checkbox"> Mueckenschutz</label>
-            <label><input type="checkbox"> Reiseapotheke</label>
-            <label><input type="checkbox"> Zahnbuerste & Co</label>
+            <label><input type="checkbox"> Zahnb&uuml;rste</label>
+            <label><input type="checkbox"> Haarb&uuml;rste</label>
+            <label><input type="checkbox"> ggf. pers&ouml;nliche Creme</label>
         </div>
         <div class="pack-category">
             <h3>&#x1F4F1; Tech</h3>
-            <label><input type="checkbox"> Reiseadapter (Thailand &rarr; EU)</label>
-            <label><input type="checkbox"> Powerbank</label>
-            <label><input type="checkbox"> Kopfhoerer</label>
+            <label><input type="checkbox"> Handy</label>
+            <label><input type="checkbox"> iPad</label>
+            <label><input type="checkbox"> Kopfh&ouml;rer</label>
             <label><input type="checkbox"> Ladekabel</label>
-            <label><input type="checkbox"> Kamera</label>
         </div>
         <div class="pack-category">
-            <h3>&#x1F4C4; Dokumente</h3>
-            <label><input type="checkbox"> Reisepaesse</label>
+            <h3>&#x1F392; Handgep&auml;ck</h3>
+            <label><input type="checkbox"> Wasserflasche</label>
+            <label><input type="checkbox"> Karten- o. W&uuml;rfelspiel</label>
+            <label><input type="checkbox"> Buch</label>
+        </div>
+    </div>
+
+    <h3 class="pack-group-title">&#x1F9F3; F&uuml;r alle <span class="pack-group-sub">&middot; darum k&uuml;mmert sich Mama</span></h3>
+    <div class="pack-grid">
+        <div class="pack-category">
+            <h3>&#x1F4C4; Dokumente & Technik</h3>
+            <label><input type="checkbox"> Reisep&auml;sse</label>
             <label><input type="checkbox"> Flugtickets (digital/Print)</label>
             <label><input type="checkbox"> Hotel-Buchungen</label>
-            <label><input type="checkbox"> Fuehrerschein (Mietwagen!)</label>
+            <label><input type="checkbox"> F&uuml;hrerschein (Mietwagen!)</label>
             <label><input type="checkbox"> Kreditkarte</label>
             <label><input type="checkbox"> Auslandskrankenversicherung</label>
             <label><input type="checkbox"> Rotary-Wimpel (Wimpeltausch 25.06.!)</label>
+            <label><input type="checkbox"> Powerbank</label>
         </div>
         <div class="pack-category">
-            <h3>&#x1F3D6;&#xFE0F; Strand & Fun</h3>
-            <label><input type="checkbox"> Strandtuch / Sarong</label>
-            <label><input type="checkbox"> Wasserflasche</label>
-            <label><input type="checkbox"> Kartenspiele / Brettspiele</label>
-            <label><input type="checkbox"> Buecher / Kindle</label>
-            <label><input type="checkbox"> Schnorchelmaske</label>
+            <h3>&#x1F48A; Reiseapotheke & Sonnenschutz</h3>
+            <label><input type="checkbox"> Reiseapotheke</label>
+            <label><input type="checkbox"> Sonnencreme (LSF 50!)</label>
+            <label><input type="checkbox"> After-Sun</label>
+            <label><input type="checkbox"> M&uuml;ckenschutz</label>
         </div>
     </div>
 </section>
@@ -2086,25 +2202,19 @@
     <p class="section-sub">Was noch erledigt werden muss vor der Abreise!</p>
     <div class="todo-list">
         <div class="todo-item urgent">
-            <label><input type="checkbox"> <strong>Fahrzeug&uuml;berf&uuml;hrung Hepberg &rarr; Bordeaux buchen</strong> &ndash; MB E 250 T (EI-CB 1604), muss bis 19.06. vor Ort sein! Angebote: clicktrans / pkwtransport24 / automove24</label>
-        </div>
-        <div class="todo-item">
-            <label><input type="checkbox"> <strong>Ol&eacute;ron: Bettw&auml;sche, Handt&uuml;cher &amp; Fahrr&auml;der</strong> &ndash; bei Unterkunft anfragen/organisieren</label>
-        </div>
-        <div class="todo-item">
-            <label><input type="checkbox"> <strong>M&uuml;nchen 10.&ndash;11.07.</strong> &ndash; bei Jochen &amp; Rossi (1 Nacht) abstimmen</label>
-        </div>
-        <div class="todo-item">
-            <label><input type="checkbox"> <strong>Passau 11.&ndash;17.07.</strong> &ndash; mit Freunden abstimmen (Abreise 17.07. morgens nach Sindelfingen)</label>
+            <label><input type="checkbox"> <strong>Marlene Zugticket nach Ol&eacute;ron buchen</strong> &ndash; TGV-Direktzug Mannheim &harr; Bordeaux: Hin Sa 25.07. (07:30 &rarr; 14:40), R&uuml;ck Sa 01.08. (15:58 &rarr; 22:30); ab Bordeaux weiter nach Ol&eacute;ron</label>
         </div>
         <div class="todo-item urgent">
-            <label><input type="checkbox"> <strong>Carla Abi-Ball 17.07.</strong> &ndash; Outfit, Frisur, Anreise zur GGS organisieren!</label>
+            <label><input type="checkbox"> <strong>Marlene: R&uuml;ckreise &rarr; Leipzig kl&auml;ren</strong> &ndash; aus Ol&eacute;ron zur&uuml;ck in Mannheim erst 01.08. ~22:30, muss aber bis sp&auml;testens 02.08. nach Leipzig. Logistik offen!</label>
+        </div>
+        <div class="todo-item">
+            <label><input type="checkbox"> <strong>Luisa: Bonn zu Oma &amp; Opa?</strong> &ndash; ob Luisa ab ~25.07. nochmal alleine nach Bonn f&auml;hrt, muss noch besprochen werden</label>
+        </div>
+        <div class="todo-item">
+            <label><input type="checkbox"> <strong>Passau 11.&ndash;16.07.</strong> &ndash; mit Freunden abstimmen (danach: Carla allein &rarr; Sindelfingen, Claudia/Luisa/Marlene &rarr; Hepberg)</label>
         </div>
         <div class="todo-item">
             <label><input type="checkbox"> <strong>Leipzig 01.&ndash;03.08.</strong> &ndash; Unterkunft/Anreise mit Familie abstimmen (Ella's Geburtstag!)</label>
-        </div>
-        <div class="todo-item">
-            <label><input type="checkbox"> <strong>Langoustinade-Details von Jean-Paul</strong> &ndash; Ort, Preis/Person, Bezahlung best&auml;tigen (Rotary-Termine 25.+26.06. sind fix &#x2713;)</label>
         </div>
         <div class="todo-item">
             <label><input type="checkbox"> <strong>Surfkurs</strong> &ndash; wird spontan vor Ort gebucht, bei Lust &amp; Laune. Mission: Marlene &#x1F30A;</label>

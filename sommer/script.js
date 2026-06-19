@@ -1,49 +1,56 @@
 // ===== BERGER SUMMER TOUR 2026 - Interactive Script =====
 
-// --- Password Lock ---
+// --- Codewort-Login (Firebase) ---
+// Das Codewort ist das Passwort eines gemeinsamen Familien-Accounts. Erfolgreicher
+// Login entsperrt die Seite UND oeffnet die Datenbank - beides mit einer Eingabe.
 (function() {
-    const PASS_HASH = '8f14e45fceea167a5a36dedd4bea2543'; // md5 of gruenesblatt
-    const UNLOCK_KEY = 'mccamalu_unlocked'; // gemeinsamer Unlock fuer Hub + beide Touren
-
-    function simpleHash(str) {
-        // Simple check - compare lowercase trimmed input
-        return str.toLowerCase().trim() === 'gruenesblatt';
-    }
-
     const lockScreen = document.getElementById('lockScreen');
-    const lockForm = document.getElementById('lockForm');
     const lockInput = document.getElementById('lockInput');
     const lockError = document.getElementById('lockError');
     const lockBtn = document.getElementById('lockBtn');
+    if (!lockScreen) return;
 
-    // Check if already unlocked this session
-    if (sessionStorage.getItem(UNLOCK_KEY) === 'true') {
+    document.body.classList.add('locked');
+
+    function unlock() {
         lockScreen.classList.add('unlocked');
         document.body.classList.remove('locked');
-    } else {
-        document.body.classList.add('locked');
+        lockError.textContent = '';
+    }
+
+    // Bereits angemeldet (gespeicherte Sitzung)? Dann direkt rein.
+    if (window.crewAuthed) unlock();
+    window.addEventListener('crew-authed', unlock);
+
+    function whenSignInReady(cb) {
+        if (window.fbSignIn) return cb();
+        const t = setInterval(() => { if (window.fbSignIn) { clearInterval(t); cb(); } }, 50);
+    }
+
+    function tryUnlock() {
+        const code = lockInput.value;
+        if (!code) return;
+        lockBtn.disabled = true;
+        const prevLabel = lockBtn.textContent;
+        lockBtn.textContent = 'Pruefe...';
+        lockError.textContent = '';
+        whenSignInReady(() => {
+            window.fbSignIn(code)
+                .catch(() => {
+                    lockError.textContent = 'Falsches Codewort! Versuch es nochmal.';
+                    lockInput.value = '';
+                    lockInput.focus();
+                    lockScreen.style.animation = 'shake 0.4s ease';
+                    setTimeout(() => lockScreen.style.animation = '', 400);
+                })
+                .finally(() => { lockBtn.disabled = false; lockBtn.textContent = prevLabel; });
+        });
     }
 
     lockBtn.addEventListener('click', tryUnlock);
     lockInput.addEventListener('keydown', function(e) {
-        if (e.key === 'Enter') tryUnlock();
+        if (e.key === 'Enter') { e.preventDefault(); tryUnlock(); }
     });
-
-    function tryUnlock() {
-        const value = lockInput.value;
-        if (simpleHash(value)) {
-            sessionStorage.setItem(UNLOCK_KEY, 'true');
-            lockScreen.classList.add('unlocked');
-            document.body.classList.remove('locked');
-            lockError.textContent = '';
-        } else {
-            lockError.textContent = 'Falsches Codewort! Versuch es nochmal.';
-            lockInput.value = '';
-            lockInput.focus();
-            lockScreen.style.animation = 'shake 0.4s ease';
-            setTimeout(() => lockScreen.style.animation = '', 400);
-        }
-    }
 })();
 
 // --- Countdown ---
@@ -795,6 +802,19 @@ updateCostDisplay(0);
             renderExpenses(data);
         });
 
+        // Loeschen per Klick auf das X (Event-Delegation, da die Liste neu gerendert wird)
+        const list = document.getElementById('expenseList');
+        if (list) {
+            list.addEventListener('click', (ev) => {
+                const btn = ev.target.closest('.expense-del');
+                if (!btn) return;
+                const id = btn.dataset.id;
+                if (!id) return;
+                if (!confirm('Diesen Eintrag wirklich loeschen?')) return;
+                window.fbSet(window.fbRef(window.fbDb, 'expenses/' + id), null);
+            });
+        }
+
         // Submit handler
         submitBtn.addEventListener('click', () => {
             const cat = document.getElementById('expCat').value;
@@ -868,6 +888,7 @@ updateCostDisplay(0);
                 html += '<span class="expense-icon">' + icon + '</span>';
                 html += '<div class="expense-item-info"><span class="expense-item-desc">' + (e.desc || label) + '</span><span class="expense-item-meta">' + label + '</span></div>';
                 html += '<span class="expense-item-amount">' + (e.amount || 0).toLocaleString('de-DE', { minimumFractionDigits: 2 }) + ' €</span>';
+                html += '<button class="expense-del" data-id="' + e.id + '" title="Eintrag loeschen" aria-label="Eintrag loeschen">&#x2715;</button>';
                 html += '</div>';
             });
             html += '</div>';

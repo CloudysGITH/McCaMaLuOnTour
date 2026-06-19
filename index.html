@@ -280,6 +280,35 @@
             .tile-deco span { animation: none; }
         }
     </style>
+
+    <!-- Firebase: nur Login (gemeinsam mit beiden Touren, gleiches Projekt & gleiche Origin) -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAVWHSOEQCpavUEm8tCwB1zZcf8lvDiAFA",
+            authDomain: "bst2026-41f21.firebaseapp.com",
+            databaseURL: "https://bst2026-41f21-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "bst2026-41f21",
+            storageBucket: "bst2026-41f21.firebasestorage.app",
+            messagingSenderId: "120422502733",
+            appId: "1:120422502733:web:3c1a80948654892e96e704"
+        };
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const CREW_EMAIL = "crew@bst2026.app";
+
+        window.fbSignIn = (codeword) =>
+            signInWithEmailAndPassword(auth, CREW_EMAIL, String(codeword).toLowerCase().trim());
+
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                window.crewAuthed = true;
+                window.dispatchEvent(new Event('crew-authed'));
+            }
+        });
+    </script>
 </head>
 <body>
 
@@ -346,36 +375,51 @@
 </footer>
 
 <script>
-// --- Password Lock (gemeinsam fuer Hub + beide Touren) ---
+// --- Codewort-Login (Firebase, gemeinsam fuer Hub + beide Touren) ---
 (function() {
-    const UNLOCK_KEY = 'mccamalu_unlocked';
     const lockScreen = document.getElementById('lockScreen');
     const lockInput = document.getElementById('lockInput');
     const lockError = document.getElementById('lockError');
     const lockBtn = document.getElementById('lockBtn');
+    if (!lockScreen) return;
 
-    if (sessionStorage.getItem(UNLOCK_KEY) === 'true') {
+    document.body.classList.add('locked');
+
+    function unlock() {
         lockScreen.classList.add('unlocked');
-    } else {
-        document.body.classList.add('locked');
+        document.body.classList.remove('locked');
+        lockError.textContent = '';
+    }
+
+    if (window.crewAuthed) unlock();
+    window.addEventListener('crew-authed', unlock);
+
+    function whenSignInReady(cb) {
+        if (window.fbSignIn) return cb();
+        const t = setInterval(() => { if (window.fbSignIn) { clearInterval(t); cb(); } }, 50);
     }
 
     function tryUnlock() {
-        if (lockInput.value.toLowerCase().trim() === 'gruenesblatt') {
-            sessionStorage.setItem(UNLOCK_KEY, 'true');
-            lockScreen.classList.add('unlocked');
-            document.body.classList.remove('locked');
-            lockError.textContent = '';
-        } else {
-            lockError.textContent = 'Falsches Codewort! Versuch es nochmal.';
-            lockInput.value = '';
-            lockInput.focus();
-            lockScreen.style.animation = 'shake 0.4s ease';
-            setTimeout(() => lockScreen.style.animation = '', 400);
-        }
+        const code = lockInput.value;
+        if (!code) return;
+        lockBtn.disabled = true;
+        const prevLabel = lockBtn.textContent;
+        lockBtn.textContent = 'Pruefe...';
+        lockError.textContent = '';
+        whenSignInReady(() => {
+            window.fbSignIn(code)
+                .catch(() => {
+                    lockError.textContent = 'Falsches Codewort! Versuch es nochmal.';
+                    lockInput.value = '';
+                    lockInput.focus();
+                    lockScreen.style.animation = 'shake 0.4s ease';
+                    setTimeout(() => lockScreen.style.animation = '', 400);
+                })
+                .finally(() => { lockBtn.disabled = false; lockBtn.textContent = prevLabel; });
+        });
     }
     lockBtn.addEventListener('click', tryUnlock);
-    lockInput.addEventListener('keydown', e => { if (e.key === 'Enter') tryUnlock(); });
+    lockInput.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); tryUnlock(); } });
 })();
 </script>
 <script>
