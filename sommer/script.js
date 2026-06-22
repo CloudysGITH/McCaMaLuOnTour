@@ -778,12 +778,14 @@ updateCostDisplay(0);
     const CAT_ICONS = {
         restaurant: '\uD83C\uDF7D\uFE0F', eis: '\uD83C\uDF66', sprit: '\u26FD',
         maut: '\uD83D\uDEE3\uFE0F', supermarkt: '\uD83D\uDED2', aktivitaet: '\uD83C\uDFC4',
-        parken: '\uD83C\uDD7F\uFE0F', sonstiges: '\uD83D\uDCB6'
+        parken: '\uD83C\uDD7F\uFE0F', taxi: '\uD83D\uDE95', bahn: '\uD83D\uDE86', baeckerei: '\uD83E\uDD50', cafe: '\u2615',
+        souvenir: '\uD83C\uDF81', sonstiges: '\uD83D\uDCB6'
     };
     const CAT_LABELS = {
         restaurant: 'Restaurant', eis: 'Eis', sprit: 'Sprit',
         maut: 'Maut', supermarkt: 'Supermarkt', aktivitaet: 'Aktivität',
-        parken: 'Parken', sonstiges: 'Sonstiges'
+        parken: 'Parken', taxi: 'Taxi', bahn: 'Deutsche Bahn', baeckerei: 'Bäckerei', cafe: 'Café',
+        souvenir: 'Souvenirs', sonstiges: 'Sonstiges'
     };
 
     // Set default date to today
