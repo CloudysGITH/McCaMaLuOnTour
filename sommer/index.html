@@ -2039,95 +2039,13 @@
 <section class="section sidequest-section" id="sidequest">
     <h2 class="section-title">Side Quests</h2>
     <p class="section-sub">Familien-Challenges fuer den ultimativen Sommer! Wer sammelt die meisten Punkte?</p>
+    <p class="quest-howto">So geht&rsquo;s: Tippe bei einer Quest auf <strong>deinen Namen</strong>, sobald du sie geschafft hast &ndash; die Punkte gehen automatisch an dich. In der Rangliste siehst du, wer gerade fuehrt! &#x1F3C6;</p>
 
-    <div class="quest-grid">
-        <div class="quest-card" data-quest="1">
-            <div class="quest-difficulty easy">EASY</div>
-            <h3>&#x1F366; Eis-Degustation</h3>
-            <p>Probiert in JEDER Stadt mindestens eine Eisdiele. Bewertet von 1-10. Wer findet das beste Eis des Sommers?</p>
-            <div class="quest-reward">+10 XP pro Eis</div>
-            <label class="quest-check"><input type="checkbox"> Erledigt!</label>
-        </div>
-        <div class="quest-card" data-quest="2">
-            <div class="quest-difficulty medium">MEDIUM</div>
-            <h3>&#x1F3C4; Surf Champion</h3>
-            <p>Wer steht beim Surfkurs am laengsten auf dem Board? Loser muss abends kochen!</p>
-            <div class="quest-reward">+50 XP</div>
-            <label class="quest-check"><input type="checkbox"> Erledigt!</label>
-        </div>
-        <div class="quest-card" data-quest="3">
-            <div class="quest-difficulty easy">EASY</div>
-            <h3>&#x1F4F8; Golden Hour Challenge</h3>
-            <p>Jeden Abend um Sonnenuntergang: Jeder macht EIN Foto. Am Ende des Urlaubs wird abgestimmt &ndash; bestes Foto gewinnt!</p>
-            <div class="quest-reward">+5 XP pro Foto</div>
-            <label class="quest-check"><input type="checkbox"> Erledigt!</label>
-        </div>
-        <div class="quest-card" data-quest="4">
-            <div class="quest-difficulty hard">HARD</div>
-            <h3>&#x1F9C0; Kaese-Connoisseur</h3>
-            <p>Probiert 10 verschiedene franzoesische Kaesesorten und merkt euch die Namen! Quiz am Ende.</p>
-            <div class="quest-reward">+100 XP</div>
-            <label class="quest-check"><input type="checkbox"> Erledigt!</label>
-        </div>
-        <div class="quest-card" data-quest="5">
-            <div class="quest-difficulty medium">MEDIUM</div>
-            <h3>&#x1F5E3;&#xFE0F; Parlez-vous francais?</h3>
-            <p>Bestellt mindestens einmal komplett auf Franzoesisch in einem Restaurant. Bonus: ohne dass der Kellner auf Englisch wechselt!</p>
-            <div class="quest-reward">+75 XP</div>
-            <label class="quest-check"><input type="checkbox"> Erledigt!</label>
-        </div>
-        <div class="quest-card" data-quest="6">
-            <div class="quest-difficulty hard">HARD</div>
-            <h3>&#x1F6B4; Tour de Oleron</h3>
-            <p>Schafft die komplette Insel-Umrundung per Fahrrad (~65km). Respect fuer alle, die es schaffen!</p>
-            <div class="quest-reward">+200 XP</div>
-            <label class="quest-check"><input type="checkbox"> Erledigt!</label>
-        </div>
-        <div class="quest-card" data-quest="7">
-            <div class="quest-difficulty easy">EASY</div>
-            <h3>&#x1F305; Sonnenuntergangs-Streak</h3>
-            <p>5 Tage am Stueck den Sonnenuntergang live sehen (kein Handy waehrenddessen!)</p>
-            <div class="quest-reward">+30 XP</div>
-            <label class="quest-check"><input type="checkbox"> Erledigt!</label>
-        </div>
-        <div class="quest-card" data-quest="8">
-            <div class="quest-difficulty medium">MEDIUM</div>
-            <h3>&#x1F455; Outfit des Sommers</h3>
-            <p>Carla muss vor dem 27. Juli ein Outfit fuer den ersten Tag im Dualen Studium bei Fresenius finden. Shopping-Mission mit Oma in Bonn! Die Familie darf beraten. Veto-Recht fuer alle!</p>
-            <div class="quest-reward">+50 XP + Selbstvertrauen</div>
-            <label class="quest-check"><input type="checkbox"> Erledigt!</label>
-        </div>
-    </div>
+    <div class="quest-grid" id="questGrid"></div>
 
-    <div class="xp-tracker">
-        <h3>XP-Tracker</h3>
-        <div class="xp-bars">
-            <div class="xp-person">
-                <span>Mark</span>
-                <div class="xp-bar"><div class="xp-fill" id="xp-mark" style="width:0%"></div></div>
-                <span class="xp-value" id="xp-mark-val">0 XP</span>
-            </div>
-            <div class="xp-person">
-                <span>Claudia</span>
-                <div class="xp-bar"><div class="xp-fill" id="xp-claudia" style="width:0%"></div></div>
-                <span class="xp-value" id="xp-claudia-val">0 XP</span>
-            </div>
-            <div class="xp-person">
-                <span>Carla</span>
-                <div class="xp-bar"><div class="xp-fill" id="xp-carla" style="width:0%"></div></div>
-                <span class="xp-value" id="xp-carla-val">0 XP</span>
-            </div>
-            <div class="xp-person">
-                <span>Luisa</span>
-                <div class="xp-bar"><div class="xp-fill" id="xp-luisa" style="width:0%"></div></div>
-                <span class="xp-value" id="xp-luisa-val">0 XP</span>
-            </div>
-            <div class="xp-person">
-                <span>Marlene</span>
-                <div class="xp-bar"><div class="xp-fill" id="xp-marlene" style="width:0%"></div></div>
-                <span class="xp-value" id="xp-marlene-val">0 XP</span>
-            </div>
-        </div>
+    <div class="leaderboard" id="leaderboard">
+        <h3>&#x1F3C6; Rangliste</h3>
+        <div class="leaderboard-list" id="leaderboardList"></div>
     </div>
 </section>
 

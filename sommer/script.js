@@ -274,62 +274,182 @@ function initChecklists() {
 
 initChecklists();
 
-// --- XP Tracker ---
-const XP_KEY = 'bst26_xp';
+// --- Side Quests & Rangliste (Firebase - geteilt, pro Person) ---
+// Jede Quest hat XP. Tippt jemand bei einer Quest auf seinen Namen, wird sie fuer
+// diese Person als erledigt markiert und die XP gehen an sie. Die Rangliste
+// errechnet sich automatisch aus allen erledigten Quests (live fuer alle).
+(function() {
+    const grid = document.getElementById('questGrid');
+    const lbList = document.getElementById('leaderboardList');
+    if (!grid || !lbList) return;
 
-function loadXP() {
-    try {
-        return JSON.parse(localStorage.getItem(XP_KEY)) || {
-            mark: 0, claudia: 0, carla: 0, luisa: 0, marlene: 0
-        };
-    } catch {
-        return { mark: 0, claudia: 0, carla: 0, luisa: 0, marlene: 0 };
+    // Quests passend zum Reiseverlauf 2026 (Oleron -> Roadtrip -> Deutschland)
+    const QUESTS = [
+        { id: 'eis',         emoji: '🍦', diff: 'easy',   xp: 10,
+          title: 'Eis-Degustation',
+          desc: 'Probiert in jeder Stadt eine Eisdiele und bewertet von 1&ndash;10. Wer findet das beste Eis des Sommers?' },
+        { id: 'austern',     emoji: '🦪', diff: 'medium', xp: 60,
+          title: 'Austern-Mutprobe',
+          desc: 'Eine frische Auster direkt von Oleron schluerfen &ndash; roh und mutig! Wer traut sich?' },
+        { id: 'surf',        emoji: '🏄', diff: 'medium', xp: 50,
+          title: 'Surf Champion',
+          desc: 'Wer steht beim Surfkurs in Vert Bois am laengsten auf dem Board?' },
+        { id: 'tourdeoleron',emoji: '🚴', diff: 'hard',   xp: 200,
+          title: 'Tour de Oleron',
+          desc: 'Die Insel komplett per Fahrrad umrunden (~65 km). Respekt fuer alle, die es schaffen!' },
+        { id: 'golden',      emoji: '📸', diff: 'easy',   xp: 30,
+          title: 'Golden Hour Challenge',
+          desc: 'Jeden Abend ein Sonnenuntergangs-Foto. Am Ende wird abgestimmt &ndash; das beste Foto gewinnt!' },
+        { id: 'atlantik',    emoji: '🌊', diff: 'medium', xp: 40,
+          title: 'Atlantik-Sprung',
+          desc: 'Einmal komplett im Atlantik untertauchen &ndash; egal wie kalt das Wasser ist!' },
+        { id: 'kaese',       emoji: '🧀', diff: 'hard',   xp: 100,
+          title: 'Kaese-Connoisseur',
+          desc: 'Probiert 10 verschiedene franzoesische Kaesesorten und merkt euch die Namen. Quiz am Ende!' },
+        { id: 'francais',    emoji: '🗣️', diff: 'medium', xp: 75,
+          title: 'Parlez-vous francais?',
+          desc: 'Bestellt einmal komplett auf Franzoesisch im Restaurant. Bonus: ohne dass der Kellner auf Englisch wechselt!' },
+        { id: 'fortboyard',  emoji: '🏰', diff: 'easy',   xp: 40,
+          title: 'Fort Boyard gesichtet',
+          desc: 'Das legendaere Fort vom Boot oder der Ile d’Aix aus erspaehen und ein Foto schiessen.' },
+        { id: 'charavoile',  emoji: '⛵', diff: 'medium', xp: 60,
+          title: 'Strandsegler-Pilot',
+          desc: 'Einmal Char a Voile (Strandsegeln) fahren, ohne umzukippen!' },
+        { id: 'langustinen', emoji: '🦐', diff: 'medium', xp: 50,
+          title: 'Langustinen-Wettessen',
+          desc: 'Bei der Langoustinade die meisten Langustinen vernichten. Wer schafft am meisten?' },
+        { id: 'markt',       emoji: '🧺', diff: 'easy',   xp: 20,
+          title: 'Markt-Entdecker',
+          desc: 'Auf dem Wochenmarkt etwas kaufen und probieren, das ihr noch nie gegessen habt.' },
+        { id: 'boule',       emoji: '🔴', diff: 'medium', xp: 40,
+          title: 'Petanque-Meister',
+          desc: 'Eine Runde Boule gegen die Familie gewinnen. Franzoesischer geht’s nicht!' },
+        { id: 'sonnenstreak',emoji: '🌅', diff: 'easy',   xp: 30,
+          title: 'Sonnenuntergangs-Streak',
+          desc: '5 Tage in Folge den Sonnenuntergang live sehen &ndash; ohne Handy waehrenddessen!' },
+        { id: 'esel',        emoji: '🐴', diff: 'easy',   xp: 30,
+          title: 'Esel in Hosen',
+          desc: 'Findet Olerons beruehmte Esel, die echte Hosen tragen (lokale Tradition!), und macht ein Foto.' },
+        { id: 'cabanes',     emoji: '🎨', diff: 'medium', xp: 50,
+          title: 'Regenbogen-Cabanes',
+          desc: 'Die bunten Fischerhuetten von La Cotiniere: fotografiert eine in jeder Farbe &ndash; rot, blau, gruen, gelb.' },
+        { id: 'geheimstrand',emoji: '🏖️', diff: 'medium', xp: 40,
+          title: 'Geheimer Strand',
+          desc: 'Entdeckt eine Bucht, die nicht auf der Touri-Karte steht und wo kaum jemand ist.' },
+        { id: 'leuchtturm',  emoji: '🗼', diff: 'medium', xp: 50,
+          title: '224 Stufen',
+          desc: 'Den Leuchtturm Phare de Chassiron hochsteigen, die Stufen zaehlen und oben den Ausblick geniessen.' },
+        { id: 'sternbild',   emoji: '⭐', diff: 'easy',   xp: 30,
+          title: 'Sternbild-Jaeger',
+          desc: 'In einer klaren Nacht 3 Sternbilder am Atlantikhimmel finden und benennen.' },
+        { id: 'postkarte',   emoji: '✉️', diff: 'easy',   xp: 30,
+          title: 'Postkarten-Mission',
+          desc: 'Eine Postkarte kaufen, auf Franzoesisch beschriften und in einen echten franzoesischen Briefkasten werfen.' },
+        { id: 'kapitaen',    emoji: '🧭', diff: 'medium', xp: 50,
+          title: 'Tages-Kapitaen',
+          desc: 'Einen ganzen Tag die Crew anfuehren: Route, Restaurant, Plan &ndash; alle ziehen mit, kein Meckern erlaubt!' },
+        { id: 'handyfrei',   emoji: '📵', diff: 'easy',   xp: 30,
+          title: 'Handy-freies Dinner',
+          desc: 'Ein komplettes Abendessen, bei dem niemand das Handy anfasst. Wer zuerst zueckt, verliert.' },
+        { id: 'sonnenaufgang',emoji: '🌅', diff: 'medium', xp: 40,
+          title: 'Frueher Vogel',
+          desc: 'Einen Sonnenaufgang schaffen (schwerer als der Sonnenuntergang!) &ndash; einmal reicht.' },
+        { id: 'navigator',   emoji: '🗺️', diff: 'medium', xp: 50,
+          title: 'Karten-Navigator',
+          desc: 'Die Familie nur mit einer Papierkarte ans Ziel lotsen &ndash; kein Handy-GPS erlaubt.' },
+        { id: 'muscheln',    emoji: '🐚', diff: 'medium', xp: 40,
+          title: 'Muschel-Bestimmer',
+          desc: '5 verschiedene Muscheln am Strand sammeln und herausfinden, wie sie heissen.' },
+        { id: 'salz',        emoji: '🧂', diff: 'medium', xp: 40,
+          title: 'Fleur de Sel',
+          desc: 'Die Salzgaerten von Oleron besuchen und echtes Inselsalz mit nach Hause nehmen.' },
+    ];
+
+    const DIFF_LABEL = { easy: 'EASY', medium: 'MEDIUM', hard: 'HARD' };
+    const MEDALS = ['🥇', '🥈', '🥉'];
+
+    // Quest-Karten aufbauen (mit Namens-Buttons statt Checkbox)
+    grid.innerHTML = QUESTS.map(q => `
+        <div class="quest-card" data-quest="${q.id}">
+            <div class="quest-difficulty ${q.diff}">${DIFF_LABEL[q.diff]}</div>
+            <h3>${q.emoji} ${q.title}</h3>
+            <p>${q.desc}</p>
+            <div class="quest-reward">+${q.xp} XP pro Person</div>
+            <div class="quest-members">
+                ${MEMBERS.map(m => `
+                    <button class="quest-member" type="button" data-quest="${q.id}" data-member="${m}" title="${m} hat&rsquo;s geschafft">
+                        <span class="qm-icon">${MEMBER_ICONS[m]}</span>
+                        <span class="qm-name">${m}</span>
+                    </button>`).join('')}
+            </div>
+        </div>`).join('');
+
+    let questData = {}; // { questId: { member: true } }
+
+    function isDone(questId, member) {
+        return !!(questData[questId] && questData[questId][member]);
     }
-}
 
-function saveXP(xp) {
-    localStorage.setItem(XP_KEY, JSON.stringify(xp));
-}
+    function renderQuestStates() {
+        grid.querySelectorAll('.quest-member').forEach(btn => {
+            btn.classList.toggle('done', isDone(btn.dataset.quest, btn.dataset.member));
+        });
+    }
 
-function updateXPDisplay(xp) {
-    const maxXP = 500;
-    Object.keys(xp).forEach(name => {
-        const fill = document.getElementById(`xp-${name}`);
-        const val = document.getElementById(`xp-${name}-val`);
-        if (fill && val) {
-            const pct = Math.min((xp[name] / maxXP) * 100, 100);
-            fill.style.width = pct + '%';
-            val.textContent = xp[name] + ' XP';
-        }
-    });
-}
+    function renderLeaderboard() {
+        const totals = MEMBERS.map(m => {
+            let xp = 0, count = 0;
+            QUESTS.forEach(q => { if (isDone(q.id, m)) { xp += q.xp; count++; } });
+            return { name: m, xp, count };
+        });
+        totals.sort((a, b) => b.xp - a.xp || b.count - a.count || a.name.localeCompare(b.name));
+        const maxXp = Math.max(totals[0].xp, 1);
 
-// Make XP editable by clicking on the value
-function initXPTracker() {
-    const xp = loadXP();
-    updateXPDisplay(xp);
+        lbList.innerHTML = totals.map((t, i) => {
+            const pct = Math.min((t.xp / maxXp) * 100, 100);
+            const rank = (t.xp > 0 && i < 3)
+                ? `<span class="lb-medal">${MEDALS[i]}</span>`
+                : `<span class="lb-num">${i + 1}</span>`;
+            const leader = (i === 0 && t.xp > 0) ? ' leader' : '';
+            return `
+                <div class="lb-row${leader}">
+                    <span class="lb-rank">${rank}</span>
+                    <span class="lb-name">${MEMBER_ICONS[t.name]} ${t.name}</span>
+                    <div class="lb-bar"><div class="lb-fill" style="width:${pct}%"></div></div>
+                    <span class="lb-xp">${t.xp} XP <span class="lb-count">&middot; ${t.count}</span></span>
+                </div>`;
+        }).join('');
+    }
 
-    Object.keys(xp).forEach(name => {
-        const val = document.getElementById(`xp-${name}-val`);
-        if (val) {
-            val.style.cursor = 'pointer';
-            val.title = 'Klicke zum Bearbeiten';
-            val.addEventListener('click', () => {
-                const input = prompt(`XP fuer ${name.charAt(0).toUpperCase() + name.slice(1)} eingeben:`, xp[name]);
-                if (input !== null) {
-                    const num = parseInt(input);
-                    if (!isNaN(num) && num >= 0) {
-                        xp[name] = num;
-                        saveXP(xp);
-                        updateXPDisplay(xp);
-                    }
-                }
-            });
-        }
-    });
-}
+    function renderAll() {
+        renderQuestStates();
+        renderLeaderboard();
+    }
 
-initXPTracker();
+    function setup() {
+        const qRef = window.fbRef(window.fbDb, 'quests');
+        window.fbOnValue(qRef, (snapshot) => {
+            questData = snapshot.val() || {};
+            renderAll();
+        });
+
+        grid.addEventListener('click', (ev) => {
+            const btn = ev.target.closest('.quest-member');
+            if (!btn) return;
+            const quest = btn.dataset.quest;
+            const member = btn.dataset.member;
+            const next = isDone(quest, member) ? null : true;
+            window.fbSet(window.fbRef(window.fbDb, `quests/${quest}/${member}`), next);
+        });
+    }
+
+    renderAll(); // sofortige Anzeige (leer), bevor Firebase laedt
+    if (window.firebaseReady) {
+        setup();
+    } else {
+        window.addEventListener('firebase-ready', setup);
+    }
+})();
 
 // --- Scroll Animations ---
 const observer = new IntersectionObserver((entries) => {
