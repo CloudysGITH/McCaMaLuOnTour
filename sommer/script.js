@@ -795,6 +795,31 @@ updateCostDisplay(0);
     const submitBtn = document.getElementById('expSubmit');
     if (!submitBtn) return;
 
+    // Bearbeitungs-Status: welche Eintrags-id wird gerade bearbeitet (null = neuer Eintrag)
+    let editingId = null;
+    let editingTs = null;
+    let lastData = {};
+
+    function exitEditMode() {
+        editingId = null;
+        editingTs = null;
+        document.getElementById('expCat').value = '';
+        document.getElementById('expAmount').value = '';
+        document.getElementById('expDesc').value = '';
+        document.getElementById('expDate').valueAsDate = new Date();
+        submitBtn.textContent = 'Eintragen';
+        if (cancelBtn) cancelBtn.style.display = 'none';
+    }
+
+    // Abbrechen-Button (nur im Bearbeiten-Modus sichtbar)
+    const cancelBtn = document.createElement('button');
+    cancelBtn.type = 'button';
+    cancelBtn.className = 'expense-btn expense-btn-cancel';
+    cancelBtn.textContent = 'Abbrechen';
+    cancelBtn.style.display = 'none';
+    submitBtn.parentNode.appendChild(cancelBtn);
+    cancelBtn.addEventListener('click', exitEditMode);
+
     function initExpenses() {
         const expRef = window.fbRef(window.fbDb, 'expenses');
 
@@ -804,16 +829,35 @@ updateCostDisplay(0);
             renderExpenses(data);
         });
 
-        // Loeschen per Klick auf das X (Event-Delegation, da die Liste neu gerendert wird)
+        // Loeschen & Bearbeiten per Klick (Event-Delegation, da die Liste neu gerendert wird)
         const list = document.getElementById('expenseList');
         if (list) {
             list.addEventListener('click', (ev) => {
-                const btn = ev.target.closest('.expense-del');
-                if (!btn) return;
-                const id = btn.dataset.id;
-                if (!id) return;
-                if (!confirm('Diesen Eintrag wirklich loeschen?')) return;
-                window.fbSet(window.fbRef(window.fbDb, 'expenses/' + id), null);
+                const delBtn = ev.target.closest('.expense-del');
+                if (delBtn) {
+                    const id = delBtn.dataset.id;
+                    if (!id) return;
+                    if (!confirm('Diesen Eintrag wirklich loeschen?')) return;
+                    if (id === editingId) exitEditMode();
+                    window.fbSet(window.fbRef(window.fbDb, 'expenses/' + id), null);
+                    return;
+                }
+
+                const editBtn = ev.target.closest('.expense-edit');
+                if (editBtn) {
+                    const id = editBtn.dataset.id;
+                    if (!id || !lastData[id]) return;
+                    const e = lastData[id];
+                    editingId = id;
+                    editingTs = e.ts || null;
+                    document.getElementById('expCat').value = e.cat || '';
+                    document.getElementById('expAmount').value = e.amount != null ? e.amount : '';
+                    document.getElementById('expDesc').value = e.desc || '';
+                    if (e.date) document.getElementById('expDate').value = e.date;
+                    submitBtn.textContent = 'Aktualisieren';
+                    cancelBtn.style.display = '';
+                    document.getElementById('expenseForm').scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
             });
         }
 
@@ -826,31 +870,47 @@ updateCostDisplay(0);
 
             if (!cat || !amount || !date) {
                 submitBtn.textContent = 'Bitte alles ausfüllen!';
-                setTimeout(() => { submitBtn.textContent = 'Eintragen'; }, 2000);
+                const restore = editingId ? 'Aktualisieren' : 'Eintragen';
+                setTimeout(() => { submitBtn.textContent = restore; }, 2000);
                 return;
             }
 
-            const newRef = window.fbPush(expRef);
-            window.fbSet(newRef, {
-                cat: cat,
-                amount: amount,
-                desc: desc,
-                date: date,
-                ts: Date.now()
-            });
+            if (editingId) {
+                // Bestehenden Eintrag ueberschreiben (gleiche id, urspruengliches ts behalten)
+                window.fbSet(window.fbRef(window.fbDb, 'expenses/' + editingId), {
+                    cat: cat,
+                    amount: amount,
+                    desc: desc,
+                    date: date,
+                    ts: editingTs || Date.now()
+                });
+                exitEditMode();
+                submitBtn.textContent = 'Aktualisiert!';
+                setTimeout(() => { submitBtn.textContent = 'Eintragen'; }, 1500);
+            } else {
+                const newRef = window.fbPush(expRef);
+                window.fbSet(newRef, {
+                    cat: cat,
+                    amount: amount,
+                    desc: desc,
+                    date: date,
+                    ts: Date.now()
+                });
 
-            // Reset form
-            document.getElementById('expCat').value = '';
-            document.getElementById('expAmount').value = '';
-            document.getElementById('expDesc').value = '';
-            document.getElementById('expDate').valueAsDate = new Date();
+                // Reset form
+                document.getElementById('expCat').value = '';
+                document.getElementById('expAmount').value = '';
+                document.getElementById('expDesc').value = '';
+                document.getElementById('expDate').valueAsDate = new Date();
 
-            submitBtn.textContent = 'Gespeichert!';
-            setTimeout(() => { submitBtn.textContent = 'Eintragen'; }, 1500);
+                submitBtn.textContent = 'Gespeichert!';
+                setTimeout(() => { submitBtn.textContent = 'Eintragen'; }, 1500);
+            }
         });
     }
 
     function renderExpenses(data) {
+        lastData = data || {};
         const list = document.getElementById('expenseList');
         const totalEl = document.getElementById('expenseTotal');
         if (!list) return;
@@ -890,6 +950,7 @@ updateCostDisplay(0);
                 html += '<span class="expense-icon">' + icon + '</span>';
                 html += '<div class="expense-item-info"><span class="expense-item-desc">' + (e.desc || label) + '</span><span class="expense-item-meta">' + label + '</span></div>';
                 html += '<span class="expense-item-amount">' + (e.amount || 0).toLocaleString('de-DE', { minimumFractionDigits: 2 }) + ' €</span>';
+                html += '<button class="expense-edit" data-id="' + e.id + '" title="Eintrag bearbeiten" aria-label="Eintrag bearbeiten">&#x270F;&#xFE0F;</button>';
                 html += '<button class="expense-del" data-id="' + e.id + '" title="Eintrag loeschen" aria-label="Eintrag loeschen">&#x2715;</button>';
                 html += '</div>';
             });
