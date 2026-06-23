@@ -485,6 +485,15 @@ initChecklists();
           desc: 'Heimlich ein Familienfoto sprengen, ohne dass es jemand merkt.' },
     ];
 
+    // Quests bunt durchmischen: alte & neue verteilt, aber stabile Reihenfolge
+    // (gleich bei jedem Laden, damit die Karten nicht herumspringen).
+    function questHash(s) {
+        let h = 0;
+        for (let i = 0; i < s.length; i++) { h = (h * 31 + s.charCodeAt(i)) >>> 0; }
+        return h;
+    }
+    QUESTS.sort((a, b) => questHash(a.id) - questHash(b.id));
+
     const DIFF_LABEL = { easy: 'EASY', medium: 'MEDIUM', hard: 'HARD' };
     const MEDALS = ['🥇', '🥈', '🥉'];
 
