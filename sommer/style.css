@@ -1618,6 +1618,22 @@ body.locked {
     margin-bottom: 0.8rem;
 }
 
+.quest-solo {
+    display: inline-block;
+    margin: 0.4rem 0 0.2rem;
+    padding: 0.15rem 0.6rem;
+    border-radius: 20px;
+    font-size: 0.65rem;
+    font-weight: 800;
+    letter-spacing: 0.05em;
+    background: rgba(251,191,36,0.15);
+    color: var(--yellow);
+    border: 1px solid rgba(251,191,36,0.35);
+}
+.quest-card-solo {
+    border-color: rgba(251,191,36,0.3);
+}
+
 .quest-howto {
     max-width: 720px;
     margin: 0.5rem auto 0;

@@ -291,13 +291,13 @@ initChecklists();
         { id: 'austern',     emoji: '🦪', diff: 'medium', xp: 60,
           title: 'Austern-Mutprobe',
           desc: 'Eine frische Auster direkt von Oleron schluerfen &ndash; roh und mutig! Wer traut sich?' },
-        { id: 'surf',        emoji: '🏄', diff: 'medium', xp: 50,
+        { id: 'surf',        emoji: '🏄', diff: 'medium', xp: 50, solo: true,
           title: 'Surf Champion',
           desc: 'Wer steht beim Surfkurs in Vert Bois am laengsten auf dem Board?' },
         { id: 'tourdeoleron',emoji: '🚴', diff: 'hard',   xp: 200,
           title: 'Tour de Oleron',
           desc: 'Die Insel komplett per Fahrrad umrunden (~65 km). Respekt fuer alle, die es schaffen!' },
-        { id: 'golden',      emoji: '📸', diff: 'easy',   xp: 30,
+        { id: 'golden',      emoji: '📸', diff: 'easy',   xp: 30, solo: true,
           title: 'Golden Hour Challenge',
           desc: 'Jeden Abend ein Sonnenuntergangs-Foto. Am Ende wird abgestimmt &ndash; das beste Foto gewinnt!' },
         { id: 'atlantik',    emoji: '🌊', diff: 'medium', xp: 40,
@@ -309,7 +309,7 @@ initChecklists();
         { id: 'francais',    emoji: '🗣️', diff: 'medium', xp: 75,
           title: 'Parlez-vous francais?',
           desc: 'Bestellt einmal komplett auf Franzoesisch im Restaurant. Bonus: ohne dass der Kellner auf Englisch wechselt!' },
-        { id: 'langustinen', emoji: '🦐', diff: 'medium', xp: 50,
+        { id: 'langustinen', emoji: '🦐', diff: 'medium', xp: 50, solo: true,
           title: 'Langustinen-Wettessen',
           desc: 'Bei der Langoustinade die meisten Langustinen vernichten. Wer schafft am meisten?' },
         { id: 'sonnenstreak',emoji: '🌅', diff: 'easy',   xp: 30,
@@ -384,7 +384,7 @@ initChecklists();
         { id: 'gutetat',          emoji: '🤝', diff: 'medium', xp: 40,
           title: 'Gute-Tat',
           desc: 'Einem Fremden helfen &ndash; Weg zeigen, etwas tragen, Tuer aufhalten.' },
-        { id: 'lasttier',         emoji: '🛍️', diff: 'medium', xp: 50,
+        { id: 'lasttier',         emoji: '🛍️', diff: 'medium', xp: 50, solo: true,
           title: 'Lasttier',
           desc: 'Am meisten zum Strand schleppen &ndash; Taschen, Schirm, Kuehlbox!' },
         { id: 'moewenpaparazzo',  emoji: '🦅', diff: 'easy',   xp: 30,
@@ -393,22 +393,22 @@ initChecklists();
         { id: 'eisretter',        emoji: '🍦', diff: 'easy',   xp: 20,
           title: 'Eis-Retter',
           desc: 'Ein Eis komplett aufessen, bevor es schmilzt!' },
-        { id: 'steinflitscher',   emoji: '🪨', diff: 'easy',   xp: 30,
+        { id: 'steinflitscher',   emoji: '🪨', diff: 'easy',   xp: 30, solo: true,
           title: 'Stein-Flitscher',
           desc: 'Einen flachen Stein am Wasser so oft wie moeglich huepfen lassen.' },
         { id: 'sprungfoto',       emoji: '📸', diff: 'easy',   xp: 30,
           title: 'Sprungfoto',
           desc: 'Ein perfektes Sprungfoto am Strand hinkriegen &ndash; alle in der Luft!' },
-        { id: 'mutsprung',        emoji: '🧊', diff: 'easy',   xp: 30,
+        { id: 'mutsprung',        emoji: '🧊', diff: 'easy',   xp: 30, solo: true,
           title: 'Mutigster Sprung',
           desc: 'Als Erste:r in den kalten Atlantik springen.' },
-        { id: 'eisbaer',          emoji: '🌊', diff: 'medium', xp: 40,
+        { id: 'eisbaer',          emoji: '🌊', diff: 'medium', xp: 40, solo: true,
           title: 'Eisbaer',
           desc: 'Am laengsten im kalten Wasser bleiben &ndash; wer haelt durch?' },
         { id: 'baguette',         emoji: '🥖', diff: 'easy',   xp: 20,
           title: 'Baguette-Balance',
           desc: 'Ein Baguette den ganzen Weg heimtragen, ohne reinzubeissen!' },
-        { id: 'strandstyle',      emoji: '😎', diff: 'easy',   xp: 20,
+        { id: 'strandstyle',      emoji: '😎', diff: 'easy',   xp: 20, solo: true,
           title: 'Strand-Style',
           desc: 'Den coolsten Strand-Look des Tages tragen &ndash; Sonnenbrille, Hut, alles.' },
         { id: 'wellenrenner',     emoji: '🌊', diff: 'easy',   xp: 20,
@@ -447,7 +447,7 @@ initChecklists();
         { id: 'painchocolat',     emoji: '🍫', diff: 'easy',   xp: 20,
           title: 'Pain au Chocolat',
           desc: 'Ein warmes Pain au Chocolat vom Baecker geniessen &ndash; echt franzoesisch.' },
-        { id: 'grimassen',        emoji: '🤪', diff: 'easy',   xp: 20,
+        { id: 'grimassen',        emoji: '🤪', diff: 'easy',   xp: 20, solo: true,
           title: 'Grimassen-Koenig',
           desc: 'Das allerlustigste Foto-Gesicht der Familie ziehen.' },
         { id: 'strandtanz',       emoji: '🕺', diff: 'easy',   xp: 20,
@@ -474,7 +474,7 @@ initChecklists();
         { id: 'pinguin',          emoji: '🐧', diff: 'easy',   xp: 20,
           title: 'Pinguin-Gang',
           desc: 'Wie ein Pinguin den ganzen Strand entlang watscheln.' },
-        { id: 'photobomb',        emoji: '📸', diff: 'easy',   xp: 20,
+        { id: 'photobomb',        emoji: '📸', diff: 'easy',   xp: 20, solo: true,
           title: 'Photobomb-Koenig',
           desc: 'Heimlich ein Familienfoto sprengen, ohne dass es jemand merkt.' },
         { id: 'chefkochtag',      emoji: '🍽️', diff: 'hard',   xp: 100,
@@ -539,13 +539,18 @@ initChecklists();
     const DIFF_LABEL = { easy: 'EASY', medium: 'MEDIUM', hard: 'HARD' };
     const MEDALS = ['🥇', '🥈', '🥉'];
 
+    // Schnell-Zugriff auf eine Quest per id (fuer Solo-Logik)
+    const QUEST_BY_ID = {};
+    QUESTS.forEach(q => { QUEST_BY_ID[q.id] = q; });
+
     // Quest-Karten aufbauen (mit Namens-Buttons statt Checkbox)
     grid.innerHTML = QUESTS.map(q => `
-        <div class="quest-card" data-quest="${q.id}">
+        <div class="quest-card${q.solo ? ' quest-card-solo' : ''}" data-quest="${q.id}">
             <div class="quest-difficulty ${q.diff}">${DIFF_LABEL[q.diff]}</div>
+            ${q.solo ? '<div class="quest-solo">👑 Nur 1 Gewinner</div>' : ''}
             <h3>${q.emoji} ${q.title}</h3>
             <p>${q.desc}</p>
-            <div class="quest-reward">+${q.xp} XP pro Person</div>
+            <div class="quest-reward">+${q.xp} XP ${q.solo ? '&middot; nur fuer den Gewinner' : 'pro Person'}</div>
             <div class="quest-members">
                 ${MEMBERS.map(m => `
                     <button class="quest-member" type="button" data-quest="${q.id}" data-member="${m}" title="${m} hat&rsquo;s geschafft">
@@ -609,8 +614,21 @@ initChecklists();
             if (!btn) return;
             const quest = btn.dataset.quest;
             const member = btn.dataset.member;
-            const next = isDone(quest, member) ? null : true;
-            window.fbSet(window.fbRef(window.fbDb, `quests/${quest}/${member}`), next);
+            const q = QUEST_BY_ID[quest];
+            const alreadyDone = isDone(quest, member);
+
+            if (q && q.solo) {
+                // Wettkampf-Quest: nur EINE Person kann Gewinner sein.
+                // Klick auf den aktuellen Gewinner = abwaehlen, sonst Sieg uebernehmen.
+                if (alreadyDone) {
+                    window.fbSet(window.fbRef(window.fbDb, `quests/${quest}`), null);
+                } else {
+                    window.fbSet(window.fbRef(window.fbDb, `quests/${quest}`), { [member]: true });
+                }
+            } else {
+                const next = alreadyDone ? null : true;
+                window.fbSet(window.fbRef(window.fbDb, `quests/${quest}/${member}`), next);
+            }
         });
     }
 
