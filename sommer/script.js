@@ -555,6 +555,9 @@ initChecklists();
         { id: 'freundschaftsband',emoji: '📿', diff: 'medium', xp: 40,
           title: 'Freundschaftsband',
           desc: 'Ein Freundschaftsband knuepfen und jemandem aus der Familie schenken.' },
+        { id: 'waeschechampion',  emoji: '🧺', diff: 'medium', xp: 50, solo: true,
+          title: 'Waesche-Champion',
+          desc: 'Wer waescht in den Ferien am meisten Waesche? Nur die fleissigste Person holt sich die Punkte!' },
     ];
 
     // Quests bunt durchmischen: alte & neue verteilt, aber stabile Reihenfolge
