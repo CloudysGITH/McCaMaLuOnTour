@@ -1755,6 +1755,96 @@ body.locked {
 .gear-no {
     color: var(--red);
     font-weight: 700;
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.2s, color 0.2s;
+}
+.gear-no:hover {
+    background: rgba(239,68,68,0.14);
+    color: #fca5a5;
+}
+.gear-no:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: -2px;
+}
+
+/* Besorgt: rotes Kreuz wird zum gruenen Haken */
+.gear-no.gear-done {
+    color: var(--green);
+    background: rgba(52,211,153,0.12);
+}
+.gear-no.gear-done::after {
+    content: '✓';
+}
+.gear-no.gear-done { font-size: 0; }
+.gear-no.gear-done::after { font-size: 0.95rem; }
+.gear-no.gear-done:hover { background: rgba(52,211,153,0.2); color: var(--green); }
+
+.gear-row-done th[scope="row"] {
+    color: var(--green) !important;
+    text-decoration: line-through;
+    text-decoration-color: rgba(52,211,153,0.5);
+}
+
+/* Fortschrittsbalken */
+.gear-progress-wrap {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.gear-progress {
+    flex: 1;
+    height: 10px;
+    background: rgba(136,136,160,0.15);
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+.gear-progress-fill {
+    height: 100%;
+    border-radius: 20px;
+    background: linear-gradient(90deg, var(--accent), var(--green));
+    transition: width 0.4s ease;
+}
+
+.gear-progress-label {
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    color: var(--text-dim);
+    white-space: nowrap;
+}
+
+.gear-legend {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    margin: 0.7rem 0 2rem;
+}
+
+.gear-reset {
+    flex-shrink: 0;
+    background: none;
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 0.35rem 0.9rem;
+    color: var(--text-dim);
+    font-family: var(--font);
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: color 0.2s, border-color 0.2s;
+}
+.gear-reset:hover {
+    color: var(--red);
+    border-color: rgba(239,68,68,0.5);
+}
+
+@media (max-width: 640px) {
+    .gear-legend { flex-direction: column; }
+    .gear-progress-wrap { flex-direction: column; align-items: stretch; gap: 0.5rem; }
+    .gear-progress-label { text-align: right; }
 }
 
 .gear-gap-head { color: var(--yellow) !important; }
@@ -1789,7 +1879,8 @@ body.locked {
 .gear-hint {
     font-size: 0.8rem;
     color: var(--text-dim);
-    margin: 0.7rem 0 2rem;
+    line-height: 1.5;
+    margin: 0;
 }
 
 .gear-action-grid {

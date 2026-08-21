@@ -857,3 +857,147 @@ document.querySelectorAll('.phase-label').forEach((label, i) => {
         wrapper.classList.toggle('expanded');
     });
 });
+
+// --- Ski-Ausruestung: Inventur abhakbar ---
+// Jede rote Zelle (fehlendes Teil) laesst sich antippen, sobald es besorgt ist.
+// Gespeichert wird pro Item+Person, damit spaetere Zeilen-Aenderungen nichts verschieben.
+const GEAR_KEY = 'bwt26_gear';
+
+function loadGear() {
+    try {
+        return JSON.parse(localStorage.getItem(GEAR_KEY)) || {};
+    } catch {
+        return {};
+    }
+}
+
+function saveGear(data) {
+    localStorage.setItem(GEAR_KEY, JSON.stringify(data));
+}
+
+function gearSlug(text) {
+    return text.trim().toLowerCase()
+        .replace(/ä/g, 'ae').replace(/ö/g, 'oe').replace(/ü/g, 'ue').replace(/ß/g, 'ss')
+        .replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+}
+
+function initGearInventory() {
+    const table = document.querySelector('.gear-table');
+    if (!table) return;
+
+    const data = loadGear();
+    const rows = Array.from(table.querySelectorAll('tbody tr'));
+    const persons = Array.from(table.querySelectorAll('thead th'))
+        .slice(1, -1)
+        .map(th => th.textContent.trim());
+
+    // Ausgangsstand: wie viele Teile fehlten laut Inventur ueberhaupt?
+    let baseTotal = 0;
+
+    const cells = [];
+
+    rows.forEach(row => {
+        const itemLabel = row.querySelector('th[scope="row"]');
+        // Badge ("leihen") gehoert nicht in den Schluessel
+        const itemName = itemLabel.childNodes[0].textContent;
+        const slug = gearSlug(itemName);
+        const isRent = row.classList.contains('gear-row-rent');
+
+        // Ueber ALLE Zellen laufen: nur so stimmt der Spaltenindex mit der Person ueberein
+        row.querySelectorAll('td').forEach((cell, col) => {
+            if (!cell.classList.contains('gear-no')) return;
+
+            const personName = persons[col] || String(col);
+            const key = `${slug}__${gearSlug(personName)}`;
+
+            baseTotal++;
+            cell.dataset.gearKey = key;
+            cell.dataset.gearRent = isRent ? '1' : '';
+            cell.setAttribute('role', 'button');
+            cell.setAttribute('tabindex', '0');
+            cell.title = `${itemName.trim()} für ${personName} – antippen, wenn besorgt`;
+
+            const toggle = () => {
+                const done = !cell.classList.contains('gear-done');
+                cell.classList.toggle('gear-done', done);
+                if (done) {
+                    data[key] = true;
+                } else {
+                    delete data[key];
+                }
+                saveGear(data);
+                renderGear();
+            };
+
+            cell.addEventListener('click', toggle);
+            cell.addEventListener('keydown', e => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    toggle();
+                }
+            });
+
+            if (data[key]) cell.classList.add('gear-done');
+            cells.push(cell);
+        });
+    });
+
+    function renderGear() {
+        let missing = 0;
+        let missingRent = 0;
+
+        rows.forEach(row => {
+            const open = row.querySelectorAll('td.gear-no:not(.gear-done)').length;
+            const gapCell = row.querySelector('.gear-gap');
+            const isRent = row.classList.contains('gear-row-rent');
+
+            missing += open;
+            if (isRent) missingRent += open;
+
+            if (gapCell) {
+                gapCell.textContent = open === 0 ? '0 \u{1F389}' : String(open);
+                gapCell.classList.toggle('gear-gap-zero', open === 0);
+                gapCell.classList.toggle('gear-gap-max', open >= 5);
+            }
+            row.classList.toggle('gear-row-done', open === 0);
+        });
+
+        const missingBuy = missing - missingRent;
+        const done = baseTotal - missing;
+        const pct = baseTotal ? Math.round((done / baseTotal) * 100) : 0;
+
+        const set = (id, value) => {
+            const el = document.getElementById(id);
+            if (el) el.textContent = value;
+        };
+
+        set('gearStatMissing', missing);
+        set('gearStatBuy', missingBuy);
+        set('gearStatRent', missingRent);
+        set('gearBuyHeadline', missingBuy);
+        set('gearBuyTodo', missingBuy);
+        set('gearProgressLabel', missing === 0
+            ? `Alles besorgt! \u{1F389} (${baseTotal} von ${baseTotal})`
+            : `${done} von ${baseTotal} besorgt`);
+
+        const fill = document.getElementById('gearProgressFill');
+        if (fill) fill.style.width = pct + '%';
+    }
+
+    const resetBtn = document.getElementById('gearReset');
+    if (resetBtn) {
+        resetBtn.addEventListener('click', () => {
+            if (!confirm('Wirklich alle Haken in der Ausruestungs-Inventur zuruecksetzen?')) return;
+            cells.forEach(cell => {
+                cell.classList.remove('gear-done');
+                delete data[cell.dataset.gearKey];
+            });
+            saveGear(data);
+            renderGear();
+        });
+    }
+
+    renderGear();
+}
+
+initGearInventory();
