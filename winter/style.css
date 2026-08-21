@@ -640,6 +640,17 @@ body.locked {
     line-height: 1;
 }
 
+/* Karte, die keinen einzelnen Tag, sondern einen Rhythmus ueber mehrere Tage zeigt */
+.day-date-range .day-number { font-size: 1.05rem; letter-spacing: -0.02em; }
+.day-date-range .day-month { font-size: 0.6rem; }
+.day-date-range .day-weekday { letter-spacing: 0.02em; }
+
+.day-card-routine {
+    border-color: rgba(56,189,248,0.35);
+    background: linear-gradient(135deg, rgba(56,189,248,0.06), transparent 60%);
+}
+.day-card-routine .day-title h3 { color: var(--accent-light); }
+
 .day-month {
     font-size: 0.65rem;
     font-weight: 600;
