@@ -250,7 +250,16 @@ function previewStars(stars, value) {
 initRatings();
 
 // --- Checklist Persistence ---
-const CHECKLIST_KEY = 'bwt26_checklists';
+// v2: Schluessel aus Sektion + Beschriftung statt laufender Nummer. Sonst verrutschen
+// alle gesetzten Haken, sobald irgendwo ein Punkt dazukommt oder wegfaellt.
+const CHECKLIST_KEY = 'bwt26_checklists_v2';
+const CHECKLIST_KEY_OLD = 'bwt26_checklists';
+
+function slugify(text) {
+    return String(text).trim().toLowerCase()
+        .replace(/ä/g, 'ae').replace(/ö/g, 'oe').replace(/ü/g, 'ue').replace(/ß/g, 'ss')
+        .replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+}
 
 function loadChecklists() {
     try {
@@ -264,29 +273,68 @@ function saveChecklists(data) {
     localStorage.setItem(CHECKLIST_KEY, JSON.stringify(data));
 }
 
+function checklistKey(cb, seen) {
+    const label = cb.closest('label');
+    const section = cb.closest('section');
+    const sectionId = section ? section.id : 'allgemein';
+
+    // Kontext der Gruppe dazunehmen - die Side Quests heissen z.B. alle "Erledigt!",
+    // und "Handschuhe" koennte in zwei Packlisten-Kategorien vorkommen.
+    const group = cb.closest('.quest-card, .pack-category, .todo-item');
+    let context = sectionId;
+    if (group) {
+        if (group.dataset.quest) {
+            context += `::quest-${group.dataset.quest}`;
+        } else {
+            const heading = group.querySelector('h3');
+            if (heading) context += `::${slugify(heading.textContent).slice(0, 40)}`;
+        }
+    }
+
+    // Text der Beschriftung ohne die Checkbox selbst
+    const text = label ? label.textContent.replace(/\s+/g, ' ').trim() : '';
+    let key = `${context}::${slugify(text).slice(0, 60)}`;
+
+    // Gleichlautende Eintraege in derselben Sektion durchnummerieren
+    if (seen.has(key)) {
+        const n = seen.get(key) + 1;
+        seen.set(key, n);
+        key = `${key}~${n}`;
+    } else {
+        seen.set(key, 1);
+    }
+    return key;
+}
+
 function initChecklists() {
     const data = loadChecklists();
+    const seen = new Map();
 
-    document.querySelectorAll('input[type="checkbox"]').forEach((cb, index) => {
-        const key = `check_${index}`;
+    // Alte, positionsbasierte Daten aufraeumen - sie liessen sich nicht zuverlaessig
+    // zuordnen, weil sich die Reihenfolge der Punkte inzwischen geaendert hat.
+    localStorage.removeItem(CHECKLIST_KEY_OLD);
 
-        if (data[key]) {
-            cb.checked = true;
-            cb.closest('label').style.opacity = '0.5';
-            cb.closest('label').style.textDecoration = 'line-through';
-        }
+    document.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+        const key = checklistKey(cb, seen);
+        const label = cb.closest('label');
+        if (!label) return;
+
+        const paint = () => {
+            label.style.opacity = cb.checked ? '0.5' : '1';
+            label.style.textDecoration = cb.checked ? 'line-through' : 'none';
+        };
+
+        if (data[key]) cb.checked = true;
+        paint();
 
         cb.addEventListener('change', () => {
-            data[key] = cb.checked;
-            saveChecklists(data);
-
             if (cb.checked) {
-                cb.closest('label').style.opacity = '0.5';
-                cb.closest('label').style.textDecoration = 'line-through';
+                data[key] = true;
             } else {
-                cb.closest('label').style.opacity = '1';
-                cb.closest('label').style.textDecoration = 'none';
+                delete data[key];
             }
+            saveChecklists(data);
+            paint();
         });
     });
 }
@@ -875,12 +923,6 @@ function saveGear(data) {
     localStorage.setItem(GEAR_KEY, JSON.stringify(data));
 }
 
-function gearSlug(text) {
-    return text.trim().toLowerCase()
-        .replace(/ä/g, 'ae').replace(/ö/g, 'oe').replace(/ü/g, 'ue').replace(/ß/g, 'ss')
-        .replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
-}
-
 function initGearInventory() {
     const table = document.querySelector('.gear-table');
     if (!table) return;
@@ -900,7 +942,7 @@ function initGearInventory() {
         const itemLabel = row.querySelector('th[scope="row"]');
         // Badge ("leihen") gehoert nicht in den Schluessel
         const itemName = itemLabel.childNodes[0].textContent;
-        const slug = gearSlug(itemName);
+        const slug = slugify(itemName);
         const isRent = row.classList.contains('gear-row-rent');
 
         // Ueber ALLE Zellen laufen: nur so stimmt der Spaltenindex mit der Person ueberein
@@ -908,7 +950,7 @@ function initGearInventory() {
             if (!cell.classList.contains('gear-no')) return;
 
             const personName = persons[col] || String(col);
-            const key = `${slug}__${gearSlug(personName)}`;
+            const key = `${slug}__${slugify(personName)}`;
 
             baseTotal++;
             cell.dataset.gearKey = key;
