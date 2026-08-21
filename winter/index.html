@@ -149,13 +149,13 @@
             <span class="crew-badge">&#x1F3BF; Skipass &#x2713; 27.12.&ndash;04.01.</span>
         </div>
     </div>
-    <div class="placeholder-note"><strong>Fast komplett:</strong> Carla st&ouml;&szlig;t in N&uuml;rnberg dazu &#x2713; &ndash; nur ihr Zugticket (Mannheim &rarr; N&uuml;rnberg) muss noch gebucht werden.</div>
+    <div class="placeholder-note"><strong>Komplett:</strong> Carla st&ouml;&szlig;t am 23.12. in Bonn dazu &#x2713; &ndash; sie reist selbstst&auml;ndig mit dem Deutschland-Ticket aus Mannheim an.</div>
 </section>
 
 <!-- OVERVIEW MAP -->
 <section class="section" id="overview">
     <h2 class="section-title">Die Route</h2>
-    <div class="placeholder-note"><strong>Plan (zu best&auml;tigen):</strong> MUC &rarr; Christkindlesmarkt N&uuml;rnberg &rarr; 2 N&auml;chte Hepberg (dort steht unser Auto! &#x1F697;) &rarr; Weihnachten in Bonn &rarr; 26.12. Kaunertal &ndash; alles im eigenen MB E 250 T. <strong>Offen:</strong> Carlas Zugticket.</div>
+    <div class="placeholder-note"><strong>Steht &#x2713;</strong> MUC &rarr; Christkindlesmarkt N&uuml;rnberg &rarr; 2 N&auml;chte Hepberg (dort steht unser Auto! &#x1F697;) &rarr; Weihnachten in Bonn (Carla kommt am 23.12. dazu) &rarr; 26.12. Kaunertal &ndash; alles im eigenen MB E 250 T. <strong>Offen:</strong> nur noch die Phase nach dem Skifahren (03.&ndash;08.01.).</div>
 
     <!-- LEAFLET MAP -->
     <div id="route-map" style="height: 500px; border-radius: 16px; border: 1px solid rgba(136,136,160,0.15); overflow: hidden;"></div>
@@ -179,10 +179,10 @@
             { name: 'Bangkok', lat: 13.75, lon: 100.5, color: '#fbbf24', info: 'START • Abflug 19.12. 22:10', r: 6, perm: false },
             { name: 'Istanbul', lat: 41.01, lon: 28.98, color: '#22d3ee', info: 'Umsteigen', r: 5, perm: false },
             { name: 'München', lat: 48.354, lon: 11.786, color: '#fbbf24', info: 'Ankunft 20.12. 09:50 ✈️', r: 7, perm: true },
-            { name: 'Nürnberg', lat: 49.454, lon: 11.077, color: '#ef4444', info: 'Christkindlesmarkt 🎄 • Reunion mit Carla 🥳', r: 7, perm: true },
-            { name: 'Mannheim', lat: 49.488, lon: 8.466, color: '#22d3ee', info: 'Carla startet hier 🚆', r: 6, perm: true },
-            { name: 'Hepberg', lat: 48.812, lon: 11.464, color: '#34d399', info: 'Familie Jantz 💛 20.–22.12.', r: 6, perm: true },
-            { name: 'Bonn', lat: 50.737, lon: 7.098, color: '#ef4444', info: 'Weihnachten bei Oma & Opa ❤️ 22.–26.12.', r: 8, perm: true },
+            { name: 'Nürnberg', lat: 49.454, lon: 11.077, color: '#ef4444', info: 'Christkindlesmarkt 🎄 20.12.', r: 7, perm: true },
+            { name: 'Mannheim', lat: 49.488, lon: 8.466, color: '#22d3ee', info: 'Carla startet hier 🚆 (Deutschland-Ticket)', r: 6, perm: true },
+            { name: 'Hepberg', lat: 48.812, lon: 11.464, color: '#34d399', info: 'Familie Jantz 💛 20.–22.12. ✓', r: 6, perm: true },
+            { name: 'Bonn', lat: 50.737, lon: 7.098, color: '#ef4444', info: 'Weihnachten bei Oma & Opa ❤️ 22.–26.12. ✓ • Reunion mit Carla 23.12. 🥳', r: 8, perm: true },
             { name: 'Feichten / Kaunertal', lat: 47.005, lon: 10.713, color: '#38bdf8', info: 'Basis im Tal \u{1F3E0}', r: 7, perm: true },
             { name: 'Kaunertaler Gletscher', lat: 46.871, lon: 10.717, color: '#7dd3fc', info: 'Skigebiet bis 3.113 m \u{1F3BF}', r: 8, perm: true },
             { name: 'Fendels', lat: 47.049, lon: 10.690, color: '#2dd4bf', info: 'Skigebiet Fendels-Ried ⛷️', r: 7, perm: true },
@@ -210,11 +210,11 @@
         L.marker([25, 80], { icon: emojiIcon('✈️', 18) }).addTo(map);
         L.marker([44, 21], { icon: emojiIcon('✈️', 18) }).addTo(map);
 
-        // Carlas Zug: Mannheim -> Nuernberg
+        // Carlas Zug: Mannheim -> Bonn (23.12., Deutschland-Ticket)
         L.polyline([
-            [49.488, 8.466], [49.454, 11.077]
+            [49.488, 8.466], [50.0, 7.6], [50.737, 7.098]
         ], { color: '#22d3ee', weight: 2, opacity: 0.5, dashArray: '8,8' }).addTo(map);
-        L.marker([49.50, 9.77], { icon: emojiIcon('\u{1F686}', 16) }).addTo(map);
+        L.marker([50.02, 7.58], { icon: emojiIcon('\u{1F686}', 16) }).addTo(map);
 
         // MUC -> Nuernberg (Abholung Familie Jantz)
         L.polyline([
@@ -227,10 +227,10 @@
             [49.454, 11.077], [48.812, 11.464]
         ], { color: '#34d399', weight: 3, opacity: 0.7 }).addTo(map);
 
-        // Hepberg -> Bonn (22.12., geplant)
+        // Hepberg -> Bonn (22.12.)
         L.polyline([
             [48.812, 11.464], [49.5, 9.5], [50.737, 7.098]
-        ], { color: '#ef4444', weight: 3, opacity: 0.6, dashArray: '6,6' }).addTo(map);
+        ], { color: '#ef4444', weight: 3, opacity: 0.7 }).addTo(map);
 
         // Bonn -> Kaunertal (26.12., lange Etappe)
         L.polyline([
@@ -339,7 +339,7 @@
                 <span class="day-month">DEZ</span>
             </div>
             <div class="day-title">
-                <h3>Ankunft, Carla-Reunion &amp; Christkindlesmarkt! &#x1F384;</h3>
+                <h3>Ankunft &amp; Christkindlesmarkt! &#x1F384;</h3>
                 <div class="day-location">&#x1F4CD; Istanbul &rarr; M&uuml;nchen &rarr; N&uuml;rnberg</div>
             </div>
             <div class="day-weather">
@@ -356,10 +356,6 @@
                 <div class="schedule-item">
                     <span class="time">danach</span>
                     <span class="activity">Familie Jantz kommt mit ZWEI Autos &ndash; &Uuml;bergabe unseres E 250 direkt am Flughafen! &#x1F697;&#x1F697;&#x1F49B; Ab jetzt autark. Im Konvoi Richtung N&uuml;rnberg (~1,5h)</span>
-                </div>
-                <div class="schedule-item highlight">
-                    <span class="time">in N&uuml;rnberg</span>
-                    <span class="activity">FAMILIEN-REUNION: Carla ist da! &#x1F973; Endlich wieder zu f&uuml;nft!</span>
                 </div>
                 <div class="schedule-item highlight">
                     <span class="time">nachmittags</span>
@@ -394,9 +390,9 @@
         </div>
     </div>
 
-    <div class="phase-label">So. 20.12. &ndash; Sa. 26.12. &middot; Hepberg &rarr; Bonn &ndash; Weihnachten bei Oma &amp; Opa (geplant)</div>
+    <div class="phase-label">So. 20.12. &ndash; Sa. 26.12. &middot; Hepberg &rarr; Bonn &ndash; Weihnachten bei Oma &amp; Opa &#x2713;</div>
 
-    <!-- TAG 4: FAHRT NACH BONN (GEPLANT) -->
+    <!-- TAG 4: FAHRT NACH BONN -->
     <div class="day-card" data-day="3">
         <div class="day-header">
             <div class="day-date">
@@ -425,7 +421,7 @@
                 </div>
             </div>
             <div class="day-tips">
-                <div class="tip">&#x1F4CB; <strong>Status:</strong> GEPLANT &ndash; noch nicht final best&auml;tigt.</div>
+                <div class="tip">&#x2705; <strong>Status:</strong> Best&auml;tigt &ndash; Oma &amp; Opa wissen Bescheid!</div>
             </div>
         </div>
         <div class="day-rating" data-day="3">
@@ -441,8 +437,58 @@
         </div>
     </div>
 
-    <!-- TAG: HEILIGABEND (GEPLANT) -->
+    <!-- TAG: CARLA KOMMT NACH BONN -->
     <div class="day-card" data-day="4">
+        <div class="day-header">
+            <div class="day-date">
+                <span class="day-weekday">MI</span>
+                <span class="day-number">23</span>
+                <span class="day-month">DEZ</span>
+            </div>
+            <div class="day-title">
+                <h3>Carla kommt! Endlich wieder zu f&uuml;nft &#x1F973;</h3>
+                <div class="day-location">&#x1F4CD; Bonn &ndash; Carla reist aus Mannheim an</div>
+            </div>
+            <div class="day-weather">
+                <span class="weather-icon">&#x1F328;&#xFE0F;</span>
+                <span class="weather-temp">3&deg;C</span>
+            </div>
+        </div>
+        <div class="day-content">
+            <div class="day-schedule">
+                <div class="schedule-item highlight">
+                    <span class="time">im Lauf des Tages</span>
+                    <span class="activity">FAMILIEN-REUNION in Bonn: Carla ist da! &#x2764;&#xFE0F; Sie kommt selbstst&auml;ndig mit dem Deutschland-Ticket aus Mannheim.</span>
+                </div>
+                <div class="schedule-item">
+                    <span class="time">nachmittags</span>
+                    <span class="activity">Letzte Weihnachtsvorbereitungen mit Oma &amp; Opa &ndash; Pl&auml;tzchen, Baum, Geschenke einpacken &#x1F384;</span>
+                </div>
+                <div class="schedule-item">
+                    <span class="time">abends</span>
+                    <span class="activity">Erster gemeinsamer Abend zu f&uuml;nft plus Gro&szlig;eltern &ndash; nach f&uuml;nf Jahren Bangkok wieder komplett!</span>
+                </div>
+            </div>
+            <div class="day-tips">
+                <div class="tip special-tip">&#x1F49B; <strong>Der Moment des Urlaubs:</strong> Ab heute sind wir wieder vollz&auml;hlig.</div>
+                <div class="tip">&#x1F39F;&#xFE0F; <strong>Anreise Carla:</strong> Deutschland-Ticket, Mannheim &rarr; Bonn &ndash; kein Ticket zu buchen, alles geregelt &#x2713;</div>
+            </div>
+        </div>
+        <div class="day-rating" data-day="4">
+            <span class="rating-label">Tages-Rating:</span>
+            <div class="stars">
+                <span class="star" data-value="1">&#x2B50;</span>
+                <span class="star" data-value="2">&#x2B50;</span>
+                <span class="star" data-value="3">&#x2B50;</span>
+                <span class="star" data-value="4">&#x2B50;</span>
+                <span class="star" data-value="5">&#x2B50;</span>
+            </div>
+            <span class="rating-display"></span>
+        </div>
+    </div>
+
+    <!-- TAG: HEILIGABEND -->
+    <div class="day-card" data-day="5">
         <div class="day-header">
             <div class="day-date">
                 <span class="day-weekday">DO</span>
@@ -473,7 +519,7 @@
                 <div class="tip special-tip">&#x1F49B; <strong>Motto des Tages:</strong> Volle Weihnachtsstimmung &ndash; daf&uuml;r sind wir hier!</div>
             </div>
         </div>
-        <div class="day-rating" data-day="4">
+        <div class="day-rating" data-day="5">
             <span class="rating-label">Tages-Rating:</span>
             <div class="stars">
                 <span class="star" data-value="1">&#x2B50;</span>
@@ -486,12 +532,12 @@
         </div>
     </div>
 
-    <div class="placeholder-note"><strong>Geplant (noch zu best&auml;tigen):</strong> 2 N&auml;chte Hepberg bei Familie Jantz (20.&ndash;22.12.), dann Bonn &ndash; Heiligabend &amp; Weihnachten bei Oma &amp; Opa (22.&ndash;26.12.). Day-Cards f&uuml;r 21./23./25.12. folgen.</div>
+    <div class="placeholder-note"><strong>Best&auml;tigt &#x2713;</strong> 2 N&auml;chte Hepberg bei Familie Jantz (20.&ndash;22.12.), dann Bonn &ndash; Heiligabend &amp; Weihnachten bei Oma &amp; Opa (22.&ndash;26.12.), Carla ab 23.12. dabei. Day-Cards f&uuml;r 21./25.12. folgen.</div>
 
     <div class="phase-label">Sa. 26.12. &ndash; So. 03.01. &middot; Kaunertal &ndash; Ski, Silvester &amp; Gletscher</div>
 
     <!-- CHECK-IN KAUNERTAL -->
-    <div class="day-card" data-day="5">
+    <div class="day-card" data-day="6">
         <div class="day-header">
             <div class="day-date">
                 <span class="day-weekday">SA</span>
@@ -538,7 +584,7 @@
                 <div class="tip">&#x1F4A1; <strong>Tipp:</strong> Online Check-in vorab erledigen (App &bdquo;SARA&ldquo;) &ndash; spart Zeit. Br&ouml;tchenservice f&uuml;r den ersten Morgen vorbestellen!</div>
             </div>
         </div>
-        <div class="day-rating" data-day="5">
+        <div class="day-rating" data-day="6">
             <span class="rating-label">Tages-Rating:</span>
             <div class="stars">
                 <span class="star" data-value="1">&#x2B50;</span>
@@ -552,7 +598,7 @@
     </div>
 
     <!-- SKITAG 1 -->
-    <div class="day-card" data-day="6">
+    <div class="day-card" data-day="7">
         <div class="day-header">
             <div class="day-date">
                 <span class="day-weekday">SO</span>
@@ -589,7 +635,7 @@
                 <div class="tip special-tip">&#x1F49B; <strong>Motto des Tages:</strong> Es staubt! &#x2744;&#xFE0F;</div>
             </div>
         </div>
-        <div class="day-rating" data-day="6">
+        <div class="day-rating" data-day="7">
             <span class="rating-label">Tages-Rating:</span>
             <div class="stars">
                 <span class="star" data-value="1">&#x2B50;</span>
@@ -603,7 +649,7 @@
     </div>
 
     <!-- PITZTAL-TAG (GEPLANT) -->
-    <div class="day-card" data-day="7">
+    <div class="day-card" data-day="8">
         <div class="day-header">
             <div class="day-date">
                 <span class="day-weekday">SA</span>
@@ -645,7 +691,7 @@
                 <div class="tip special-tip">&#x1F49B; <strong>Motto des Tages:</strong> Alte Freunde, neue H&ouml;henmeter!</div>
             </div>
         </div>
-        <div class="day-rating" data-day="7">
+        <div class="day-rating" data-day="8">
             <span class="rating-label">Tages-Rating:</span>
             <div class="stars">
                 <span class="star" data-value="1">&#x2B50;</span>
@@ -670,7 +716,7 @@
     <div class="phase-label">Fr. 08.01. &ndash; Sa. 09.01. &middot; R&uuml;ckflug M&uuml;nchen &rarr; Bangkok</div>
 
     <!-- RUECKFLUG -->
-    <div class="day-card" data-day="8">
+    <div class="day-card" data-day="9">
         <div class="day-header">
             <div class="day-date">
                 <span class="day-weekday">FR</span>
@@ -705,7 +751,7 @@
                 </div>
             </div>
         </div>
-        <div class="day-rating" data-day="8">
+        <div class="day-rating" data-day="9">
             <span class="rating-label">Tages-Rating:</span>
             <div class="stars">
                 <span class="star" data-value="1">&#x2B50;</span>
@@ -732,18 +778,18 @@
             <p class="hotel-dates">Res.-Nr. 9274Y9 &middot; App &bdquo;SARA&ldquo; &middot; Online Check-in verf&uuml;gbar &middot; Tel. +43 5475 302</p>
         </div>
         <div class="hotel-card">
-            <div class="hotel-status family">BEI FREUNDEN (GEPLANT)</div>
+            <div class="hotel-status booked">BEI FREUNDEN &ndash; BEST&Auml;TIGT</div>
             <h3>Bei Familie Jantz</h3>
             <p class="hotel-location">&#x1F4CD; Hepberg (bei Ingolstadt)</p>
             <p class="hotel-dates">20.12. &ndash; 22.12.2026 &ndash; 2 N&auml;chte</p>
             <p>Erst Christkindlesmarkt N&uuml;rnberg, dann ankommen, Jetlag auskurieren und Wiedersehen feiern!</p>
         </div>
         <div class="hotel-card">
-            <div class="hotel-status family">BEI FAMILIE (GEPLANT)</div>
+            <div class="hotel-status booked">BEI FAMILIE &ndash; BEST&Auml;TIGT</div>
             <h3>Bei Oma &amp; Opa &ndash; Weihnachten! &#x1F384;</h3>
             <p class="hotel-location">&#x1F4CD; Bonn</p>
             <p class="hotel-dates">22.12. &ndash; 26.12.2026 &ndash; 4 N&auml;chte</p>
-            <p>Das beste Hotel der Welt &ndash; mit Kuchen-Flatrate und Liebe inklusive. Heiligabend &amp; beide Weihnachtstage bei den Gro&szlig;eltern!</p>
+            <p>Das beste Hotel der Welt &ndash; mit Kuchen-Flatrate und Liebe inklusive. Heiligabend &amp; beide Weihnachtstage bei den Gro&szlig;eltern! Carla kommt am 23.12. dazu &ndash; ab dann sind wir vollz&auml;hlig.</p>
         </div>
         <div class="hotel-card">
             <div class="hotel-status">OFFEN</div>
@@ -773,7 +819,7 @@
                 <li><strong>26.12.:</strong> Bonn &rarr; Kaunertal (~700 km / ~7h) &ndash; fr&uuml;h losfahren!</li>
                 <li><strong>26.12.&ndash;03.01.:</strong> T&auml;glich Gletscherstra&szlig;e (bis 2.750 m) oder Fendels &ndash; kostenlose Parkpl&auml;tze am Apartment.</li>
                 <li><strong>08.01.:</strong> Kaunertal/Region &rarr; Flughafen M&uuml;nchen (Abflug 19:05).</li>
-                <li><strong>Carla:</strong> trifft uns in N&uuml;rnberg &#x2713; &ndash; Zug Mannheim &rarr; N&uuml;rnberg (~2,5h, ICE direkt), Ticket noch buchen.</li>
+                <li><strong>Carla:</strong> kommt am 23.12. selbstst&auml;ndig nach Bonn &#x2713; &ndash; Mannheim &rarr; Bonn mit dem Deutschland-Ticket, nichts zu buchen.</li>
             </ul>
         </div>
 
@@ -798,10 +844,10 @@
         <div class="mobility-questions">
             <h4>&#x2753; Was wir noch kl&auml;ren m&uuml;ssen</h4>
             <ul>
-                <li><strong>Mietwagen-Gr&ouml;&szlig;e:</strong> 5 Personen + Wintergep&auml;ck + ggf. Skier &ndash; Kombi reicht nicht?</li>
-                <li><strong>Schneeketten:</strong> f&uuml;r die Gletscherstra&szlig;e (bis 2.750 m) dabei haben oder vor Ort leihen?</li>
-                <li><strong>Ski mieten statt schleppen:</strong> Verleih in Feichten direkt im Ort.</li>
-                <li><strong>Carlas Zugticket</strong> Mannheim &rarr; N&uuml;rnberg buchen &ndash; Sparpreis-Alarm vor Weihnachten!</li>
+                <li><strong>Platz f&uuml;r 5 + Wintergep&auml;ck:</strong> reicht der Kombi, oder brauchen wir eine Dachbox? Ski werden vor Ort geliehen &ndash; das spart am meisten Platz.</li>
+                <li><strong>Winterreifen &amp; Schneeketten:</strong> f&uuml;r die Gletscherstra&szlig;e (bis 2.750 m) &ndash; mit Familie Jantz koordinieren, was schon am Auto ist.</li>
+                <li><strong>Versicherung/Fahrerkreis:</strong> Auto l&auml;uft auf Robert &ndash; d&uuml;rfen Mark &amp; Claudia laut Police fahren? Unbedingt vorab kl&auml;ren!</li>
+                <li><strong>Vignette &Ouml;sterreich</strong> digital vorab kaufen (10-Tages, ~12 &euro;).</li>
             </ul>
         </div>
     </div>
@@ -1062,12 +1108,6 @@
     <h2 class="section-title">To-Do Liste</h2>
     <p class="section-sub">Was noch erledigt werden muss vor der Abreise!</p>
     <div class="todo-list">
-        <div class="todo-item urgent">
-            <label><input type="checkbox"> <strong>Hepberg &amp; Bonn best&auml;tigen</strong> &ndash; 2 N&auml;chte bei Familie Jantz, dann Oma &amp; Opa Bescheid geben &#x1F384;</label>
-        </div>
-        <div class="todo-item urgent">
-            <label><input type="checkbox"> <strong>Carlas Zugticket buchen</strong> &ndash; Mannheim &rarr; N&uuml;rnberg zum 20.12., fr&uuml;h buchen (Weihnachtsverkehr!)</label>
-        </div>
         <div class="todo-item urgent">
             <label><input type="checkbox"> <strong>Auto winterfest machen</strong> &ndash; Winterreifen auf den E 250, Schneeketten, ggf. Dachbox &ndash; mit Familie Jantz koordinieren</label>
         </div>
