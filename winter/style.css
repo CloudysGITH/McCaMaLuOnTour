@@ -849,9 +849,11 @@ body.locked {
 /* ===== HOTEL GRID ===== */
 .hotel-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    /* Immer zwei Karten pro Reihe (2x2) - auf dem Handy untereinander */
+    grid-template-columns: repeat(2, 1fr);
     gap: 1.5rem;
     margin-top: 2rem;
+    align-items: stretch;
 }
 
 .hotel-card {
@@ -861,18 +863,23 @@ body.locked {
     padding: 1.5rem;
     position: relative;
     transition: transform 0.3s;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
 }
 .hotel-card:hover { transform: translateY(-3px); }
 
 .hotel-status {
-    position: absolute;
-    top: 1rem;
-    right: 1rem;
-    padding: 0.2rem 0.7rem;
+    align-self: flex-start;
+    padding: 0.25rem 0.8rem;
+    margin-bottom: 0.9rem;
     border-radius: 20px;
     font-size: 0.7rem;
     font-weight: 700;
+    letter-spacing: 0.06em;
     text-transform: uppercase;
+    background: rgba(136,136,160,0.15);
+    color: var(--text-dim);
 }
 .hotel-status.booked { background: rgba(52,211,153,0.15); color: var(--green); }
 .hotel-status.todo { background: rgba(239,68,68,0.15); color: var(--red); }
@@ -881,7 +888,6 @@ body.locked {
 .hotel-card h3 {
     font-size: 1.1rem;
     margin-bottom: 0.3rem;
-    padding-right: 80px;
 }
 
 .hotel-location {
@@ -897,9 +903,19 @@ body.locked {
     font-family: var(--font-mono);
 }
 
-.hotel-card > p:last-child {
+.hotel-card > p {
     font-size: 0.9rem;
     color: var(--text-dim);
+}
+
+/* Buchungs-Kleingedrucktes buendig am unteren Kartenrand */
+.hotel-meta {
+    font-size: 0.78rem;
+    color: var(--text-dim);
+    font-family: var(--font-mono);
+    margin-top: auto;
+    padding-top: 0.9rem;
+    opacity: 0.75;
 }
 
 /* ===== OFFENE TAGE (rote Warnkarte) ===== */
@@ -2366,11 +2382,6 @@ body.locked {
 
     .xp-person {
         grid-template-columns: 60px 1fr 50px;
-    }
-
-    .hotel-card h3 {
-        padding-right: 0;
-        margin-top: 1.8rem;
     }
 
     .hotel-grid {
