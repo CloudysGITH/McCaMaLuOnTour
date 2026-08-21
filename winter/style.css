@@ -1656,6 +1656,208 @@ body.locked {
     font-weight: 600;
 }
 
+/* ===== SKI-AUSRUESTUNG / INVENTUR ===== */
+.gear-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin-bottom: 1.8rem;
+}
+
+.gear-stat {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 1.2rem 1rem;
+    text-align: center;
+}
+
+.gear-stat-num {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 2.2rem;
+    font-weight: 700;
+    line-height: 1;
+    margin-bottom: 0.4rem;
+}
+
+.gear-stat-label {
+    font-size: 0.8rem;
+    color: var(--text-dim);
+}
+
+.gear-stat-missing { border-color: rgba(239,68,68,0.4); }
+.gear-stat-missing .gear-stat-num { color: var(--red); }
+.gear-stat-buy { border-color: rgba(251,191,36,0.4); }
+.gear-stat-buy .gear-stat-num { color: var(--yellow); }
+.gear-stat-rent { border-color: rgba(56,189,248,0.4); }
+.gear-stat-rent .gear-stat-num { color: var(--accent); }
+
+.gear-table-wrap {
+    overflow-x: auto;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--bg-card);
+    -webkit-overflow-scrolling: touch;
+}
+
+.gear-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+    min-width: 620px;
+}
+
+.gear-table th,
+.gear-table td {
+    padding: 0.65rem 0.8rem;
+    border-bottom: 1px solid var(--border);
+    text-align: center;
+    white-space: nowrap;
+}
+
+.gear-table thead th {
+    background: rgba(56,189,248,0.08);
+    color: var(--accent-light);
+    font-size: 0.82rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    position: sticky;
+    top: 0;
+}
+
+/* Erste Spalte bleibt beim Scrollen stehen */
+.gear-table th.gear-item-head,
+.gear-table tbody th {
+    text-align: left;
+    position: sticky;
+    left: 0;
+    background: var(--bg-card);
+    z-index: 1;
+    font-weight: 600;
+    color: var(--text);
+}
+.gear-table th.gear-item-head {
+    background: #0e1c31;
+    z-index: 2;
+}
+
+.gear-table tbody tr:last-child th,
+.gear-table tbody tr:last-child td { border-bottom: none; }
+
+.gear-table tbody tr:hover td { background: rgba(56,189,248,0.05); }
+
+.gear-yes {
+    color: var(--green);
+    font-family: var(--font-mono);
+    font-weight: 600;
+}
+.gear-no {
+    color: var(--red);
+    font-weight: 700;
+}
+
+.gear-gap-head { color: var(--yellow) !important; }
+
+.gear-gap {
+    font-family: var(--font-mono);
+    font-weight: 700;
+    color: var(--yellow);
+    background: rgba(251,191,36,0.07);
+}
+.gear-gap-zero { color: var(--green); background: rgba(52,211,153,0.1); }
+.gear-gap-max { color: var(--red); background: rgba(239,68,68,0.12); }
+
+.gear-row-ok tbody th,
+.gear-row-ok th[scope="row"] { color: var(--green); }
+.gear-row-alert th[scope="row"] { color: var(--red); }
+.gear-row-rent th[scope="row"] { color: var(--accent-light); }
+
+.gear-tag {
+    display: inline-block;
+    margin-left: 0.4rem;
+    padding: 0.1rem 0.5rem;
+    border-radius: 20px;
+    background: rgba(56,189,248,0.15);
+    color: var(--accent);
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.gear-hint {
+    font-size: 0.8rem;
+    color: var(--text-dim);
+    margin: 0.7rem 0 2rem;
+}
+
+.gear-action-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+}
+
+.gear-action {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+}
+
+.gear-action h3 {
+    font-size: 1.05rem;
+    margin-bottom: 0.9rem;
+}
+
+.gear-action ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.gear-action li {
+    font-size: 0.88rem;
+    color: var(--text-dim);
+    padding: 0.35rem 0 0.35rem 1rem;
+    position: relative;
+    line-height: 1.5;
+}
+.gear-action li::before {
+    content: '›';
+    position: absolute;
+    left: 0;
+    color: var(--accent);
+    font-weight: 700;
+}
+
+.gear-action p {
+    font-size: 0.88rem;
+    color: var(--text-dim);
+    line-height: 1.55;
+    margin-bottom: 0.7rem;
+}
+
+.gear-action-note {
+    margin-top: 0.9rem;
+    padding-top: 0.9rem;
+    border-top: 1px solid var(--border);
+    font-size: 0.83rem !important;
+    margin-bottom: 0 !important;
+}
+
+.gear-action-buy { border-left-color: var(--yellow); }
+.gear-action-rent { border-left-color: var(--accent); }
+.gear-action-tip { border-left-color: var(--green); }
+.gear-action-tip li::before { color: var(--green); }
+
+@media (max-width: 640px) {
+    .gear-stats { grid-template-columns: 1fr; }
+    .gear-stat { display: flex; align-items: center; gap: 1rem; text-align: left; }
+    .gear-stat-num { font-size: 1.8rem; margin-bottom: 0; }
+}
+
 /* ===== PACKLISTE ===== */
 .pack-grid {
     display: grid;

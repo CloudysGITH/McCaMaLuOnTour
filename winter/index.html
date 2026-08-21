@@ -26,7 +26,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css?v=20260821a">
+    <link rel="stylesheet" href="style.css?v=20260821b">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
@@ -107,6 +107,7 @@
             <a href="#mobilitaet">Mobilit&auml;t</a>
             <a href="#kosten">Kosten</a>
             <a href="#sidequest">Side Quests</a>
+            <a href="#ausruestung">Ausrüstung</a>
             <a href="#packliste">Packliste</a>
             <a href="#sprachen">Spickzettel</a>
             <a href="#tagebuch">Tagebuch</a>
@@ -1058,6 +1059,195 @@
     </div>
 </section>
 
+<!-- SKI-AUSRUESTUNG INVENTUR -->
+<section class="section" id="ausruestung">
+    <h2 class="section-title">Ski-Ausrüstung &ndash; Inventur</h2>
+    <p class="section-sub">Wer hat was &ndash; und was müssen wir noch besorgen? Der größte Posten vor der Abreise!</p>
+
+    <div class="gear-stats">
+        <div class="gear-stat gear-stat-missing">
+            <span class="gear-stat-num">35</span>
+            <span class="gear-stat-label">Teile fehlen insgesamt</span>
+        </div>
+        <div class="gear-stat gear-stat-buy">
+            <span class="gear-stat-num">22</span>
+            <span class="gear-stat-label">davon kaufen</span>
+        </div>
+        <div class="gear-stat gear-stat-rent">
+            <span class="gear-stat-num">13</span>
+            <span class="gear-stat-label">davon leihen (Ski, Stiefel, Stöcke)</span>
+        </div>
+    </div>
+
+    <div class="gear-table-wrap">
+        <table class="gear-table">
+            <thead>
+                <tr>
+                    <th class="gear-item-head">Item</th>
+                    <th>Mark</th>
+                    <th>Claudia</th>
+                    <th>Carla</th>
+                    <th>Marlene</th>
+                    <th>Luisa</th>
+                    <th class="gear-gap-head">fehlt</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th scope="row">Ski-Socken</th>
+                    <td class="gear-yes">3×</td>
+                    <td class="gear-yes">2×</td>
+                    <td class="gear-yes">2×</td>
+                    <td class="gear-no">✗</td>
+                    <td class="gear-no">✗</td>
+                    <td class="gear-gap">2</td>
+                </tr>
+                <tr>
+                    <th scope="row">Lange Unterhose</th>
+                    <td class="gear-yes">2×</td>
+                    <td class="gear-no">✗</td>
+                    <td class="gear-yes">1×</td>
+                    <td class="gear-yes">1×</td>
+                    <td class="gear-no">✗</td>
+                    <td class="gear-gap">2</td>
+                </tr>
+                <tr>
+                    <th scope="row">Unterwäsche-Oberteil</th>
+                    <td class="gear-yes">1×</td>
+                    <td class="gear-no">✗</td>
+                    <td class="gear-yes">2×</td>
+                    <td class="gear-no">✗</td>
+                    <td class="gear-no">✗</td>
+                    <td class="gear-gap">3</td>
+                </tr>
+                <tr>
+                    <th scope="row">Winter-Pullis</th>
+                    <td class="gear-yes">2×</td>
+                    <td class="gear-no">✗</td>
+                    <td class="gear-no">✗</td>
+                    <td class="gear-yes">✓</td>
+                    <td class="gear-no">✗</td>
+                    <td class="gear-gap">3</td>
+                </tr>
+                <tr class="gear-row-ok">
+                    <th scope="row">Ski-Hose</th>
+                    <td class="gear-yes">1×</td>
+                    <td class="gear-yes">1×</td>
+                    <td class="gear-yes">1×</td>
+                    <td class="gear-yes">1×</td>
+                    <td class="gear-yes">✓</td>
+                    <td class="gear-gap gear-gap-zero">0 &#x1F389;</td>
+                </tr>
+                <tr class="gear-row-ok">
+                    <th scope="row">Ski-Jacke</th>
+                    <td class="gear-yes">1×</td>
+                    <td class="gear-yes">1×</td>
+                    <td class="gear-yes">1×</td>
+                    <td class="gear-yes">1×</td>
+                    <td class="gear-yes">✓</td>
+                    <td class="gear-gap gear-gap-zero">0 &#x1F389;</td>
+                </tr>
+                <tr>
+                    <th scope="row">Helm</th>
+                    <td class="gear-yes">✓</td>
+                    <td class="gear-no">✗</td>
+                    <td class="gear-yes">1×</td>
+                    <td class="gear-no">✗</td>
+                    <td class="gear-no">✗</td>
+                    <td class="gear-gap">3</td>
+                </tr>
+                <tr>
+                    <th scope="row">Ski-Brille</th>
+                    <td class="gear-yes">✓</td>
+                    <td class="gear-no">✗</td>
+                    <td class="gear-yes">1×</td>
+                    <td class="gear-yes">1×</td>
+                    <td class="gear-no">✗</td>
+                    <td class="gear-gap">2</td>
+                </tr>
+                <tr>
+                    <th scope="row">Handschuhe</th>
+                    <td class="gear-yes">✓</td>
+                    <td class="gear-no">✗</td>
+                    <td class="gear-yes">1×</td>
+                    <td class="gear-no">✗</td>
+                    <td class="gear-yes">1×</td>
+                    <td class="gear-gap">2</td>
+                </tr>
+                <tr class="gear-row-alert">
+                    <th scope="row">Winter-Schuhe</th>
+                    <td class="gear-no">✗</td>
+                    <td class="gear-no">✗</td>
+                    <td class="gear-no">✗</td>
+                    <td class="gear-no">✗</td>
+                    <td class="gear-no">✗</td>
+                    <td class="gear-gap gear-gap-max">5</td>
+                </tr>
+                <tr class="gear-row-rent">
+                    <th scope="row">Ski-Stiefel <span class="gear-tag">leihen?</span></th>
+                    <td class="gear-yes">✓</td>
+                    <td class="gear-yes">✓</td>
+                    <td class="gear-no">✗</td>
+                    <td class="gear-no">✗</td>
+                    <td class="gear-no">✗</td>
+                    <td class="gear-gap">3</td>
+                </tr>
+                <tr class="gear-row-rent">
+                    <th scope="row">Ski <span class="gear-tag">leihen</span></th>
+                    <td class="gear-no">✗</td>
+                    <td class="gear-no">✗</td>
+                    <td class="gear-no">✗</td>
+                    <td class="gear-no">✗</td>
+                    <td class="gear-no">✗</td>
+                    <td class="gear-gap gear-gap-max">5</td>
+                </tr>
+                <tr class="gear-row-rent">
+                    <th scope="row">Stöcke <span class="gear-tag">leihen</span></th>
+                    <td class="gear-no">✗</td>
+                    <td class="gear-no">✗</td>
+                    <td class="gear-no">✗</td>
+                    <td class="gear-no">✗</td>
+                    <td class="gear-no">✗</td>
+                    <td class="gear-gap gear-gap-max">5</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <p class="gear-hint">&#x1F4A1; Wischen bzw. seitlich scrollen, um alle fünf Spalten zu sehen. Zahlen = vorhandene Stück, ✗ = fehlt.</p>
+
+    <div class="gear-action-grid">
+        <div class="gear-action gear-action-buy">
+            <h3>&#x1F6D2; Einkaufsliste &ndash; 22 Teile</h3>
+            <ul>
+                <li><strong>Winter-Schuhe:</strong> für <em>alle fünf</em> &ndash; niemand hat welche! Größter Einzelposten.</li>
+                <li><strong>Helm:</strong> Claudia, Marlene, Luisa</li>
+                <li><strong>Unterwäsche-Oberteil:</strong> Claudia, Marlene, Luisa</li>
+                <li><strong>Winter-Pullis:</strong> Claudia, Carla, Luisa</li>
+                <li><strong>Ski-Brille:</strong> Claudia, Luisa</li>
+                <li><strong>Handschuhe:</strong> Claudia, Marlene</li>
+                <li><strong>Ski-Socken:</strong> Marlene, Luisa</li>
+                <li><strong>Lange Unterhose:</strong> Claudia, Luisa</li>
+            </ul>
+            <p class="gear-action-note">&#x2705; Komplett abgehakt: <strong>Ski-Hose &amp; Ski-Jacke</strong> &ndash; da sind alle fünf versorgt.</p>
+        </div>
+        <div class="gear-action gear-action-rent">
+            <h3>&#x1F3BF; Leihen statt kaufen</h3>
+            <p><strong>Ski, Stöcke</strong> für alle fünf und <strong>Ski-Stiefel</strong> für Carla, Marlene &amp; Luisa &ndash; das lohnt sich zu mieten statt zu kaufen und zu schleppen (Mark &amp; Claudia haben eigene Stiefel).</p>
+            <p><strong>Larcher Sport, Feichten</strong> &ndash; direkt im Ort, Abholung geplant für den 26.12. abends. Achtung: Stefanitag, Öffnungszeiten vorher checken!</p>
+            <p class="gear-action-note">&#x26A0;&#xFE0F; Online vorreservieren &ndash; zwischen Weihnachten und Neujahr ist Hochsaison, und wir brauchen 5 Garnituren auf einmal.</p>
+        </div>
+        <div class="gear-action gear-action-tip">
+            <h3>&#x1F4A1; Vor dem Kaufen</h3>
+            <ul>
+                <li><strong>Anprobe-Check:</strong> Luisa (14), Marlene (16) &ndash; alles vom letzten Skiurlaub nochmal anziehen lassen, bevor gekauft wird!</li>
+                <li><strong>Wo kaufen?</strong> In Bangkok gibt es kaum Winterware &ndash; das meiste in Deutschland besorgen (Hepberg/Bonn 20.&ndash;26.12.) oder vorab online liefern lassen.</li>
+                <li><strong>Zeitfenster:</strong> Zwischen Ankunft und Kaunertal bleiben nur wenige Tage &ndash; und der 24.&ndash;26.12. fällt aus. Also 21./22./23.12. einplanen.</li>
+                <li><strong>Gepäck:</strong> Was in Deutschland gekauft wird, muss nicht mit nach Bangkok zurück &ndash; ggf. bei Oma &amp; Opa einlagern.</li>
+            </ul>
+        </div>
+    </div>
+</section>
+
 <!-- PACKLISTE -->
 <section class="section" id="packliste">
     <h2 class="section-title">Packliste</h2>
@@ -1125,7 +1315,7 @@
             <label><input type="checkbox"> <strong>Skiverleih online reservieren</strong> &ndash; Larcher Sport Feichten, Abholung 26.12. abends (Stefanitag! &Ouml;ffnungszeiten checken), 5x Ski/Boards + Helme</label>
         </div>
         <div class="todo-item">
-            <label><input type="checkbox"> <strong>Skikleidung-Check</strong> &ndash; alle gewachsen seit dem letzten Skiurlaub? Helme!</label>
+            <label><input type="checkbox"> <strong>Ski-Ausrüstung kaufen &ndash; 22 Teile!</strong> &ndash; Winter-Schuhe für alle fünf, Helme, Unterwäsche, Pullis &hellip; siehe <a href="#ausruestung">Inventur</a>. Zeitfenster: 21.&ndash;23.12. in Deutschland!</label>
         </div>
         <div class="todo-item">
             <label><input type="checkbox"> <strong>Online Check-in Apart Gletscherblick</strong> &ndash; App &bdquo;SARA&ldquo;, spart Zeit bei Anreise</label>
@@ -1287,6 +1477,6 @@
     </div>
 </footer>
 
-<script src="script.js?v=20260821a"></script>
+<script src="script.js?v=20260821b"></script>
 </body>
 </html>
