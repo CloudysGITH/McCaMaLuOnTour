@@ -423,11 +423,11 @@ document.querySelectorAll('.day-card, .hotel-card, .quest-card, .weather-card, .
     const days = [
         // Phase 1: Anreise
         { date: '2026-12-19', label: 'Sa 19. Dez', loc: 'Bangkok → Istanbul', title: 'Abflug! Los geht die Winter Tour', prompt: 'Wie war der Abflug um 22:10? Aufregung? Wer hat im Flieger geschlafen?' },
-        { date: '2026-12-20', label: 'So 20. Dez', loc: 'München → Nürnberg', title: '\u{1F384} Ankunft, Carla-Reunion & Christkindlesmarkt!', prompt: 'REUNION! Wie war das Wiedersehen mit Carla? Erster Glühwein nach 5 Jahren Bangkok – wie war die Weihnachtsstimmung? Bratwurst probiert?' },
+        { date: '2026-12-20', label: 'So 20. Dez', loc: 'München → Nürnberg', title: '\u{1F384} Ankunft & Christkindlesmarkt!', prompt: 'Endlich in Deutschland! Wie war das Wiedersehen mit Familie Jantz? Erster Glühwein nach 5 Jahren Bangkok – wie war die Weihnachtsstimmung? Bratwurst probiert?' },
         // Phase 2: Hepberg -> Bonn (geplant)
         { date: '2026-12-21', label: 'Mo 21. Dez', loc: 'Hepberg', title: 'Tag bei Familie Jantz', prompt: 'Jetlag besiegt? Was habt ihr mit Familie Jantz unternommen?' },
         { date: '2026-12-22', label: 'Di 22. Dez', loc: 'Hepberg → Bonn', title: 'Fahrt nach Bonn – zu Oma & Opa!', prompt: 'Wie war die Fahrt? Wiedersehen mit Oma & Opa nach so langer Zeit?' },
-        { date: '2026-12-23', label: 'Mi 23. Dez', loc: 'Bonn', title: 'Bonn – Weihnachtsvorbereitungen', prompt: 'Bonner Weihnachtsmarkt? Letzte Geschenke? Plätzchen mit Oma?' },
+        { date: '2026-12-23', label: 'Mi 23. Dez', loc: 'Bonn', title: '\u{1F973} Carla ist da – wir sind komplett!', prompt: 'REUNION! Wie war das Wiedersehen mit Carla? Bonner Weihnachtsmarkt? Letzte Geschenke? Plätzchen mit Oma?' },
         { date: '2026-12-24', label: 'Do 24. Dez', loc: 'Bonn', title: '\u{1F384} Heiligabend bei Oma & Opa!', prompt: 'Bescherung! Bestes Geschenk? Was gab es zu essen? Wer hat geweint vor Rührung?' },
         { date: '2026-12-25', label: 'Fr 25. Dez', loc: 'Bonn', title: '1. Weihnachtstag in Bonn', prompt: 'Weihnachts-Food-Koma? Rheinspaziergang? Erzählt!' },
         // Phase 3: Kaunertal
@@ -439,14 +439,14 @@ document.querySelectorAll('.day-card, .hotel-card, .quest-card, .weather-card, .
         { date: '2026-12-31', label: 'Do 31. Dez', loc: 'Kaunertal', title: '\u{1F386} Silvester in den Bergen!', prompt: 'Wie habt ihr reingefeiert? Feuerwerk überm Tal? Vorsätze für 2027?' },
         { date: '2027-01-01', label: 'Fr 1. Jan', loc: 'Kaunertal', title: 'Neujahr – Skitag oder Ausschlafen?', prompt: 'Frohes Neues! Erster Skitag 2027 oder gemütlicher Start?' },
         { date: '2027-01-02', label: 'Sa 2. Jan', loc: 'Pitztaler Gletscher', title: '\u{1F3D4}\uFE0F Pitztal-Tag mit Caro, Tobi, Paul, Benedikt & Sofia!', prompt: 'Wie war der Tag mit den Freunden? Café 3.440 besucht? Wer hatte die schnellste Linie?' },
-        { date: '2027-01-03', label: 'So 3. Jan', loc: 'Kaunertal → ?', title: 'Skitag 8 (Finale!) & Check-out', prompt: 'Letzter Skitag und Abschied vom Kaunertal – was werdet ihr vermissen? Wohin geht’s jetzt?' },
-        // Phase 4: Nach-Ski (Plan folgt)
-        { date: '2027-01-04', label: 'Mo 4. Jan', loc: 'folgt', title: 'Nach-Ski-Phase – Tag 1', prompt: 'Wie fühlen sich die Beine nach 8 Skitagen an? Was steht heute an?' },
-        { date: '2027-01-05', label: 'Di 5. Jan', loc: 'folgt', title: 'Nach-Ski-Phase – Tag 2', prompt: 'Was habt ihr heute gemacht?' },
-        { date: '2027-01-06', label: 'Mi 6. Jan', loc: 'folgt', title: 'Heilige Drei Könige (Feiertag in AT!)', prompt: 'Sternsinger gesehen? Was stand an?' },
-        { date: '2027-01-07', label: 'Do 7. Jan', loc: 'folgt', title: 'Letzter voller Tag in Europa', prompt: 'Koffer packen – was MUSS mit nach Bangkok?' },
+        { date: '2027-01-03', label: 'So 3. Jan', loc: 'Kaunertal → Leutkirch', title: 'Check-out & ab ins Allgäu', prompt: 'Abschied vom Kaunertal und von Carla – was werdet ihr vermissen? Erster Eindruck von der Ferienwohnung?' },
+        // Phase 4: Allgaeu (Leutkirch)
+        { date: '2027-01-04', label: 'Mo 4. Jan', loc: 'Leutkirch', title: 'Erster Allgäu-Tag', prompt: 'Wie fühlen sich die Beine nach 8 Skitagen an? Was steht heute an?' },
+        { date: '2027-01-05', label: 'Di 5. Jan', loc: 'Leutkirch', title: 'Allgäu-Tag 2', prompt: 'Was habt ihr heute gemacht?' },
+        { date: '2027-01-06', label: 'Mi 6. Jan', loc: 'Leutkirch', title: 'Heilige Drei Könige (Feiertag!)', prompt: 'Sternsinger gesehen? Was habt ihr mit den Leipzigern unternommen?' },
+        { date: '2027-01-07', label: 'Do 7. Jan', loc: 'Leutkirch', title: 'Letzter voller Tag in Europa', prompt: 'Koffer packen – was MUSS mit nach Bangkok?' },
         // Phase 5: Rueckflug
-        { date: '2027-01-08', label: 'Fr 8. Jan', loc: 'München → Bangkok', title: '✈️ Rückflug – Ende der Winter Tour', prompt: 'Was war das BESTE Erlebnis der ganzen Reise? Jeder ein Highlight!' },
+        { date: '2027-01-08', label: 'Fr 8. Jan', loc: 'Leutkirch → München → Bangkok', title: '✈️ Rückflug – Ende der Winter Tour', prompt: 'Was war das BESTE Erlebnis der ganzen Reise? Jeder ein Highlight!' },
     ];
 
     function buildDiary(liveMode) {
@@ -564,13 +564,13 @@ if (navToggle && navLinksEl) {
 
 // --- Live Weather from Open-Meteo ---
 (function() {
-    // Reise-Orte (TODO: 20.-26.12. und 03.-08.01. ergaenzen, sobald der Plan steht)
+    // Reise-Orte
     const locations = [
         { name: 'München → Nürnberg', lat: 49.4541, lon: 11.0775, from: '2026-12-19', to: '2026-12-20', snow: false },
         { name: 'Hepberg', lat: 48.8120, lon: 11.4640, from: '2026-12-21', to: '2026-12-21', snow: false },
         { name: 'Bonn', lat: 50.7374, lon: 7.0982, from: '2026-12-22', to: '2026-12-25', snow: false },
         { name: 'Kaunertal / Feichten', lat: 47.005, lon: 10.713, from: '2026-12-26', to: '2027-01-03', snow: true },
-        { name: 'Nach-Ski-Phase (Ort folgt)', lat: 47.005, lon: 10.713, from: '2027-01-04', to: '2027-01-07', snow: true },
+        { name: 'Leutkirch im Allgäu', lat: 47.794, lon: 10.016, from: '2027-01-04', to: '2027-01-07', snow: true },
         { name: 'München (Rückflug)', lat: 48.3537, lon: 11.7861, from: '2027-01-08', to: '2027-01-08', snow: false },
     ];
 
