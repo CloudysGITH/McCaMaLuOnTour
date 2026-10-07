@@ -230,6 +230,22 @@
         }
         .tile-winter:hover { box-shadow: 0 24px 70px rgba(56,189,248,0.25); }
 
+        .tile-opa {
+            background:
+                radial-gradient(ellipse at 20% 15%, rgba(252,215,127,0.28), transparent 55%),
+                radial-gradient(ellipse at 85% 35%, rgba(244,114,182,0.22), transparent 55%),
+                radial-gradient(ellipse at 50% 95%, rgba(251,146,60,0.26), transparent 60%),
+                #1a1018;
+        }
+        .tile-opa:hover { box-shadow: 0 24px 70px rgba(245,185,66,0.25); }
+        .tile-opa h2 em {
+            font-style: normal;
+            background: linear-gradient(135deg, #f5b942, #f472b6);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+        }
+        .tile-opa .tile-dates { color: #fcd77f; }
+        .tile-opa .tile-cta { background: linear-gradient(135deg, #f5b942, #f472b6); }
+
         .tile-deco {
             position: absolute;
             inset: 0;
@@ -389,7 +405,7 @@
     <p class="hub-sub"><strong>M</strong>ark &middot; <strong>C</strong>laudia &middot; <strong>Ca</strong>rla &middot; <strong>Ma</strong>rlene &middot; <strong>Lu</strong>isa &ndash; Sommer, Winter, Hauptsache zusammen</p>
 </header>
 
-<main class="tiles tiles-single">
+<main class="tiles">
     <!-- AKTUELLE REISEN: neue Touren hier als Kachel anlegen -->
 
     <!-- WINTER -->
@@ -407,6 +423,24 @@
         <div class="tile-footer">
             <span class="tile-cta">Zur Winter Tour &rarr;</span>
             <span class="tile-countdown" id="cdWinter"></span>
+        </div>
+    </a>
+
+    <!-- OPAS 80er (Ueberraschung - Opa weiss nichts!) -->
+    <a class="tile tile-opa" href="opa80/">
+        <div class="tile-deco">
+            <span style="top:12%; right:12%; font-size:2rem; animation-delay:-1.5s;">&#x1F388;</span>
+            <span style="top:36%; left:8%; font-size:1.6rem; animation-delay:-0.8s;">&#x1F92B;</span>
+            <span style="top:18%; left:42%; font-size:1.3rem; animation-delay:-3.2s;">&#x2728;</span>
+        </div>
+        <div class="tile-emoji">&#x1F382;</div>
+        <p class="tile-season">M&auml;rz 2027 &middot; Top Secret</p>
+        <h2>Opas <em>80er</em></h2>
+        <p class="tile-route">Bangkok &rarr; Frankfurt &rarr; Bonn &rarr; Frankfurt &rarr; Bangkok</p>
+        <p class="tile-dates">17. &ndash; 21. M&auml;rz 2027</p>
+        <div class="tile-footer">
+            <span class="tile-cta">Zur &Uuml;berraschung &rarr;</span>
+            <span class="tile-countdown" id="cdOpa"></span>
         </div>
     </a>
 </main>
@@ -483,6 +517,7 @@
 <script>
 (function() {
     const tours = [
+        { el: document.getElementById('cdOpa'), start: new Date('2027-03-17T12:40:00+07:00'), end: new Date('2027-03-22T13:45:00+07:00'), live: 'JETZT unterwegs! \u{1F382}', done: 'War das schön! ❤️' },
         { el: document.getElementById('cdWinter'), start: new Date('2026-12-19T22:10:00+07:00'), end: new Date('2027-01-09T23:59:59+07:00'), live: 'JETZT unterwegs! ⛄', done: 'War das schön! ❤️' }
     ];
 

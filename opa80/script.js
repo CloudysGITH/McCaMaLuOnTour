@@ -1,0 +1,882 @@
+// ===== OPAS 80er (Maerz 2027) - Interactive Script =====
+
+// --- Codewort-Login (Firebase, gemeinsam mit Hub + Sommer-Tour) ---
+(function() {
+    const lockScreen = document.getElementById('lockScreen');
+    const lockInput = document.getElementById('lockInput');
+    const lockError = document.getElementById('lockError');
+    const lockBtn = document.getElementById('lockBtn');
+    if (!lockScreen) return;
+
+    document.body.classList.add('locked');
+
+    function unlock() {
+        lockScreen.classList.add('unlocked');
+        document.body.classList.remove('locked');
+        lockError.textContent = '';
+    }
+
+    if (window.crewAuthed) unlock();
+    window.addEventListener('crew-authed', unlock);
+
+    function whenSignInReady(cb) {
+        if (window.fbSignIn) return cb();
+        const t = setInterval(() => { if (window.fbSignIn) { clearInterval(t); cb(); } }, 50);
+    }
+
+    function tryUnlock() {
+        const code = lockInput.value;
+        if (!code) return;
+        lockBtn.disabled = true;
+        const prevLabel = lockBtn.textContent;
+        lockBtn.textContent = 'Pruefe...';
+        lockError.textContent = '';
+        whenSignInReady(() => {
+            window.fbSignIn(code)
+                .catch(() => {
+                    lockError.textContent = 'Falsches Codewort! Versuch es nochmal.';
+                    lockInput.value = '';
+                    lockInput.focus();
+                    lockScreen.style.animation = 'shake 0.4s ease';
+                    setTimeout(() => lockScreen.style.animation = '', 400);
+                })
+                .finally(() => { lockBtn.disabled = false; lockBtn.textContent = prevLabel; });
+        });
+    }
+
+    lockBtn.addEventListener('click', tryUnlock);
+    lockInput.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') { e.preventDefault(); tryUnlock(); }
+    });
+})();
+
+// --- Schneefall ---
+(function() {
+    const layer = document.getElementById('snowLayer');
+    if (!layer) return;
+
+    const FLAKES = ['✦', '✧', '·', '•', '·'];
+    const COUNT = window.innerWidth < 600 ? 25 : 45;
+
+    for (let i = 0; i < COUNT; i++) {
+        const flake = document.createElement('span');
+        flake.className = 'snowflake';
+        flake.textContent = FLAKES[Math.floor(Math.random() * FLAKES.length)];
+        flake.style.left = Math.random() * 100 + 'vw';
+        flake.style.fontSize = (0.5 + Math.random() * 1.1) + 'rem';
+        flake.style.opacity = (0.3 + Math.random() * 0.6).toFixed(2);
+        flake.style.animationDuration = (8 + Math.random() * 14) + 's';
+        flake.style.animationDelay = (-Math.random() * 20) + 's';
+        layer.appendChild(flake);
+    }
+})();
+
+// --- Countdown ---
+const DEPARTURE = new Date('2027-03-17T12:40:00+07:00'); // Abflug BKK, Thai Airways TG 922
+
+(function() {
+    const els = [document.getElementById('countdown'), document.getElementById('countdownFooter')].filter(Boolean);
+    if (!els.length) return;
+
+    function update() {
+        const now = new Date();
+        const diff = DEPARTURE - now;
+        if (diff <= 0) {
+            els.forEach(el => el.innerHTML = '<span style="font-size:1.5rem;color:var(--pink)">AUF ZU OPA! \u{1F382}</span>');
+            return;
+        }
+        const d = Math.floor(diff / 86400000);
+        const h = Math.floor((diff % 86400000) / 3600000);
+        const m = Math.floor((diff % 3600000) / 60000);
+        const s = Math.floor((diff % 60000) / 1000);
+        const html =
+            '<div class="countdown-item"><span class="countdown-num">' + d + '</span><span class="countdown-label">Tage</span></div>' +
+            '<div class="countdown-item"><span class="countdown-num">' + String(h).padStart(2,'0') + '</span><span class="countdown-label">Std</span></div>' +
+            '<div class="countdown-item"><span class="countdown-num">' + String(m).padStart(2,'0') + '</span><span class="countdown-label">Min</span></div>' +
+            '<div class="countdown-item"><span class="countdown-num">' + String(s).padStart(2,'0') + '</span><span class="countdown-label">Sek</span></div>';
+        els[0].innerHTML = html;
+        if (els[1]) els[1].textContent = 'Noch ' + d + ' Tage bis zum Abflug!';
+    }
+    update();
+    setInterval(update, 1000);
+})();
+
+// --- Day Card Toggle ---
+document.querySelectorAll('.day-header').forEach(header => {
+    header.addEventListener('click', () => {
+        const card = header.closest('.day-card');
+        const content = card.querySelector('.day-content');
+        const rating = card.querySelector('.day-rating');
+
+        if (content) {
+            content.style.display = content.style.display === 'none' ? 'block' : 'none';
+        }
+        if (rating) {
+            rating.style.display = rating.style.display === 'none' ? 'flex' : 'none';
+        }
+    });
+});
+
+// --- WHO AM I? (Name selection) ---
+const MEMBER_KEY = 'opa80_member';
+const MEMBERS = ['Mark', 'Claudia', 'Carla', 'Luisa', 'Marlene'];
+const MEMBER_ICONS = {
+    'Mark': '⛷️',
+    'Claudia': '👩‍💻',
+    'Carla': '🐰',
+    'Luisa': '🥞',
+    'Marlene': '🏎️'
+};
+
+function getCurrentMember() {
+    return localStorage.getItem(MEMBER_KEY);
+}
+
+function setCurrentMember(name) {
+    localStorage.setItem(MEMBER_KEY, name);
+}
+
+function ensureMemberSelected(callback) {
+    let member = getCurrentMember();
+    if (member) { callback(member); return; }
+
+    const overlay = document.createElement('div');
+    overlay.className = 'member-picker-overlay';
+    overlay.innerHTML = `
+        <div class="member-picker">
+            <h2>Wer bist du?</h2>
+            <p>Waehle deinen Namen &ndash; deine Ratings und Tagebuch-Eintraege werden damit gespeichert.</p>
+            <div class="member-picker-buttons">
+                ${MEMBERS.map(m => `<button class="member-btn" data-name="${m}">${MEMBER_ICONS[m]} ${m}</button>`).join('')}
+            </div>
+        </div>
+    `;
+    document.body.appendChild(overlay);
+
+    overlay.querySelectorAll('.member-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const name = btn.dataset.name;
+            setCurrentMember(name);
+            overlay.remove();
+            callback(name);
+        });
+    });
+}
+
+// --- Firebase-Helfer: ist die Config schon eingetragen? ---
+function whenFirebaseReady(callback, onMissing) {
+    if (window.firebaseReady) { callback(); return; }
+    let done = false;
+    window.addEventListener('firebase-ready', () => { done = true; callback(); });
+    // Nach 1,5s ohne Firebase: Platzhalter-Modus
+    setTimeout(() => { if (!done && !window.firebaseReady && onMissing) onMissing(); }, 1500);
+}
+
+// --- Star Ratings (Firebase - personal per member) ---
+function initRatings() {
+    whenFirebaseReady(() => {
+        document.querySelectorAll('.day-rating').forEach(ratingEl => {
+            const day = ratingEl.dataset.day;
+            if (!day) return;
+            const starsContainer = ratingEl.querySelector('.stars');
+            const stars = ratingEl.querySelectorAll('.star');
+            const display = ratingEl.querySelector('.rating-display');
+
+            display.innerHTML = '';
+            let myRating = 0;
+
+            const ratingsRef = window.fbRef(window.fbDb, `ratings/${day}`);
+            window.fbOnValue(ratingsRef, (snapshot) => {
+                const data = snapshot.val() || {};
+                const member = getCurrentMember();
+                if (member) {
+                    myRating = data[member] || 0;
+                    updateStars(stars, myRating);
+                }
+                let html = '';
+                MEMBERS.forEach(m => {
+                    if (data[m]) {
+                        const starStr = '⭐'.repeat(data[m]);
+                        html += `<span class="member-rating">${MEMBER_ICONS[m]}${starStr}</span>`;
+                    }
+                });
+                display.innerHTML = html;
+            });
+
+            stars.forEach(star => {
+                star.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    ensureMemberSelected((member) => {
+                        const value = parseInt(star.dataset.value);
+                        if (myRating === value) {
+                            window.fbSet(window.fbRef(window.fbDb, `ratings/${day}/${member}`), null);
+                        } else {
+                            window.fbSet(window.fbRef(window.fbDb, `ratings/${day}/${member}`), value);
+                        }
+                    });
+                });
+
+                star.addEventListener('mouseenter', () => {
+                    previewStars(stars, parseInt(star.dataset.value));
+                });
+            });
+
+            starsContainer.addEventListener('mouseleave', () => {
+                updateStars(stars, myRating);
+            });
+        });
+    });
+}
+
+function updateStars(stars, value) {
+    stars.forEach(s => {
+        const active = parseInt(s.dataset.value) <= value;
+        s.classList.toggle('active', active);
+        s.style.filter = '';
+        s.style.transform = '';
+    });
+}
+
+function previewStars(stars, value) {
+    stars.forEach(s => {
+        const v = parseInt(s.dataset.value);
+        s.style.filter = v <= value ? 'none' : 'grayscale(1) opacity(0.3)';
+        s.style.transform = v <= value ? 'scale(1.2)' : 'scale(1)';
+    });
+}
+
+initRatings();
+
+// --- Checklist Persistence ---
+// v2: Schluessel aus Sektion + Beschriftung statt laufender Nummer. Sonst verrutschen
+// alle gesetzten Haken, sobald irgendwo ein Punkt dazukommt oder wegfaellt.
+const CHECKLIST_KEY = 'opa80_checklists_v2';
+const CHECKLIST_KEY_OLD = 'opa80_checklists';
+
+function slugify(text) {
+    return String(text).trim().toLowerCase()
+        .replace(/ä/g, 'ae').replace(/ö/g, 'oe').replace(/ü/g, 'ue').replace(/ß/g, 'ss')
+        .replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+}
+
+function loadChecklists() {
+    try {
+        return JSON.parse(localStorage.getItem(CHECKLIST_KEY)) || {};
+    } catch {
+        return {};
+    }
+}
+
+function saveChecklists(data) {
+    localStorage.setItem(CHECKLIST_KEY, JSON.stringify(data));
+}
+
+function checklistKey(cb, seen) {
+    const label = cb.closest('label');
+    const section = cb.closest('section');
+    const sectionId = section ? section.id : 'allgemein';
+
+    // Kontext der Gruppe dazunehmen - die Side Quests heissen z.B. alle "Erledigt!",
+    // und "Handschuhe" koennte in zwei Packlisten-Kategorien vorkommen.
+    const group = cb.closest('.quest-card, .pack-category, .todo-item');
+    let context = sectionId;
+    if (group) {
+        if (group.dataset.quest) {
+            context += `::quest-${group.dataset.quest}`;
+        } else {
+            const heading = group.querySelector('h3');
+            if (heading) context += `::${slugify(heading.textContent).slice(0, 40)}`;
+        }
+    }
+
+    // Text der Beschriftung ohne die Checkbox selbst
+    const text = label ? label.textContent.replace(/\s+/g, ' ').trim() : '';
+    let key = `${context}::${slugify(text).slice(0, 60)}`;
+
+    // Gleichlautende Eintraege in derselben Sektion durchnummerieren
+    if (seen.has(key)) {
+        const n = seen.get(key) + 1;
+        seen.set(key, n);
+        key = `${key}~${n}`;
+    } else {
+        seen.set(key, 1);
+    }
+    return key;
+}
+
+function initChecklists() {
+    const data = loadChecklists();
+    const seen = new Map();
+
+    // Alte, positionsbasierte Daten aufraeumen - sie liessen sich nicht zuverlaessig
+    // zuordnen, weil sich die Reihenfolge der Punkte inzwischen geaendert hat.
+    localStorage.removeItem(CHECKLIST_KEY_OLD);
+
+    document.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+        const key = checklistKey(cb, seen);
+        const label = cb.closest('label');
+        if (!label) return;
+
+        const paint = () => {
+            label.style.opacity = cb.checked ? '0.5' : '1';
+            label.style.textDecoration = cb.checked ? 'line-through' : 'none';
+        };
+
+        if (data[key]) cb.checked = true;
+        paint();
+
+        cb.addEventListener('change', () => {
+            if (cb.checked) {
+                data[key] = true;
+            } else {
+                delete data[key];
+            }
+            saveChecklists(data);
+            paint();
+        });
+    });
+}
+
+initChecklists();
+
+// --- XP Tracker ---
+const XP_KEY = 'opa80_xp';
+
+function loadXP() {
+    try {
+        return JSON.parse(localStorage.getItem(XP_KEY)) || {
+            mark: 0, claudia: 0, carla: 0, luisa: 0, marlene: 0
+        };
+    } catch {
+        return { mark: 0, claudia: 0, carla: 0, luisa: 0, marlene: 0 };
+    }
+}
+
+function saveXP(xp) {
+    localStorage.setItem(XP_KEY, JSON.stringify(xp));
+}
+
+function updateXPDisplay(xp) {
+    const maxXP = 500;
+    Object.keys(xp).forEach(name => {
+        const fill = document.getElementById(`xp-${name}`);
+        const val = document.getElementById(`xp-${name}-val`);
+        if (fill && val) {
+            const pct = Math.min((xp[name] / maxXP) * 100, 100);
+            fill.style.width = pct + '%';
+            val.textContent = xp[name] + ' XP';
+        }
+    });
+}
+
+function initXPTracker() {
+    const xp = loadXP();
+    updateXPDisplay(xp);
+
+    Object.keys(xp).forEach(name => {
+        const val = document.getElementById(`xp-${name}-val`);
+        if (val) {
+            val.style.cursor = 'pointer';
+            val.title = 'Klicke zum Bearbeiten';
+            val.addEventListener('click', () => {
+                const input = prompt(`XP fuer ${name.charAt(0).toUpperCase() + name.slice(1)} eingeben:`, xp[name]);
+                if (input !== null) {
+                    const num = parseInt(input);
+                    if (!isNaN(num) && num >= 0) {
+                        xp[name] = num;
+                        saveXP(xp);
+                        updateXPDisplay(xp);
+                    }
+                }
+            });
+        }
+    });
+}
+
+initXPTracker();
+
+// --- Scroll Animations ---
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.style.opacity = '1';
+            entry.target.style.transform = 'translateY(0)';
+        }
+    });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.day-card, .hotel-card, .quest-card, .weather-card, .crew-card').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(20px)';
+    el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+    observer.observe(el);
+});
+
+// --- Diary / Tagebuch (Firebase - shared) ---
+(function() {
+    const container = document.getElementById('diaryContainer');
+    if (!container) return;
+
+    // Reisetage 19.12.2026 - 08.01.2027 (Titel werden mit der Detailplanung verfeinert)
+    const days = [
+        { date: '2027-03-17', label: 'Mi 17. Mär', loc: 'Bangkok → Frankfurt', title: '✈️ Abflug zu Opas 80er!', prompt: 'Wie war der Flug? Wer hat im Flieger geschlafen? Erster Eindruck vom deutschen Frühling?' },
+        { date: '2027-03-18', label: 'Do 18. Mär', loc: 'Bonn', title: '\u{1F92B} Überraschung!', prompt: 'Wie hat Opa reagiert, als wir plötzlich da waren? Hat Oma dichtgehalten?' },
+        { date: '2027-03-19', label: 'Fr 19. Mär', loc: 'Bonn', title: 'Tag in Bonn', prompt: 'Was habt ihr heute gemacht? Vorbereitungen für die Feier?' },
+        { date: '2027-03-20', label: 'Sa 20. Mär', loc: 'Bonn', title: '\u{1F382} Opas 80er', prompt: 'Wie war die Feier? Beste Rede, bester Moment, wer hat geweint?' },
+        { date: '2027-03-21', label: 'So 21. Mär', loc: 'Bonn → Frankfurt → Bangkok', title: '✈️ Rückflug', prompt: 'Was nehmt ihr mit von diesen Tagen? Jeder ein Highlight!' },
+    ];
+
+    function buildDiary(liveMode) {
+        days.forEach(day => {
+            const dateKey = day.date.replace(/-/g, '');
+            const entry = document.createElement('div');
+            entry.className = 'diary-entry';
+            entry.innerHTML = `
+                <div class="diary-header">
+                    <span class="diary-date-badge">${day.label}</span>
+                    <div class="diary-header-info">
+                        <h4>${day.title}</h4>
+                        <span class="diary-loc">📍 ${day.loc}</span>
+                    </div>
+                    <span class="diary-indicator"></span>
+                </div>
+                <div class="diary-body" style="display:none;">
+                    <p class="diary-prompt">${day.prompt}</p>
+                    <div class="diary-entries-list"></div>
+                    <div class="diary-write">
+                        <textarea placeholder="Dein Eintrag fuer heute..."></textarea>
+                        <button class="diary-submit-btn">Eintrag speichern</button>
+                        <p class="diary-saved">Gespeichert!</p>
+                    </div>
+                </div>
+            `;
+
+            const header = entry.querySelector('.diary-header');
+            const body = entry.querySelector('.diary-body');
+            const entriesList = entry.querySelector('.diary-entries-list');
+            const textarea = entry.querySelector('textarea');
+            const submitBtn = entry.querySelector('.diary-submit-btn');
+            const savedMsg = entry.querySelector('.diary-saved');
+            const indicator = entry.querySelector('.diary-indicator');
+
+            header.addEventListener('click', () => {
+                body.style.display = body.style.display === 'none' ? 'block' : 'none';
+            });
+
+            if (!liveMode) {
+                entriesList.innerHTML = '<p class="diary-empty">Tagebuch wird aktiviert, sobald die Firebase-Config eingetragen ist.</p>';
+                submitBtn.disabled = true;
+                submitBtn.style.opacity = '0.5';
+            } else {
+                const diaryRef = window.fbRef(window.fbDb, `diary/${dateKey}`);
+                window.fbOnValue(diaryRef, (snapshot) => {
+                    const entries = snapshot.val() || {};
+                    const sorted = Object.values(entries).sort((a, b) => (a.timestamp || 0) - (b.timestamp || 0));
+
+                    if (sorted.length > 0) {
+                        indicator.textContent = `✏️ ${sorted.length} Eintrag${sorted.length > 1 ? 'e' : ''}`;
+                        entriesList.innerHTML = sorted.map(e => `
+                            <div class="diary-entry-item">
+                                <div class="diary-entry-meta">
+                                    <span class="diary-author">${MEMBER_ICONS[e.author] || ''} ${e.author}</span>
+                                    <span class="diary-time">${e.time || ''}</span>
+                                </div>
+                                <p class="diary-entry-text">${(e.text || '').replace(/</g, '&lt;').replace(/\n/g, '<br>')}</p>
+                            </div>
+                        `).join('');
+                    } else {
+                        indicator.textContent = '';
+                        entriesList.innerHTML = '<p class="diary-empty">Noch keine Eintraege &ndash; sei der Erste!</p>';
+                    }
+                });
+
+                submitBtn.addEventListener('click', () => {
+                    const text = textarea.value.trim();
+                    if (!text) return;
+
+                    ensureMemberSelected((member) => {
+                        const now = new Date();
+                        const timeStr = now.toLocaleString('de-DE', { hour: '2-digit', minute: '2-digit', day: '2-digit', month: '2-digit' });
+                        const newEntryRef = window.fbPush(window.fbRef(window.fbDb, `diary/${dateKey}`));
+                        window.fbSet(newEntryRef, {
+                            author: member,
+                            text: text,
+                            time: timeStr,
+                            timestamp: now.getTime()
+                        });
+                        textarea.value = '';
+                        savedMsg.classList.add('show');
+                        setTimeout(() => savedMsg.classList.remove('show'), 2000);
+                    });
+                });
+            }
+
+            container.appendChild(entry);
+        });
+    }
+
+    whenFirebaseReady(
+        () => buildDiary(true),
+        () => buildDiary(false)
+    );
+})();
+
+// --- Mobile Nav Toggle ---
+const navToggle = document.getElementById('navToggle');
+const navLinksEl = document.getElementById('navLinks');
+
+if (navToggle && navLinksEl) {
+    navToggle.addEventListener('click', () => {
+        navLinksEl.classList.toggle('open');
+        navToggle.textContent = navLinksEl.classList.contains('open') ? '✕' : '☰';
+    });
+
+    navLinksEl.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', () => {
+            navLinksEl.classList.remove('open');
+            navToggle.textContent = '☰';
+        });
+    });
+}
+
+// --- Live Weather from Open-Meteo ---
+(function() {
+    // Reise-Orte
+    const locations = [
+        { name: 'Frankfurt', lat: 50.0379, lon: 8.5622, from: '2027-03-17', to: '2027-03-17', snow: false },
+        { name: 'Bonn', lat: 50.7374, lon: 7.0982, from: '2027-03-18', to: '2027-03-21', snow: false },
+    ];
+
+    const WMO_CODES = {
+        0: { icon: '☀️', text: 'Klar' },
+        1: { icon: '🌤️', text: 'Ueberwiegend klar' },
+        2: { icon: '⛅', text: 'Teilweise bewoelkt' },
+        3: { icon: '☁️', text: 'Bedeckt' },
+        45: { icon: '🌫️', text: 'Nebel' },
+        48: { icon: '🌫️', text: 'Reifnebel' },
+        51: { icon: '🌦️', text: 'Leichter Nieselregen' },
+        53: { icon: '🌦️', text: 'Nieselregen' },
+        55: { icon: '🌧️', text: 'Starker Nieselregen' },
+        61: { icon: '🌧️', text: 'Leichter Regen' },
+        63: { icon: '🌧️', text: 'Regen' },
+        65: { icon: '🌧️', text: 'Starker Regen' },
+        71: { icon: '🌨️', text: 'Leichter Schneefall' },
+        73: { icon: '🌨️', text: 'Schneefall' },
+        75: { icon: '❄️', text: 'Starker Schneefall' },
+        77: { icon: '❄️', text: 'Schneegriesel' },
+        80: { icon: '🌦️', text: 'Leichte Schauer' },
+        81: { icon: '🌧️', text: 'Schauer' },
+        82: { icon: '⛈️', text: 'Starke Schauer' },
+        85: { icon: '🌨️', text: 'Leichte Schneeschauer' },
+        86: { icon: '❄️', text: 'Starke Schneeschauer' },
+        95: { icon: '⛈️', text: 'Gewitter' },
+        96: { icon: '⛈️', text: 'Gewitter mit Hagel' },
+        99: { icon: '⛈️', text: 'Gewitter mit starkem Hagel' },
+    };
+
+    const WEEKDAYS = ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa'];
+
+    function getCurrentLocation(today) {
+        const todayMs = today.getTime();
+        const sevenDays = 7 * 24 * 60 * 60 * 1000;
+
+        for (const loc of locations) {
+            const from = new Date(loc.from + 'T00:00:00');
+            const to = new Date(loc.to + 'T23:59:59');
+            if (todayMs >= from.getTime() && todayMs <= to.getTime()) {
+                return { current: loc };
+            }
+        }
+
+        const firstFrom = new Date(locations[0].from + 'T00:00:00');
+        if (todayMs < firstFrom.getTime() && (firstFrom.getTime() - todayMs) <= sevenDays) {
+            return { current: locations[0], preTrip: true };
+        }
+
+        return null;
+    }
+
+    function isSnowPhase(today) {
+        const todayMs = today.getTime();
+        for (const loc of locations) {
+            if (!loc.snow) continue;
+            const from = new Date(loc.from + 'T00:00:00');
+            const to = new Date(loc.to + 'T23:59:59');
+            const earlyFrom = new Date(from);
+            earlyFrom.setDate(earlyFrom.getDate() - 2);
+            if (todayMs >= earlyFrom.getTime() && todayMs <= to.getTime()) return true;
+        }
+        return false;
+    }
+
+    async function fetchWeather(lat, lon) {
+        const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,snowfall_sum,wind_speed_10m_max,sunrise,sunset&timezone=auto&forecast_days=3`;
+        const resp = await fetch(url);
+        if (!resp.ok) throw new Error('Weather API error');
+        return resp.json();
+    }
+
+    function renderForecast(data, locationName, container) {
+        const days = data.daily;
+        let html = `
+            <div class="live-weather-header">
+                <h3>📍 ${locationName} &ndash; Live 3-Tage-Vorschau</h3>
+                <p>Daten von Open-Meteo (aktualisiert sich automatisch)</p>
+            </div>
+            <div class="live-forecast-grid">
+        `;
+
+        for (let i = 0; i < days.time.length; i++) {
+            const date = new Date(days.time[i] + 'T12:00:00');
+            const weekday = WEEKDAYS[date.getDay()];
+            const dayNum = date.getDate();
+            const month = date.toLocaleString('de-DE', { month: 'short' });
+            const code = days.weather_code[i];
+            const weather = WMO_CODES[code] || { icon: '❓', text: 'Unbekannt' };
+            const isToday = i === 0 ? ' today' : '';
+            const snow = days.snowfall_sum && days.snowfall_sum[i] > 0
+                ? `<span>❄️ ${days.snowfall_sum[i].toFixed(1)} cm Neuschnee</span>`
+                : '';
+
+            html += `
+                <div class="forecast-day${isToday}">
+                    <div class="forecast-date">${weekday}, ${dayNum}. ${month}</div>
+                    <div class="forecast-icon">${weather.icon}</div>
+                    <div class="forecast-temps">
+                        <span class="forecast-high">${Math.round(days.temperature_2m_max[i])}&deg;</span>
+                        <span class="forecast-low">${Math.round(days.temperature_2m_min[i])}&deg;</span>
+                    </div>
+                    <div class="forecast-details">
+                        <span>${weather.text}</span>
+                        <span>🌧️ ${days.precipitation_probability_max[i] || 0}% Niederschlag</span>
+                        ${snow}
+                        <span>🌬️ ${Math.round(days.wind_speed_10m_max[i])} km/h Wind</span>
+                    </div>
+                </div>
+            `;
+        }
+
+        html += '</div>';
+        html += '<p class="live-weather-note">Quelle: Open-Meteo.com &ndash; Vorhersage max. 7 Tage im Voraus verf&uuml;gbar</p>';
+        container.innerHTML = html;
+    }
+
+    async function init() {
+        const container = document.getElementById('liveWeather');
+        const snowSection = document.getElementById('snowSection');
+        const today = new Date();
+
+        if (snowSection && isSnowPhase(today)) {
+            snowSection.style.display = 'block';
+        }
+
+        const locInfo = getCurrentLocation(today);
+
+        if (!locInfo) {
+            container.innerHTML = '<div class="live-weather-loading">Live-Wetter wird ab 7 Tage vor Abreise angezeigt &ndash; sobald Reisedaten &amp; Orte eingetragen sind.</div>';
+            return;
+        }
+
+        const loc = locInfo.current;
+
+        try {
+            const data = await fetchWeather(loc.lat, loc.lon);
+            const label = locInfo.preTrip
+                ? `${loc.name} (Vorschau vor Anreise)`
+                : loc.name;
+            renderForecast(data, label, container);
+        } catch (err) {
+            container.innerHTML = '<div class="live-weather-loading">Wetterdaten konnten nicht geladen werden. Bitte spaeter nochmal versuchen.</div>';
+        }
+    }
+
+    init();
+})();
+
+// --- Nav highlight on scroll ---
+const sections = document.querySelectorAll('.section[id]');
+const navLinks = document.querySelectorAll('.nav-links a');
+
+window.addEventListener('scroll', () => {
+    const scrollY = window.scrollY + 100;
+
+    sections.forEach(section => {
+        const top = section.offsetTop;
+        const height = section.offsetHeight;
+        const id = section.getAttribute('id');
+
+        if (scrollY >= top && scrollY < top + height) {
+            navLinks.forEach(link => {
+                link.style.color = link.getAttribute('href') === '#' + id
+                    ? '#e8e8ed'
+                    : '#8ba0bd';
+            });
+        }
+    });
+});
+
+// --- Kosten-Tracker Summen ---
+function getFixedSum() {
+    let s = 0;
+    document.querySelectorAll('.cost-val[data-amount]').forEach(c => { s += parseFloat(c.dataset.amount) || 0; });
+    return s;
+}
+function updateCostDisplay(expenseSum) {
+    const fmt = v => v.toLocaleString('de-DE', { minimumFractionDigits: 2 }) + ' €';
+    const fixed = getFixedSum();
+    const el = id => document.getElementById(id);
+    if (el('costFixed')) el('costFixed').textContent = fmt(fixed);
+    if (el('costOnTheGo')) el('costOnTheGo').textContent = fmt(expenseSum || 0);
+    if (el('costTotal')) el('costTotal').textContent = fmt(fixed + (expenseSum || 0));
+}
+updateCostDisplay(0);
+
+// --- Live Ausgaben-Tracker (Firebase) ---
+(function() {
+    const CAT_ICONS = {
+        restaurant: '🍽️', gluehwein: '☕', skipass: '🎿',
+        sprit: '⛽', maut: '🛣️', supermarkt: '🛒',
+        aktivitaet: '⛷️', geschenke: '🎁',
+        parken: '🅿️', sonstiges: '💶', bahn: '🚆'
+    };
+    const CAT_LABELS = {
+        restaurant: 'Restaurant', gluehwein: 'Glühwein & Kakao', skipass: 'Skipass / Rodel',
+        sprit: 'Sprit', maut: 'Maut / Vignette', supermarkt: 'Supermarkt',
+        aktivitaet: 'Aktivität', geschenke: 'Geschenke',
+        parken: 'Parken', sonstiges: 'Sonstiges', bahn: 'Bahn'
+    };
+
+    const dateInput = document.getElementById('expDate');
+    if (dateInput) dateInput.valueAsDate = new Date();
+
+    const submitBtn = document.getElementById('expSubmit');
+    if (!submitBtn) return;
+
+    function initExpenses() {
+        const expRef = window.fbRef(window.fbDb, 'expenses');
+
+        window.fbOnValue(expRef, (snapshot) => {
+            const data = snapshot.val() || {};
+            renderExpenses(data);
+        });
+
+        submitBtn.addEventListener('click', () => {
+            const cat = document.getElementById('expCat').value;
+            const amount = parseFloat(document.getElementById('expAmount').value);
+            const desc = document.getElementById('expDesc').value.trim();
+            const date = document.getElementById('expDate').value;
+
+            if (!cat || !amount || !date) {
+                submitBtn.textContent = 'Bitte alles ausfüllen!';
+                setTimeout(() => { submitBtn.textContent = 'Eintragen'; }, 2000);
+                return;
+            }
+
+            const newRef = window.fbPush(expRef);
+            window.fbSet(newRef, {
+                cat: cat,
+                amount: amount,
+                desc: desc,
+                date: date,
+                ts: Date.now()
+            });
+
+            document.getElementById('expCat').value = '';
+            document.getElementById('expAmount').value = '';
+            document.getElementById('expDesc').value = '';
+            document.getElementById('expDate').valueAsDate = new Date();
+
+            submitBtn.textContent = 'Gespeichert!';
+            setTimeout(() => { submitBtn.textContent = 'Eintragen'; }, 1500);
+        });
+    }
+
+    function renderExpenses(data) {
+        const list = document.getElementById('expenseList');
+        const totalEl = document.getElementById('expenseTotal');
+        if (!list) return;
+
+        const entries = Object.entries(data).map(([id, e]) => ({ id, ...e }));
+        entries.sort((a, b) => (b.date || '').localeCompare(a.date || '') || (b.ts || 0) - (a.ts || 0));
+
+        let total = 0;
+        entries.forEach(e => { total += e.amount || 0; });
+        if (totalEl) totalEl.textContent = total.toLocaleString('de-DE', { minimumFractionDigits: 2 }) + ' €';
+        updateCostDisplay(total);
+
+        if (entries.length === 0) {
+            list.innerHTML = '<p class="expense-empty">Noch keine Ausgaben eingetragen. Startet auf der Reise!</p>';
+            return;
+        }
+
+        const grouped = {};
+        entries.forEach(e => {
+            const d = e.date || 'Unbekannt';
+            if (!grouped[d]) grouped[d] = [];
+            grouped[d].push(e);
+        });
+
+        let html = '';
+        Object.keys(grouped).sort((a, b) => b.localeCompare(a)).forEach(date => {
+            const dayTotal = grouped[date].reduce((s, e) => s + (e.amount || 0), 0);
+            const dateObj = new Date(date + 'T12:00:00');
+            const dateStr = dateObj.toLocaleDateString('de-DE', { weekday: 'short', day: '2-digit', month: '2-digit' });
+            html += '<div class="expense-day">';
+            html += '<div class="expense-day-header"><span>' + dateStr + '</span><span class="expense-day-total">' + dayTotal.toLocaleString('de-DE', { minimumFractionDigits: 2 }) + ' €</span></div>';
+            grouped[date].forEach(e => {
+                const icon = CAT_ICONS[e.cat] || '💶';
+                const label = CAT_LABELS[e.cat] || e.cat;
+                html += '<div class="expense-item">';
+                html += '<span class="expense-icon">' + icon + '</span>';
+                html += '<div class="expense-item-info"><span class="expense-item-desc">' + (e.desc || label) + '</span><span class="expense-item-meta">' + label + '</span></div>';
+                html += '<span class="expense-item-amount">' + (e.amount || 0).toLocaleString('de-DE', { minimumFractionDigits: 2 }) + ' €</span>';
+                html += '</div>';
+            });
+            html += '</div>';
+        });
+        list.innerHTML = html;
+    }
+
+    whenFirebaseReady(initExpenses, () => {
+        const list = document.getElementById('expenseList');
+        if (list) list.innerHTML = '<p class="expense-empty">Reisekasse wird aktiviert, sobald die Firebase-Config eingetragen ist.</p>';
+        submitBtn.disabled = true;
+        submitBtn.style.opacity = '0.5';
+    });
+})();
+
+// --- Phase Toggle (ein-/ausklappen, Standard: zugeklappt) ---
+document.querySelectorAll('.phase-label').forEach((label, i) => {
+    const text = label.textContent;
+    label.innerHTML = '<span>' + text + '</span>';
+
+    const content = [];
+    let sibling = label.nextElementSibling;
+    while (sibling && !sibling.classList.contains('phase-label')) {
+        content.push(sibling);
+        sibling = sibling.nextElementSibling;
+    }
+    const wrapper = document.createElement('div');
+    wrapper.classList.add('phase-content');
+    label.parentNode.insertBefore(wrapper, content[0]);
+    content.forEach(el => wrapper.appendChild(el));
+
+    if (i === 0) {
+        const hint = document.createElement('div');
+        hint.classList.add('phase-hint');
+        hint.textContent = 'Klick auf einen Termin um Details aufzuklappen';
+        label.parentNode.insertBefore(hint, wrapper);
+    }
+
+    if (label.classList.contains('phase-label-warning')) {
+        label.classList.add('expanded');
+        wrapper.classList.add('expanded');
+    }
+
+    label.addEventListener('click', () => {
+        label.classList.toggle('expanded');
+        wrapper.classList.toggle('expanded');
+    });
+});
+
+

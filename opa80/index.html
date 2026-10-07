@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Kein HTML-Caching: Aenderungen sollen sofort sichtbar sein -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+
+    <title>Opas 80er</title>
+
+    <!-- Homescreen Icon -->
+    <link rel="icon" href="../favicon.svg" type="image/svg+xml">
+    <meta name="theme-color" content="#f5b942">
+
+    <!-- Open Graph / WhatsApp Preview: bewusst NEUTRAL - Opa darf von der Reise nichts erfahren! -->
+    <meta property="og:title" content="Mc CaMaLu on Tour">
+    <meta property="og:description" content="Die Reisen der Familie Berger &ndash; geplant, geteilt, erinnert">
+    <meta property="og:url" content="https://cloudysgith.github.io/McCaMaLuOnTour/opa80/">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="https://cloudysgith.github.io/McCaMaLuOnTour/og-image.png?v=2">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css?v=20261007a">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <!-- Firebase: nur Login (gemeinsam mit Hub + Sommer-Tour, gleiches Projekt & gleiche Origin).
+         Tagebuch/Ratings/Reisekasse laufen (wie beim Winter) im Platzhalter-Modus -
+         hier wird bewusst kein window.firebaseReady gesetzt. -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAVWHSOEQCpavUEm8tCwB1zZcf8lvDiAFA",
+            authDomain: "bst2026-41f21.firebaseapp.com",
+            databaseURL: "https://bst2026-41f21-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "bst2026-41f21",
+            storageBucket: "bst2026-41f21.firebasestorage.app",
+            messagingSenderId: "120422502733",
+            appId: "1:120422502733:web:3c1a80948654892e96e704"
+        };
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const CREW_EMAIL = "crew@bst2026.app";
+
+        window.fbSignIn = (codeword) =>
+            signInWithEmailAndPassword(auth, CREW_EMAIL, String(codeword).toLowerCase().trim());
+
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                window.crewAuthed = true;
+                window.dispatchEvent(new Event('crew-authed'));
+            }
+        });
+    </script>
+</head>
+<body>
+
+<!-- FUNKELN -->
+<div class="snow-layer" id="snowLayer" aria-hidden="true"></div>
+
+<!-- PASSWORD SCREEN -->
+<div class="lock-screen" id="lockScreen">
+    <div class="lock-content">
+        <div class="lock-emoji">&#x1F382;</div>
+        <h1 class="lock-title">Opas 80er</h1>
+        <p class="lock-sub">Familien-Bereich &ndash; bitte Codewort eingeben</p>
+        <form id="lockForm" onsubmit="return false;">
+            <input type="password" id="lockInput" class="lock-input" placeholder="Codewort..." autocomplete="off" autofocus>
+            <button type="submit" class="lock-btn" id="lockBtn">Rein da!</button>
+        </form>
+        <p class="lock-error" id="lockError"></p>
+    </div>
+</div>
+
+<!-- HERO -->
+<section class="hero" id="top">
+    <div class="hero-bg"></div>
+    <div class="hero-content">
+        <p class="hero-pre">familie berger presents</p>
+        <h1 class="hero-title">OPAS<br><span class="gradient-text">80er</span></h1>
+        <div class="xmas-divider">&#x1F388; &#x1F382; &#x1F388;</div>
+        <p class="hero-sub">Bangkok &rarr; Frankfurt &rarr; Bonn &rarr; Frankfurt &rarr; Bangkok</p>
+        <p class="hero-dates">17. &ndash; 21. M&auml;rz 2027</p>
+        <div class="secret-banner">&#x1F92B; <strong>Top Secret!</strong> Opa wei&szlig; nichts von unserem Besuch &ndash; nur Oma ist eingeweiht. Nichts verraten!</div>
+        <div class="countdown" id="countdown"></div>
+        <a href="#timeline" class="scroll-btn">Los geht's &darr;</a>
+    </div>
+</section>
+
+<!-- NAV -->
+<nav class="sticky-nav" id="nav">
+    <div class="nav-inner">
+        <a href="#top" class="nav-logo">OPA 80</a>
+        <button class="nav-toggle" id="navToggle" aria-label="Menu">&#x2630;</button>
+        <div class="nav-links" id="navLinks">
+            <a href="../">&#x2302; Mc CaMaLu</a>
+            <a href="#overview">Route</a>
+            <a href="#timeline">Tagesplan</a>
+            <a href="#hotels">Unterkunft</a>
+            <a href="#mobilitaet">Mobilit&auml;t</a>
+            <a href="#kosten">Kosten</a>
+            <a href="#packliste">Packliste</a>
+            <a href="#tagebuch">Tagebuch</a>
+            <a href="#todos">To-Dos</a>
+        </div>
+    </div>
+</nav>
+
+<!-- CREW -->
+<section class="section crew-section" id="crew">
+    <h2 class="section-title">Die Crew</h2>
+    <div class="crew-grid">
+        <div class="crew-card">
+            <div class="crew-emoji">&#x1F468;&#x200D;&#x2708;&#xFE0F;</div>
+            <h3>Mark</h3>
+            <p class="crew-role">Papa / Navigator</p>
+            <p class="crew-route">BKK &rarr; FRA &rarr; Bonn &rarr; FRA &rarr; BKK</p>
+            <span class="crew-badge">&#x2708;&#xFE0F; Ticket folgt</span>
+        </div>
+        <div class="crew-card">
+            <div class="crew-emoji">&#x1F469;&#x200D;&#x1F4BB;</div>
+            <h3>Claudia</h3>
+            <p class="crew-role">Mama / Reise-CEO / Planungs-Genie</p>
+            <p class="crew-route">BKK &rarr; FRA &rarr; Bonn &rarr; FRA &rarr; BKK</p>
+            <span class="crew-badge">&#x2708;&#xFE0F; Ticket folgt</span>
+        </div>
+        <div class="crew-card">
+            <div class="crew-emoji">&#x1F430;</div>
+            <h3>Carla</h3>
+            <p class="crew-role">Unser Ski-Haserl &ndash; jetzt im Fr&uuml;hlingsmodus</p>
+            <p class="crew-route">Mannheim &rarr; Bonn &rarr; Mannheim</p>
+            <span class="crew-badge badge-hot">&#x1F973; Wiedersehen seit Januar!</span>
+        </div>
+        <div class="crew-card">
+            <div class="crew-emoji">&#x1F95E;</div>
+            <h3>Luisa</h3>
+            <p class="crew-role">Offizielle Kaiserschmarrn-Testerin</p>
+            <p class="crew-route">BKK &rarr; FRA &rarr; Bonn &rarr; FRA &rarr; BKK</p>
+            <span class="crew-badge">&#x2708;&#xFE0F; Ticket folgt</span>
+        </div>
+        <div class="crew-card">
+            <div class="crew-emoji">&#x1F3CE;&#xFE0F;</div>
+            <h3>Marlene</h3>
+            <p class="crew-role">Formel-Eis-Pilotin / schnellste Linie im Tal</p>
+            <p class="crew-route">BKK &rarr; FRA &rarr; Bonn &rarr; FRA &rarr; BKK</p>
+            <span class="crew-badge">&#x2708;&#xFE0F; TG 922/923 &#x2713;</span>
+        </div>
+        <div class="crew-card">
+            <div class="crew-emoji">&#x1F475;</div>
+            <h3>Oma</h3>
+            <p class="crew-role">Eingeweiht &ndash; unsere Komplizin vor Ort</p>
+            <p class="crew-route">Bonn</p>
+            <span class="crew-badge">&#x1F91D; Wei&szlig; Bescheid</span>
+        </div>
+        <div class="crew-card">
+            <div class="crew-emoji">&#x1F382;</div>
+            <h3>Opa</h3>
+            <p class="crew-role">Das Geburtstagskind &ndash; und ahnt nichts!</p>
+            <p class="crew-route">Bonn</p>
+            <span class="crew-badge badge-hot">&#x1F92B; &Uuml;berraschung!</span>
+        </div>
+    </div>
+</section>
+
+<!-- ROUTE -->
+<section class="section" id="overview">
+    <h2 class="section-title">Die Route</h2>
+    <div class="placeholder-note"><strong>Steht &#x2713;</strong> Fl&uuml;ge Bangkok &harr; Frankfurt (Thai Airways, nonstop). Wir wohnen bei Oma &amp; Opa in Bonn. <strong>&#x1F92B; Opa wei&szlig; nichts &ndash; nur Oma ist eingeweiht!</strong> <strong>Offen:</strong> Transfer Frankfurt &harr; Bonn, Termin &amp; Ort der Feier.</div>
+    <div id="route-map" style="height: 460px; border-radius: 16px; border: 1px solid rgba(136,136,160,0.15); overflow: hidden;"></div>
+    <script>
+    (function() {
+        var map = L.map('route-map', { zoomControl: true, scrollWheelZoom: false });
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/">CARTO</a>',
+            subdomains: 'abcd', maxZoom: 19
+        }).addTo(map);
+        var stops = [
+            { name: 'Flughafen Frankfurt', lat: 50.0379, lon: 8.5622, color: '#f5b942', info: 'An 17.03. 19:05 • Ab 21.03. 20:55 ✈️', r: 7 },
+            { name: 'Bonn', lat: 50.7374, lon: 7.0982, color: '#f472b6', info: 'Oma & Opa – Überraschungsbesuch! 🤫🎂', r: 9 },
+            { name: 'Mannheim', lat: 49.488, lon: 8.466, color: '#fb923c', info: 'Carla kommt von hier 🚆', r: 6 }
+        ];
+        L.polyline([[50.0379, 8.5622], [50.42, 7.6], [50.7374, 7.0982]], { color: '#f5b942', weight: 3, opacity: 0.7 }).addTo(map);
+        L.polyline([[49.488, 8.466], [50.0, 8.0], [50.7374, 7.0982]], { color: '#fb923c', weight: 2, opacity: 0.6, dashArray: '8,8' }).addTo(map);
+        stops.forEach(function(s) {
+            L.circleMarker([s.lat, s.lon], { radius: s.r, fillColor: s.color, color: s.color, weight: 2, opacity: 0.8, fillOpacity: 0.6 })
+                .addTo(map).bindTooltip('<strong>' + s.name + '</strong><br><span style="opacity:0.7">' + s.info + '</span>',
+                    { permanent: true, direction: 'top', className: 'map-tooltip', offset: [0, -8] });
+        });
+        map.fitBounds([[49.3, 6.4], [51.1, 9.2]], { padding: [30, 30] });
+    })();
+    </script>
+</section>
+
+<!-- TIMELINE -->
+<section class="section timeline-section" id="timeline">
+    <h2 class="section-title">Der Tagesplan</h2>
+    <p class="section-sub">F&uuml;nf Tage Deutschland &ndash; einmal um die halbe Welt f&uuml;r Opa. Details werden laufend erg&auml;nzt!</p>
+
+    <div class="phase-label">Mi. 17.03. &middot; Anreise Bangkok &rarr; Frankfurt &rarr; Bonn</div>
+
+    <div class="day-card" data-day="1">
+        <div class="day-header">
+            <div class="day-date">
+                <span class="day-weekday">MI</span>
+                <span class="day-number">17</span>
+                <span class="day-month">M&Auml;R</span>
+            </div>
+            <div class="day-title">
+                <h3>Abflug zu Opas 80er! &#x1F382;</h3>
+                <div class="day-location">&#x1F4CD; Bangkok &rarr; Frankfurt</div>
+            </div>
+            <div class="day-weather">
+                <span class="weather-icon">&#x2708;&#xFE0F;</span>
+                <span class="weather-temp">8&deg;C</span>
+            </div>
+        </div>
+        <div class="day-content">
+            <div class="day-schedule">
+                <div class="schedule-item highlight">
+                    <span class="time">12:40</span>
+                    <span class="activity">Abflug Bangkok (BKK) &ndash; Thai Airways TG 922, nonstop</span>
+                </div>
+                <div class="schedule-item highlight">
+                    <span class="time">19:05</span>
+                    <span class="activity">Landung Frankfurt, Terminal 1</span>
+                </div>
+                <div class="schedule-item">
+                    <span class="time">abends</span>
+                    <span class="activity">Weiter nach Bonn &ndash; <em>wie? noch kl&auml;ren</em> (ICE ab Fernbahnhof am Flughafen nach Siegburg/Bonn ~40 min). Abholen kann uns nicht Opa &ndash; er wei&szlig; ja nichts!</span>
+                </div>
+            </div>
+            <div class="day-details">
+                <div class="detail-box flight-box">
+                    <h4>&#x2708;&#xFE0F; Flugdetails</h4>
+                    <p><strong>TG 922 &middot; BKK &rarr; FRA</strong> | nonstop, 12h 25min | Boeing 777-300ER | Economy | 1 Koffer &agrave; 23 kg</p>
+                    <p>Marlene: Buchung FXPRR6 &middot; Ticket 217 2350588186 &middot; <em>Tickets von Mark, Claudia &amp; Luisa folgen</em></p>
+                </div>
+            </div>
+            <div class="day-tips">
+                <div class="tip">&#x1F686; <strong>Tipp:</strong> Der Fernbahnhof liegt direkt am Flughafen &ndash; mit dem ICE ist man ohne Umweg &uuml;ber die Stadt in Siegburg/Bonn.</div>
+                <div class="tip">&#x1F92B; <strong>Ankunft geheim halten:</strong> Mit Oma absprechen, wann und wie wir abends ankommen, ohne dass Opa Verdacht sch&ouml;pft.</div>
+                <div class="tip special-tip">&#x1F49B; <strong>Motto des Tages:</strong> Vom Sommer in den Fr&uuml;hling.</div>
+            </div>
+        </div>
+        <div class="day-rating" data-day="1">
+            <span class="rating-label">Tages-Rating:</span>
+            <div class="stars">
+                <span class="star" data-value="1">&#x2B50;</span>
+                <span class="star" data-value="2">&#x2B50;</span>
+                <span class="star" data-value="3">&#x2B50;</span>
+                <span class="star" data-value="4">&#x2B50;</span>
+                <span class="star" data-value="5">&#x2B50;</span>
+            </div>
+            <span class="rating-display"></span>
+        </div>
+    </div>
+
+    <div class="phase-label">Do. 18.03. &ndash; Sa. 20.03. &middot; Bonn &ndash; Opas 80er</div>
+
+    <div class="day-card day-card-routine" data-day="2">
+        <div class="day-header">
+            <div class="day-date day-date-range">
+                <span class="day-weekday">DO&ndash;SA</span>
+                <span class="day-number">18&ndash;20</span>
+                <span class="day-month">M&Auml;R</span>
+            </div>
+            <div class="day-title">
+                <h3>Bonn &ndash; &Uuml;berraschung, Familie &amp; Opas 80er! &#x1F389;</h3>
+                <div class="day-location">&#x1F4CD; Bonn</div>
+            </div>
+            <div class="day-weather">
+                <span class="weather-icon">&#x1F382;</span>
+                <span class="weather-temp">12&deg;C</span>
+            </div>
+        </div>
+        <div class="day-content">
+            <div class="day-schedule">
+                <div class="schedule-item highlight">
+                    <span class="time">Carla</span>
+                    <span class="activity">&#x1F430; Carla kommt aus Mannheim dazu &ndash; <em>wann genau? noch kl&auml;ren</em></span>
+                </div>
+                <div class="schedule-item highlight">
+                    <span class="time">Feier</span>
+                    <span class="activity">&#x1F382; Opas 80. Geburtstag &ndash; <em>Tag, Uhrzeit &amp; Ort folgen</em></span>
+                </div>
+                <div class="schedule-item">
+                    <span class="time">dazwischen</span>
+                    <span class="activity">Zeit mit Oma &amp; Opa &ndash; Plan folgt</span>
+                </div>
+            </div>
+            <div class="day-details">
+                <div class="detail-box place-box">
+                    <h4>&#x1F3E1; Bei Oma &amp; Opa in Bonn</h4>
+                    <p>Wir wohnen bei Oma &amp; Opa. &#x1F92B; Opa wei&szlig; nichts &ndash; Oma organisiert die Schlafpl&auml;tze heimlich mit.</p>
+                </div>
+                <div class="detail-box place-box">
+                    <h4>&#x1F382; Die Feier</h4>
+                    <p><em>Tag, Uhrzeit &amp; Ort folgen</em> &ndash; sobald die Einladung da ist, tragen wir alles hier ein.</p>
+                </div>
+            </div>
+            <div class="day-tips">
+                <div class="tip">&#x1F381; <strong>Geschenk:</strong> Was schenken wir Opa? Siehe To-Dos.</div>
+                <div class="tip special-tip">&#x1F49B; <strong>Motto:</strong> 80 Jahre &ndash; und wir sind alle da!</div>
+            </div>
+        </div>
+        <div class="day-rating" data-day="2">
+            <span class="rating-label">Tages-Rating:</span>
+            <div class="stars">
+                <span class="star" data-value="1">&#x2B50;</span>
+                <span class="star" data-value="2">&#x2B50;</span>
+                <span class="star" data-value="3">&#x2B50;</span>
+                <span class="star" data-value="4">&#x2B50;</span>
+                <span class="star" data-value="5">&#x2B50;</span>
+            </div>
+            <span class="rating-display"></span>
+        </div>
+    </div>
+
+    <div class="phase-label">So. 21.03. &ndash; Mo. 22.03. &middot; R&uuml;ckflug Frankfurt &rarr; Bangkok</div>
+
+    <div class="day-card" data-day="3">
+        <div class="day-header">
+            <div class="day-date">
+                <span class="day-weekday">SO</span>
+                <span class="day-number">21</span>
+                <span class="day-month">M&Auml;R</span>
+            </div>
+            <div class="day-title">
+                <h3>R&uuml;ckflug &ndash; Tsch&uuml;ss Opa, bis bald!</h3>
+                <div class="day-location">&#x1F4CD; Bonn &rarr; Frankfurt &rarr; Bangkok</div>
+            </div>
+            <div class="day-weather">
+                <span class="weather-icon">&#x2708;&#xFE0F;</span>
+                <span class="weather-temp">10&deg;C</span>
+            </div>
+        </div>
+        <div class="day-content">
+            <div class="day-schedule">
+                <div class="schedule-item">
+                    <span class="time">nachm.</span>
+                    <span class="activity">Zur&uuml;ck zum Flughafen Frankfurt &ndash; <em>wie? noch kl&auml;ren</em> (sp&auml;testens ~18:30 am Terminal 1)</span>
+                </div>
+                <div class="schedule-item highlight">
+                    <span class="time">20:55</span>
+                    <span class="activity">Abflug Frankfurt &ndash; Thai Airways TG 923, nonstop</span>
+                </div>
+                <div class="schedule-item">
+                    <span class="time">13:45 +1</span>
+                    <span class="activity">Ankunft Bangkok am Mo. 22.03.</span>
+                </div>
+            </div>
+            <div class="day-details">
+                <div class="detail-box flight-box">
+                    <h4>&#x2708;&#xFE0F; Flugdetails</h4>
+                    <p><strong>TG 923 &middot; FRA &rarr; BKK</strong> | nonstop, 10h 50min | Abflug Terminal 1 | 1 Koffer &agrave; 23 kg</p>
+                    <p>Passagiere: Mark, Claudia, Luisa &amp; Marlene</p>
+                </div>
+            </div>
+            <div class="day-tips">
+                <div class="tip">&#x1F430; <strong>Carla:</strong> f&auml;hrt zur&uuml;ck nach Mannheim &ndash; vielleicht ein St&uuml;ck gemeinsam Richtung Frankfurt?</div>
+            </div>
+        </div>
+        <div class="day-rating" data-day="3">
+            <span class="rating-label">Tages-Rating:</span>
+            <div class="stars">
+                <span class="star" data-value="1">&#x2B50;</span>
+                <span class="star" data-value="2">&#x2B50;</span>
+                <span class="star" data-value="3">&#x2B50;</span>
+                <span class="star" data-value="4">&#x2B50;</span>
+                <span class="star" data-value="5">&#x2B50;</span>
+            </div>
+            <span class="rating-display"></span>
+        </div>
+    </div>
+</section>
+
+<!-- UNTERKUNFT -->
+<section class="section" id="hotels">
+    <h2 class="section-title">Unterkunft</h2>
+    <div class="hotel-grid">
+        <div class="hotel-card">
+            <div class="hotel-status booked">Geplant</div>
+            <h3>Bei Oma &amp; Opa &ndash; streng geheim! &#x1F92B;</h3>
+            <p class="hotel-location">&#x1F4CD; Bonn</p>
+            <p class="hotel-dates">17.03. &ndash; 21.03.2027 &middot; 4 N&auml;chte</p>
+            <p>Das beste Hotel der Welt &ndash; diesmal als &Uuml;berraschung: <strong>Opa wei&szlig; nichts, nur Oma ist eingeweiht.</strong> Sie k&uuml;mmert sich heimlich um die Schlafpl&auml;tze.</p>
+        </div>
+    </div>
+</section>
+
+<!-- MOBILITAET -->
+<section class="section" id="mobilitaet">
+    <h2 class="section-title">Mobilit&auml;t</h2>
+    <p class="section-sub">Wie kommen wir von A nach B?</p>
+    <div class="mobility-card">
+        <div class="mobility-status">FL&Uuml;GE &#x2713; &middot; TRANSFER OFFEN</div>
+        <h3>&#x2708;&#xFE0F; Thai Airways nonstop &ndash; Bangkok &harr; Frankfurt</h3>
+        <p class="mobility-tagline">Hin Mi. 17.03. (TG 922, 12:40 &rarr; 19:05), zur&uuml;ck So. 21.03. (TG 923, 20:55 &rarr; Mo. 13:45). Unser Auto steht in Hepberg &ndash; diesmal geht&rsquo;s wohl ohne.</p>
+        <div class="mobility-plan">
+            <h4>So l&auml;uft's</h4>
+            <ul>
+                <li><strong>17.03.:</strong> Frankfurt Flughafen &rarr; Bonn &ndash; <em>noch offen</em>: ICE ab Fernbahnhof nach Siegburg/Bonn (~40 min) oder Abholung.</li>
+                <li><strong>18.&ndash;20.03.:</strong> in Bonn &ndash; zu Fu&szlig;, Bus/Bahn oder mit Oma &amp; Opa.</li>
+                <li><strong>&#x1F92B; Achtung:</strong> Opa wei&szlig; nichts &ndash; Ankunft nur mit Oma abstimmen, er kann uns nicht abholen.</li>
+                <li><strong>21.03.:</strong> Bonn &rarr; Frankfurt Flughafen, sp&auml;testens ~18:30 am Terminal 1.</li>
+                <li><strong>Carla:</strong> Mannheim &harr; Bonn mit dem Deutschland-Ticket (Regionalverkehr, ~3h).</li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+<!-- KOSTEN -->
+<section class="section" id="kosten">
+    <h2 class="section-title">Kosten-Tracker</h2>
+    <p class="section-sub">Was bisher ausgegeben wurde &ndash; und was noch kommt</p>
+    <div class="cost-summary">
+        <div class="cost-total">
+            <span class="cost-label">Fl&uuml;ge &amp; Unterk&uuml;nfte</span>
+            <span class="cost-amount cost-amount-fixed" id="costFixed">0 &euro;</span>
+        </div>
+        <div class="cost-total">
+            <span class="cost-label">Reisekasse on the go</span>
+            <span class="cost-amount cost-amount-go" id="costOnTheGo">0 &euro;</span>
+        </div>
+        <div class="cost-total cost-total-grand">
+            <span class="cost-label">Gesamt</span>
+            <span class="cost-amount cost-amount-grand" id="costTotal">0 &euro;</span>
+        </div>
+    </div>
+    <div class="cost-table-wrap">
+        <table class="cost-table">
+            <thead><tr><th>Was</th><th>Wann</th><th>Status</th><th>Betrag</th></tr></thead>
+            <tbody>
+                <tr>
+                    <td><strong>Flug Marlene</strong><br><span class="cost-sub">BKK&harr;FRA nonstop &bull; Thai Airways &bull; FXPRR6 &bull; 31.805 THB</span></td>
+                    <td>17.03. / 21.03.</td>
+                    <td><span class="cost-status booked">GEBUCHT</span></td>
+                    <td class="cost-val" data-amount="0"><em>Euro-Betrag folgt</em></td>
+                </tr>
+                <tr>
+                    <td><strong>Fl&uuml;ge Mark, Claudia &amp; Luisa</strong><br><span class="cost-sub">Tickets folgen</span></td>
+                    <td>17.03. / 21.03.</td>
+                    <td><span class="cost-status">OFFEN</span></td>
+                    <td class="cost-val" data-amount="0">&ndash;</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- LIVE AUSGABEN-TRACKER -->
+    <div class="expense-tracker" id="expenseTracker">
+        <h3 class="expense-title">Reisekasse</h3>
+        <p class="expense-sub">Ausgaben unterwegs &ndash; einfach eintragen, alle sehen alles</p>
+        <div class="expense-summary-row">
+            <div class="expense-summary-box">
+                <span class="expense-summary-label">Ausgaben unterwegs</span>
+                <span class="expense-summary-amount" id="expenseTotal">0,00 &euro;</span>
+            </div>
+        </div>
+        <div class="expense-form" id="expenseForm">
+            <div class="expense-form-row">
+                <select id="expCat" class="expense-input">
+                    <option value="">Kategorie...</option>
+                    <option value="restaurant">&#x1F37D;&#xFE0F; Restaurant</option>
+                    <option value="bahn">&#x1F686; Bahn</option>
+                    <option value="supermarkt">&#x1F6D2; Supermarkt</option>
+                    <option value="geschenke">&#x1F381; Geschenke</option>
+                    <option value="aktivitaet">&#x1F389; Aktivit&auml;t</option>
+                    <option value="sonstiges">&#x1F4B6; Sonstiges</option>
+                </select>
+                <input type="number" id="expAmount" class="expense-input" placeholder="Betrag &euro;" step="0.01" min="0">
+            </div>
+            <div class="expense-form-row">
+                <input type="text" id="expDesc" class="expense-input expense-desc" placeholder="Was? z.B. Blumen f&uuml;r Opa">
+                <input type="date" id="expDate" class="expense-input">
+            </div>
+            <div class="expense-form-row">
+                <button id="expSubmit" class="expense-btn">Eintragen</button>
+            </div>
+        </div>
+        <div class="expense-list" id="expenseList"></div>
+    </div>
+</section>
+
+<!-- PACKLISTE -->
+<section class="section" id="packliste">
+    <h2 class="section-title">Packliste</h2>
+    <p class="section-sub">Kurztrip-Edition &ndash; Bonn im M&auml;rz: 5&ndash;13&deg;C und gern mal Regen</p>
+    <div class="pack-grid">
+        <div class="pack-category">
+            <h3>&#x1F9E5; Kleidung</h3>
+            <label><input type="checkbox"> &Uuml;bergangsjacke (wind- &amp; regenfest)</label>
+            <label><input type="checkbox"> Pullis zum Zwiebeln</label>
+            <label><input type="checkbox"> Feste Schuhe</label>
+            <label><input type="checkbox"> Schickes Outfit f&uuml;r die Feier</label>
+            <label><input type="checkbox"> Regenschirm</label>
+        </div>
+        <div class="pack-category">
+            <h3>&#x1F381; F&uuml;r Opa</h3>
+            <label><input type="checkbox"> Geschenk</label>
+            <label><input type="checkbox"> Karte mit Gr&uuml;&szlig;en von allen</label>
+            <label><input type="checkbox"> Kleinigkeit aus Bangkok</label>
+        </div>
+        <div class="pack-category">
+            <h3>&#x1F4C4; Dokumente &amp; Technik</h3>
+            <label><input type="checkbox"> Reisep&auml;sse</label>
+            <label><input type="checkbox"> Flugtickets / Thai-App</label>
+            <label><input type="checkbox"> Ladekabel &amp; Powerbank</label>
+            <label><input type="checkbox"> Euro-Bargeld &amp; Karten</label>
+        </div>
+    </div>
+</section>
+
+<!-- TO-DOS -->
+<section class="section" id="todos">
+    <h2 class="section-title">To-Do Liste</h2>
+    <p class="section-sub">Was noch erledigt werden muss vor der Abreise!</p>
+    <div class="todo-list">
+        <div class="todo-item urgent">
+            <label><input type="checkbox"> <strong>Feier: Tag, Uhrzeit &amp; Ort</strong> &ndash; Infos (nur!) von Oma einholen und hier eintragen</label>
+        </div>
+        <div class="todo-item">
+            <label><input type="checkbox"> <strong>Tickets von Mark, Claudia &amp; Luisa</strong> ablegen &ndash; gleiche Fl&uuml;ge TG 922/923?</label>
+        </div>
+        <div class="todo-item urgent">
+            <label><input type="checkbox"> <strong>&#x1F92B; &Uuml;berraschung mit Oma planen</strong> &ndash; Schlafpl&auml;tze, Ankunftszeit am 17.03. und wie wir reinkommen, ohne dass Opa etwas merkt</label>
+        </div>
+        <div class="todo-item">
+            <label><input type="checkbox"> <strong>Transfer Frankfurt &harr; Bonn</strong> &ndash; ICE-Tickets (Sparpreis) oder Abholung?</label>
+        </div>
+        <div class="todo-item">
+            <label><input type="checkbox"> <strong>Carla:</strong> Wann kommt sie nach Bonn, wann f&auml;hrt sie zur&uuml;ck?</label>
+        </div>
+        <div class="todo-item">
+            <label><input type="checkbox"> <strong>Geschenk f&uuml;r Opa</strong> &ndash; Ideen sammeln &amp; besorgen</label>
+        </div>
+    </div>
+</section>
+
+<!-- WETTER -->
+<section class="section" id="wetter">
+    <h2 class="section-title">Wetter</h2>
+    <p class="section-sub">Live-Daten &ndash; 3-Tage-Vorschau f&uuml;r euren aktuellen Reise-Ort</p>
+    <div id="liveWeather" class="live-weather-container">
+        <div class="live-weather-loading">Wetterdaten werden geladen...</div>
+    </div>
+</section>
+
+<!-- TAGEBUCH -->
+<section class="section" id="tagebuch">
+    <h2 class="section-title">Reise-Tagebuch</h2>
+    <p class="section-sub">Schreibt eure Highlights, lustige Momente und Erinnerungen auf &ndash; f&uuml;r jeden Tag!</p>
+    <div class="diary-container" id="diaryContainer"></div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+    <div class="footer-content">
+        <p class="footer-title">Opas 80er</p>
+        <p>Bangkok &rarr; Frankfurt &rarr; Bonn &rarr; Frankfurt &rarr; Bangkok &middot; 17. &ndash; 21. M&auml;rz 2027</p>
+        <p class="footer-countdown" id="countdownFooter"></p>
+        <p class="footer-small">Made with love for Opa &#x1F382;</p>
+    </div>
+</footer>
+
+<script src="script.js?v=20261007a"></script>
+</body>
+</html>
