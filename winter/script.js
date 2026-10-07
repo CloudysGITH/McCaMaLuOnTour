@@ -121,14 +121,14 @@ document.querySelectorAll('.day-header').forEach(header => {
 
 // --- WHO AM I? (Name selection) ---
 const MEMBER_KEY = 'bwt26_member';
-const MEMBERS = ['Mark', 'Claudia', 'Carla', 'Luisa', 'Marlene', 'Raphael'];
+const MEMBERS = ['Mark', 'Claudia', 'Carla', 'Luisa', 'Marlene', 'Raphaël'];
 const MEMBER_ICONS = {
     'Mark': '⛷️',
     'Claudia': '👩‍💻',
     'Carla': '🐰',
     'Luisa': '🥞',
     'Marlene': '🏎️',
-    'Raphael': '🇫🇷'
+    'Raphaël': '🇫🇷'
 };
 
 function getCurrentMember() {
@@ -432,7 +432,7 @@ document.querySelectorAll('.day-card, .hotel-card, .quest-card, .weather-card, .
         { date: '2026-12-24', label: 'Do 24. Dez', loc: 'Bonn', title: '\u{1F384} Heiligabend bei Oma & Opa!', prompt: 'Bescherung! Bestes Geschenk? Was gab es zu essen? Wer hat geweint vor Rührung?' },
         { date: '2026-12-25', label: 'Fr 25. Dez', loc: 'Bonn', title: '1. Weihnachtstag in Bonn', prompt: 'Weihnachts-Food-Koma? Rheinspaziergang? Erzählt!' },
         // Phase 3: Kaunertal
-        { date: '2026-12-26', label: 'Sa 26. Dez', loc: 'Bonn → Kaunertal', title: 'Lange Fahrt & Check-in Apart Gletscherblick!', prompt: 'Wie war die 7h-Etappe? Erster Eindruck vom Kaunertal und der Wohnung? Ski-Abholung geschafft? Raphael gut gelandet? Liegt Schnee?' },
+        { date: '2026-12-26', label: 'Sa 26. Dez', loc: 'Bonn → Kaunertal', title: 'Lange Fahrt & Check-in Apart Gletscherblick!', prompt: 'Wie war die 7h-Etappe? Erster Eindruck vom Kaunertal und der Wohnung? Ski-Abholung geschafft? Raphaël gut gelandet? Liegt Schnee?' },
         { date: '2026-12-27', label: 'So 27. Dez', loc: 'Kaunertaler Gletscher', title: '\u{1F3BF} Skitag 1 – Gletscher!', prompt: 'Erster Tag auf der Piste! Wie waren Schnee und Beine?' },
         { date: '2026-12-28', label: 'Mo 28. Dez', loc: 'Kaunertal', title: 'Skitag 2', prompt: 'Gletscher oder Fendels? Schönste Abfahrt?' },
         { date: '2026-12-29', label: 'Di 29. Dez', loc: 'Kaunertal', title: 'Skitag 3', prompt: 'Muskelkater-Update? Bestes Hüttenessen bisher?' },
@@ -440,7 +440,7 @@ document.querySelectorAll('.day-card, .hotel-card, .quest-card, .weather-card, .
         { date: '2026-12-31', label: 'Do 31. Dez', loc: 'Kaunertal', title: '\u{1F386} Silvester in den Bergen!', prompt: 'Wie habt ihr reingefeiert? Feuerwerk überm Tal? Vorsätze für 2027?' },
         { date: '2027-01-01', label: 'Fr 1. Jan', loc: 'Kaunertal', title: 'Neujahr – Skitag oder Ausschlafen?', prompt: 'Frohes Neues! Erster Skitag 2027 oder gemütlicher Start?' },
         { date: '2027-01-02', label: 'Sa 2. Jan', loc: 'Pitztaler Gletscher', title: '\u{1F3D4}\uFE0F Pitztal-Tag mit Caro, Tobi, Paul, Benedikt & Sofia!', prompt: 'Wie war der Tag mit den Freunden? Café 3.440 besucht? Wer hatte die schnellste Linie?' },
-        { date: '2027-01-03', label: 'So 3. Jan', loc: 'Kaunertal → Leutkirch', title: 'Au revoir Raphael & ab ins Allgäu', prompt: 'Abschied vom Kaunertal, von Raphael und Carla – was werdet ihr vermissen? Wie war das Wiedersehen mit den Leipzigern?' },
+        { date: '2027-01-03', label: 'So 3. Jan', loc: 'Kaunertal → Leutkirch', title: 'Au revoir Raphaël & ab ins Allgäu', prompt: 'Abschied vom Kaunertal, von Raphaël und Carla – was werdet ihr vermissen? Wie war das Wiedersehen mit den Leipzigern?' },
         // Phase 4: Allgaeu (Leutkirch)
         { date: '2027-01-04', label: 'Mo 4. Jan', loc: 'Leutkirch', title: 'Erster Allgäu-Tag', prompt: 'Wie fühlen sich die Beine nach 8 Skitagen an? Was steht heute an?' },
         { date: '2027-01-05', label: 'Di 5. Jan', loc: 'Leutkirch', title: 'Allgäu-Tag 2', prompt: 'Was habt ihr heute gemacht?' },
