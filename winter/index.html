@@ -26,7 +26,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css?v=20261007a">
+    <link rel="stylesheet" href="style.css?v=20261007b">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
@@ -155,8 +155,15 @@
             <p class="crew-route">BKK &rarr; MUC &rarr; Kaunertal &rarr; Allg&auml;u &rarr; MUC &rarr; BKK</p>
             <span class="crew-badge">&#x1F3BF; Skipass &#x2713; 27.12.&ndash;04.01.</span>
         </div>
+        <div class="crew-card">
+            <div class="crew-emoji">&#x1F1EB;&#x1F1F7;</div>
+            <h3>Raphael</h3>
+            <p class="crew-role">Unser Gast aus Frankreich / Skibus-Crew mit Marlene</p>
+            <p class="crew-route">Bordeaux &rarr; Innsbruck &rarr; Kaunertal &rarr; Innsbruck &rarr; Bordeaux</p>
+            <span class="crew-badge badge-hot">&#x2708;&#xFE0F; 26.12. &ndash; 03.01. dabei!</span>
+        </div>
     </div>
-    <div class="placeholder-note"><strong>Komplett:</strong> Carla st&ouml;&szlig;t am 23.12. in Bonn dazu &#x2713; &ndash; sie reist selbstst&auml;ndig mit dem Deutschland-Ticket aus Mannheim an. Nach dem Kaunertal geht&rsquo;s f&uuml;r sie am 03.01. zur&uuml;ck nach Mannheim &ndash; ins Allg&auml;u fahren wir zu viert.</div>
+    <div class="placeholder-note"><strong>Komplett:</strong> Carla st&ouml;&szlig;t am 23.12. in Bonn dazu &#x2713; &ndash; sie reist selbstst&auml;ndig mit dem Deutschland-Ticket aus Mannheim an. Am 03.01. f&auml;hrt sie aus dem Allg&auml;u mit der Bahn zur&uuml;ck nach Mannheim. <strong>Neu dabei:</strong> Raphael aus Frankreich ist vom 26.12. bis 03.01. mit im Kaunertal &#x1F1EB;&#x1F1F7; &ndash; wir holen ihn am Flughafen Innsbruck ab.</div>
 </section>
 
 <!-- OVERVIEW MAP -->
@@ -194,6 +201,7 @@
             { name: 'Kaunertaler Gletscher', lat: 46.871, lon: 10.717, color: '#7dd3fc', info: 'Skigebiet bis 3.113 m \u{1F3BF}', r: 8, perm: true },
             { name: 'Fendels', lat: 47.049, lon: 10.690, color: '#2dd4bf', info: 'Skigebiet Fendels-Ried ⛷️', r: 7, perm: true },
             { name: 'Leutkirch / Herlazhofen', lat: 47.794, lon: 10.016, color: '#a78bfa', info: 'Allg&auml;u-Ausklang 03.&ndash;08.01. \u{1F3E1} ✓', r: 8, perm: true },
+            { name: 'Flughafen Innsbruck', lat: 47.260, lon: 11.344, color: '#f472b6', info: 'Raphael ✈️ an 26.12. 17:10 • ab 03.01. 17:25', r: 6, perm: true },
             { name: 'Pitztaler Gletscher', lat: 46.926, lon: 10.871, color: '#fbbf24', info: 'Bonus: 1 Skitag inklusive! ☕ 3.440 m', r: 6, perm: true }
         ];
 
@@ -245,6 +253,11 @@
             [50.737, 7.098], [49.0, 9.2], [47.6, 10.7], [47.005, 10.713]
         ], { color: '#7dd3fc', weight: 3, opacity: 0.6, dashArray: '6,6' }).addTo(map);
         L.marker([48.3, 9.9], { icon: emojiIcon('\u{1F698}', 16) }).addTo(map);
+
+        // Raphael-Shuttle: Feichten <-> Flughafen Innsbruck (26.12. + 03.01.)
+        L.polyline([
+            [47.005, 10.713], [47.14, 10.57], [47.21, 10.75], [47.24, 11.0], [47.260, 11.344]
+        ], { color: '#f472b6', weight: 2, opacity: 0.6, dashArray: '4,6' }).addTo(map);
 
         // Kaunertal -> Leutkirch (03.01., ueber Fernpass/Reutte/Kempten)
         L.polyline([
@@ -564,7 +577,7 @@
                 <span class="day-month">DEZ</span>
             </div>
             <div class="day-title">
-                <h3>Check-in Apart Gletscherblick!</h3>
+                <h3>Check-in Apart Gletscherblick &amp; Raphael abholen!</h3>
                 <div class="day-location">&#x1F4CD; Bonn &rarr; Feichten, Kaunertal (~700 km / ~7h)</div>
             </div>
             <div class="day-weather">
@@ -589,6 +602,18 @@
                 <div class="schedule-item highlight">
                     <span class="time">bis ~18:00</span>
                     <span class="activity">Ski-Equipment f&uuml;r alle 5 abholen (Larcher Sport, mitten in Feichten) &ndash; damit es am 27. DIREKT auf die Piste geht! &#x1F3BF;</span>
+                </div>
+                <div class="schedule-item">
+                    <span class="time">~15:45</span>
+                    <span class="activity">&#x1F697; Einer f&auml;hrt los zum Flughafen Innsbruck (~100 km / ~1&frac14;h) &ndash; der Rest richtet sich ein</span>
+                </div>
+                <div class="schedule-item highlight">
+                    <span class="time">17:10</span>
+                    <span class="activity">&#x1F1EB;&#x1F1F7; Raphael landet in Innsbruck (aus Bordeaux) &ndash; bienvenue!</span>
+                </div>
+                <div class="schedule-item">
+                    <span class="time">~19:00</span>
+                    <span class="activity">Zur&uuml;ck in Feichten &ndash; jetzt sind wir zu sechst!</span>
                 </div>
             </div>
             <div class="day-details">
@@ -716,6 +741,7 @@
             <div class="day-tips">
                 <div class="tip special-tip">&#x1F49B; <strong>Motto der Woche:</strong> Erst der Berg, dann das Becken, dann das Schnitzel.</div>
                 <div class="tip">&#x1F3AB; <strong>Skipass:</strong> „8 in 9 Tagen&ldquo; &ndash; diese fünf Tage laufen mitten im Kontingent. Bei täglichem Fahren ist der 03.01. der letzte Skitag.</div>
+                <div class="tip">&#x1F68C; <strong>Zu sechst, Auto hat 5 Pl&auml;tze:</strong> Raphael &amp; Marlene nehmen den Skibus zum Gletscher, die anderen das Auto oder auch den Bus.</div>
                 <div class="tip">&#x1F4A1; <strong>Wetter-Regel:</strong> Bei Sturm macht der Gletscher zu &ndash; dann Fendels, das liegt tiefer und ist windgeschützter.</div>
             </div>
         </div>
@@ -800,8 +826,8 @@
                 <span class="day-month">JAN</span>
             </div>
             <div class="day-title">
-                <h3>Servus Gletscher, gr&uuml;&szlig; Gott Allg&auml;u!</h3>
-                <div class="day-location">&#x1F4CD; Kaunertal &rarr; Leutkirch-Herlazhofen (~150 km / ~2h)</div>
+                <h3>Au revoir Raphael, gr&uuml;&szlig; Gott Allg&auml;u!</h3>
+                <div class="day-location">&#x1F4CD; Kaunertal &rarr; Flughafen Innsbruck &rarr; Kaunertal &rarr; Leutkirch-Herlazhofen</div>
             </div>
             <div class="day-weather">
                 <span class="weather-icon">&#x1F697;</span>
@@ -815,12 +841,24 @@
                     <span class="activity">Check-out Apart Gletscherblick, Leih-Ski zur&uuml;ck zu Larcher Sport</span>
                 </div>
                 <div class="schedule-item">
-                    <span class="time">tags&uuml;ber</span>
-                    <span class="activity">Abschied von Carla &#x1F430; &ndash; sie f&auml;hrt zur&uuml;ck nach Mannheim</span>
+                    <span class="time">mittags</span>
+                    <span class="activity">&#x1F697; Einer bringt Raphael fr&uuml;h zum Flughafen Innsbruck (~1&frac14;h) &ndash; er wartet dort auf seinen Flug nach Bordeaux (Abflug 17:25 &ndash; au revoir! &#x1F1EB;&#x1F1F7;), der Rest vergn&uuml;gt sich solange in Feichten</span>
+                </div>
+                <div class="schedule-item">
+                    <span class="time">nachm.</span>
+                    <span class="activity">Fahrer zur&uuml;ck in Feichten, alle einsteigen &rarr; ab ins Allg&auml;u (~150 km / ~2&ndash;2&frac12;h &uuml;ber Fernpass &amp; Kempten)</span>
                 </div>
                 <div class="schedule-item highlight">
-                    <span class="time">15:00&ndash;21:30</span>
-                    <span class="activity">Check-in &bdquo;unique Ferienwohnung&ldquo; in Leutkirch-Herlazhofen</span>
+                    <span class="time">ab 15:00</span>
+                    <span class="activity">Check-in &bdquo;unique Ferienwohnung&ldquo; in Leutkirch-Herlazhofen (m&ouml;glich bis 21:30)</span>
+                </div>
+                <div class="schedule-item highlight">
+                    <span class="time">abends</span>
+                    <span class="activity">&#x1F37D;&#xFE0F; Gemeinsames Abendessen mit den Leipzigern!</span>
+                </div>
+                <div class="schedule-item">
+                    <span class="time">danach?</span>
+                    <span class="activity">&#x1F430; Carla f&auml;hrt mit Bahn &amp; Deutschland-Ticket zur&uuml;ck nach Mannheim</span>
                 </div>
             </div>
             <div class="day-details">
@@ -830,8 +868,9 @@
                 </div>
             </div>
             <div class="day-tips">
-                <div class="tip">&#x1F3BF; <strong>Skipass:</strong> Heute w&auml;re der 8. Skitag &ndash; wer mag, f&auml;hrt morgens noch ein paar Schw&uuml;nge, bevor es losgeht. Check-in in Leutkirch geht bis 21:30.</div>
-                <div class="tip">&#x1F686; <strong>Carla:</strong> R&uuml;ckreise nach Mannheim noch kl&auml;ren &ndash; z.&nbsp;B. bis Kempten oder Memmingen mitnehmen, ab dort mit dem Deutschland-Ticket.</div>
+                <div class="tip">&#x1F3BF; <strong>Skipass:</strong> Heute w&auml;re der 8. Skitag &ndash; wer wartet, kann vormittags noch ein paar Schw&uuml;nge machen.</div>
+                <div class="tip">&#x1F686; <strong>Carla:</strong> Bester Bahnhof ist <strong>Memmingen</strong> (st&uuml;ndlich nach Ulm, dann Regio &uuml;ber Stuttgart nach Mannheim, ~4&ndash;4&frac12;h). Nach dem Abendessen kann es sp&auml;t werden &ndash; Verbindung vorher im DB Navigator checken!</div>
+                <div class="tip">&#x26A0;&#xFE0F; <strong>R&uuml;ckreise-Sonntag:</strong> Am Fernpass staut es sich am Ferienende oft &ndash; Puffer einplanen.</div>
                 <div class="tip special-tip">&#x1F49B; <strong>Motto des Tages:</strong> Vom Gletscher in den Garten.</div>
             </div>
         </div>
@@ -1022,9 +1061,11 @@
                 <li><strong>22.12.:</strong> Mit dem eigenen E 250 T nach Bonn (~480 km / ~5h).</li>
                 <li><strong>26.12.:</strong> Bonn &rarr; Kaunertal (~700 km / ~7h) &ndash; fr&uuml;h losfahren!</li>
                 <li><strong>26.12.&ndash;03.01.:</strong> T&auml;glich Gletscherstra&szlig;e (bis 2.750 m) oder Fendels &ndash; kostenlose Parkpl&auml;tze am Apartment.</li>
-                <li><strong>03.01.:</strong> Kaunertal &rarr; Leutkirch im Allg&auml;u (~150 km / ~2h &uuml;ber Fernpass &amp; Kempten).</li>
+                <li><strong>Raphael-Shuttle:</strong> 26.12. Abholung Flughafen Innsbruck (Landung 17:10) und 03.01. zur&uuml;ck (Abflug 17:25) &ndash; jeweils f&auml;hrt nur einer, ~1&frac14;h pro Strecke.</li>
+                <li><strong>Im Tal zu sechst:</strong> Raphael &amp; Marlene nehmen den Skibus zum Gletscher, die anderen Auto oder Bus.</li>
+                <li><strong>03.01.:</strong> Kaunertal &rarr; Leutkirch im Allg&auml;u (~150 km / ~2h &uuml;ber Fernpass &amp; Kempten), wenn der Fahrer aus Innsbruck zur&uuml;ck ist.</li>
                 <li><strong>08.01.:</strong> Leutkirch &rarr; Flughafen M&uuml;nchen (~200 km / ~2h, Abflug 19:05).</li>
-                <li><strong>Carla:</strong> kommt am 23.12. selbstst&auml;ndig nach Bonn &#x2713; &ndash; Mannheim &rarr; Bonn mit dem Deutschland-Ticket, nichts zu buchen. Am 03.01. zur&uuml;ck nach Mannheim &ndash; wie genau, ist noch offen.</li>
+                <li><strong>Carla:</strong> kommt am 23.12. selbstst&auml;ndig nach Bonn &#x2713; &ndash; Mannheim &rarr; Bonn mit dem Deutschland-Ticket, nichts zu buchen. Am 03.01. aus dem Allg&auml;u mit der Bahn zur&uuml;ck nach Mannheim (am besten ab Memmingen).</li>
             </ul>
         </div>
 
@@ -1521,7 +1562,10 @@
             <label><input type="checkbox"> <strong>Auto winterfest machen</strong> &ndash; Winterreifen auf den E 250, Schneeketten, ggf. Dachbox &ndash; mit Familie Jantz koordinieren</label>
         </div>
         <div class="todo-item">
-            <label><input type="checkbox"> <strong>Carlas R&uuml;ckreise am 03.01.</strong> &ndash; Kaunertal &rarr; Mannheim: mitnehmen bis Kempten/Memmingen + Deutschland-Ticket?</label>
+            <label><input type="checkbox"> <strong>Carlas Zug am 03.01.</strong> &ndash; Memmingen &rarr; Ulm &rarr; Stuttgart &rarr; Mannheim (Deutschland-Ticket): geht abends nach dem Essen noch was? Sonst Mo. fr&uuml;h</label>
+        </div>
+        <div class="todo-item urgent">
+            <label><input type="checkbox"> <strong>Raphael: Skipass, Leih-Ski &amp; Apartment</strong> &ndash; eigenen Skipass besorgen, bei Larcher Sport eine Person mehr reservieren (er landet erst 17:10), Apart Gletscherblick: 6. Person melden (Bett, Kurtaxe)</label>
         </div>
         <div class="todo-item">
             <label><input type="checkbox"> <strong>Allg&auml;u mit den Leipzigern abstimmen</strong> &ndash; gemeinsame Tage &amp; Ausfl&uuml;ge 04.&ndash;07.01., ggf. Aqua-Mundo-Tagestickets vorab buchen</label>
@@ -1695,6 +1739,6 @@
     </div>
 </footer>
 
-<script src="script.js?v=20261007a"></script>
+<script src="script.js?v=20261007b"></script>
 </body>
 </html>
