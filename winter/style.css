@@ -303,9 +303,11 @@ body.locked {
 
 .crew-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    /* 2 Reihen a 3 Karten: Mark, Claudia, Carla / Luisa, Marlene, Raphael */
+    grid-template-columns: repeat(3, 1fr);
     gap: 1.5rem;
-    margin-top: 3rem;
+    max-width: 960px;
+    margin: 3rem auto 0;
 }
 
 .crew-card {
