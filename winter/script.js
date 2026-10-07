@@ -440,7 +440,7 @@ document.querySelectorAll('.day-card, .hotel-card, .quest-card, .weather-card, .
         { date: '2026-12-31', label: 'Do 31. Dez', loc: 'Kaunertal', title: '\u{1F386} Silvester in den Bergen!', prompt: 'Wie habt ihr reingefeiert? Feuerwerk überm Tal? Vorsätze für 2027?' },
         { date: '2027-01-01', label: 'Fr 1. Jan', loc: 'Kaunertal', title: 'Neujahr – Skitag oder Ausschlafen?', prompt: 'Frohes Neues! Erster Skitag 2027 oder gemütlicher Start?' },
         { date: '2027-01-02', label: 'Sa 2. Jan', loc: 'Pitztaler Gletscher', title: '\u{1F3D4}\uFE0F Pitztal-Tag mit Caro, Tobi, Paul, Benedikt & Sofia!', prompt: 'Wie war der Tag mit den Freunden? Café 3.440 besucht? Wer hatte die schnellste Linie?' },
-        { date: '2027-01-03', label: 'So 3. Jan', loc: 'Kaunertal → Leutkirch', title: 'Au revoir Raphaël & ab ins Allgäu', prompt: 'Abschied vom Kaunertal, von Raphaël und Carla – was werdet ihr vermissen? Wie war das Wiedersehen mit den Leipzigern?' },
+        { date: '2027-01-03', label: 'So 3. Jan', loc: 'Kaunertal → Leutkirch', title: 'Au revoir Raphaël & ab ins Allgäu', prompt: 'Abschied vom Kaunertal, von Raphaël und Carla – was werdet ihr vermissen? Wie war das Wiedersehen mit den Leipzigern? Carla gut in Mannheim angekommen?' },
         // Phase 4: Allgaeu (Leutkirch)
         { date: '2027-01-04', label: 'Mo 4. Jan', loc: 'Leutkirch', title: 'Erster Allgäu-Tag', prompt: 'Wie fühlen sich die Beine nach 8 Skitagen an? Was steht heute an?' },
         { date: '2027-01-05', label: 'Di 5. Jan', loc: 'Leutkirch', title: 'Allgäu-Tag 2', prompt: 'Was habt ihr heute gemacht?' },
