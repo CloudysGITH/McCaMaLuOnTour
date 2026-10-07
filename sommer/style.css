@@ -2756,3 +2756,38 @@ body.locked {
 ::-webkit-scrollbar-thumb:hover {
     background: var(--accent);
 }
+
+
+/* ===== ARCHIV-MODUS (Past Travels) =====
+   Reise ist vorbei: alles bleibt sichtbar, aber nichts ist mehr editierbar.
+   Aktiv solange <body class="archived"> gesetzt ist. */
+.archive-banner {
+    margin: 1.5rem auto 0;
+    max-width: 34rem;
+    padding: 1rem 1.25rem;
+    border-radius: 16px;
+    border: 1px solid rgba(255,255,255,0.12);
+    background: rgba(255,255,255,0.05);
+    text-align: center;
+}
+.archive-banner p { margin: 0.5rem 0; color: var(--text-dim); font-size: 0.95rem; }
+.archive-badge {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.08);
+    font-weight: 600;
+    letter-spacing: 0.05em;
+}
+.archive-home { font-weight: 600; }
+body:not(.archived) .archive-banner { display: none; }
+
+body.archived #countdown,
+body.archived #expenseForm,
+body.archived .expense-edit,
+body.archived .expense-del,
+body.archived .diary-write { display: none !important; }
+
+body.archived .star,
+body.archived .quest-member,
+body.archived input[type="checkbox"] { pointer-events: none; }

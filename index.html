@@ -16,9 +16,9 @@
 
     <!-- Open Graph / WhatsApp Preview -->
     <meta property="og:title" content="Mc CaMaLu on Tour">
-    <meta property="og:description" content="Die Reisen der Familie Berger &ndash; aktuell: Winter Tour 2026/27 (Kaunertal &amp; Allg&auml;u)">
+    <meta property="og:description" content="Die Reisen der Familie Berger &ndash; geplant, geteilt, erinnert. Aktuell: Winter Tour 2026/27">
     <meta property="og:url" content="https://cloudysgith.github.io/McCaMaLuOnTour/">
-    <meta property="og:image" content="https://cloudysgith.github.io/McCaMaLuOnTour/og-image.png">
+    <meta property="og:image" content="https://cloudysgith.github.io/McCaMaLuOnTour/og-image.png?v=2">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
     <meta property="og:type" content="website">
@@ -140,6 +140,49 @@
             grid-template-columns: minmax(0, 46rem);
             justify-content: center;
             align-content: center;
+        }
+
+        /* ===== PAST TRAVELS ===== */
+        .past {
+            width: 100%;
+            max-width: 46rem;
+            margin: 1rem auto 0;
+            padding: 0 1rem;
+        }
+        .past-title {
+            font-size: 1rem;
+            font-weight: 600;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--text-dim);
+            text-align: center;
+            margin: 0 0 1rem;
+        }
+        .past-grid { display: grid; gap: 0.75rem; }
+        .past-tile {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 1.25rem;
+            border-radius: 18px;
+            border: 1px solid rgba(255,255,255,0.08);
+            background: rgba(255,255,255,0.03);
+            color: var(--text);
+            text-decoration: none;
+            filter: saturate(0.6);
+            opacity: 0.85;
+            transition: opacity 0.2s, filter 0.2s, transform 0.2s;
+        }
+        .past-tile:hover { opacity: 1; filter: none; transform: translateY(-2px); }
+        .past-emoji { font-size: 2rem; }
+        .past-info { flex: 1; min-width: 0; }
+        .past-info h3 { margin: 0.1rem 0; font-size: 1.1rem; }
+        .past-season, .past-route, .past-dates { margin: 0; font-size: 0.85rem; color: var(--text-dim); }
+        .past-summer .past-season { color: #f9a8d4; }
+        .past-cta { font-size: 0.85rem; font-weight: 600; white-space: nowrap; color: #f9a8d4; }
+        @media (max-width: 600px) {
+            .past-tile { flex-wrap: wrap; }
+            .past-cta { width: 100%; text-align: right; }
         }
 
         /* Nur auf schmalen Handy-Screens untereinander */
@@ -347,35 +390,7 @@
 </header>
 
 <main class="tiles tiles-single">
-    <!-- ===================================================================
-         SOMMER-KACHEL AUSGEBLENDET (21.08.2026)
-         Die Summer Tour 2026 ist gelaufen - die Kachel ist nur versteckt,
-         NICHT geloescht. Der Ordner sommer/ bleibt vollstaendig erhalten und
-         ist weiterhin direkt erreichbar unter .../McCaMaLuOnTour/sommer/
-
-         WIEDER EINBLENDEN: diesen Kommentar-Block entfernen (die Zeile
-         darueber und die Zeile mit ENDE darunter) und bei <main> die Klasse
-         "tiles-single" wieder wegnehmen.
-    ==================================================================== -->
-    <!--
-    <a class="tile tile-summer" href="sommer/">
-        <div class="tile-deco">
-            <span style="top:12%; right:10%; font-size:2.2rem; animation-delay:-1s;">&#x2600;&#xFE0F;</span>
-            <span style="top:34%; left:8%; font-size:1.6rem; animation-delay:-3s;">&#x1F3D6;&#xFE0F;</span>
-            <span style="top:20%; left:38%; font-size:1.3rem; animation-delay:-4.5s;">&#x1F30A;</span>
-        </div>
-        <div class="tile-emoji">&#x1F334;</div>
-        <p class="tile-season">Sommer 2026</p>
-        <h2>Berger <em>Summer Tour</em></h2>
-        <p class="tile-route">Bangkok &rarr; Bordeaux &rarr; &Icirc;le d'Ol&eacute;ron &rarr; Beaune &rarr; Sindelfingen &rarr; Bonn &rarr; M&uuml;nchen &rarr; Passau &rarr; Leipzig &rarr; Bangkok</p>
-        <p class="tile-dates">20. Juni &ndash; 5. August 2026</p>
-        <div class="tile-footer">
-            <span class="tile-cta">Zur Summer Tour &rarr;</span>
-            <span class="tile-countdown" id="cdSummer"></span>
-        </div>
-    </a>
-    -->
-    <!-- ENDE ausgeblendete Sommer-Kachel -->
+    <!-- AKTUELLE REISEN: neue Touren hier als Kachel anlegen -->
 
     <!-- WINTER -->
     <a class="tile tile-winter" href="winter/">
@@ -395,6 +410,23 @@
         </div>
     </a>
 </main>
+
+<!-- PAST TRAVELS: abgeschlossene Reisen, eingefroren (body.archived auf der Tour-Seite) -->
+<section class="past">
+    <h2 class="past-title">&#x1F4E6; Past Travels</h2>
+    <div class="past-grid">
+        <a class="past-tile past-summer" href="sommer/">
+            <span class="past-emoji">&#x1F334;</span>
+            <div class="past-info">
+                <p class="past-season">Sommer 2026</p>
+                <h3>Berger Summer Tour</h3>
+                <p class="past-route">Bordeaux &middot; &Icirc;le d'Ol&eacute;ron &middot; Beaune &middot; Bonn &middot; M&uuml;nchen &middot; Passau &middot; Leipzig</p>
+                <p class="past-dates">20. Juni &ndash; 5. August 2026</p>
+            </div>
+            <span class="past-cta">Erinnerungen &rarr;</span>
+        </a>
+    </div>
+</section>
 
 <footer class="hub-footer">
     Made with &#x2764;&#xFE0F; for the best trips ever &ndash; Familie Berger
@@ -451,7 +483,6 @@
 <script>
 (function() {
     const tours = [
-        { el: document.getElementById('cdSummer'), start: new Date('2026-06-20T06:40:00+07:00'), end: new Date('2026-08-05T23:59:59+02:00'), live: 'JETZT unterwegs! \u{1F334}', done: 'War das schön! ❤️' },
         { el: document.getElementById('cdWinter'), start: new Date('2026-12-19T22:10:00+07:00'), end: new Date('2027-01-09T23:59:59+07:00'), live: 'JETZT unterwegs! ⛄', done: 'War das schön! ❤️' }
     ];
 
