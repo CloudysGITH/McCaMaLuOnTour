@@ -344,7 +344,7 @@ function renderCell(s, today) {
 
     // langes gemeinsames Wochenende: alle frei an >= 3 Tagen am Stueck (mit Feiertag)
     const w = windowOf[s];
-    if (w) cls.push('in-win');
+    if (w && w.len <= 16 && !sharedRun[s]) cls.push('in-win');
     if (sharedRun[s]) cls.push('run');
 
     const emojis = [], labels = [];
@@ -363,7 +363,9 @@ function renderCell(s, today) {
         tripHtml = `<span class="trip-band">${showName ? trip.emoji + ' ' + esc(trip.name) : ''}</span>`;
     }
 
-    const runBadge = sharedRun[s] && sharedRun[s].from === s ? `<span class="run-badge">🎉 ${sharedRun[s].len} Tage</span>` : '';
+    let runBadge = '';
+    if (sharedRun[s] && sharedRun[s].from === s) runBadge = `<span class="run-badge">🎉 ${sharedRun[s].len} Tage alle frei</span>`;
+    else if (w && !sharedRun[s] && w.from === s && w.len <= 16) runBadge = `<span class="win-badge">🧳 ${w.len} Tage · ${w.vacation ? w.vacation + ' Urlaubstag' + (w.vacation === 1 ? '' : 'e') : 'alle frei'}</span>`;
     const uniq = [...new Set(emojis)].slice(0, 4);
 
     return `<div class="${cls.join(' ')}" data-date="${s}" tabindex="0">

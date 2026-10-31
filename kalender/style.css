@@ -94,6 +94,7 @@ body.locked { overflow: hidden; }
 .sw-werk { background: var(--werk); }
 .sw-tent { border: 2px dashed var(--school); background: repeating-linear-gradient(45deg, rgba(56,189,248,0.35) 0 3px, transparent 3px 6px); }
 .sw-run { background: transparent; box-shadow: inset 0 -4px 0 var(--both); border: 1px solid var(--line); }
+.sw-win { background: transparent; box-shadow: inset 0 -4px 0 var(--school); border: 1px solid var(--line); }
 .sw-trip { background: linear-gradient(90deg, var(--winter), var(--opa)); height: 0.4rem; }
 .lg-de { font-size: 0.65rem; font-weight: 700; color: var(--bg); background: var(--de); border-radius: 4px; padding: 0 0.25rem; }
 
@@ -179,9 +180,12 @@ body.locked { overflow: hidden; }
 .cell.we { background: #11111b; }
 .cell.we .num { color: #77778f; }
 
-.cell.school { background: rgba(56,189,248,0.16); border-color: rgba(56,189,248,0.45); }
-.cell.werk { background: rgba(251,146,60,0.16); border-color: rgba(251,146,60,0.5); }
-.cell.both { background: rgba(52,211,153,0.2); border-color: rgba(52,211,153,0.6); }
+.cell.school { background: rgba(56,189,248,0.30); border: 2px solid var(--school); }
+.cell.school .num { color: #e0f2fe; }
+.cell.werk { background: rgba(251,146,60,0.30); border: 2px solid var(--werk); }
+.cell.werk .num { color: #ffedd5; }
+.cell.both { background: rgba(52,211,153,0.34); border: 2px solid var(--both); }
+.cell.both .num { color: #d1fae5; }
 .cell.tent {
     border-style: dashed;
     background-image: repeating-linear-gradient(45deg, rgba(56,189,248,0.12) 0 6px, transparent 6px 12px);
@@ -189,8 +193,17 @@ body.locked { overflow: hidden; }
 .cell.both.tent { background-image: repeating-linear-gradient(45deg, rgba(52,211,153,0.16) 0 6px, transparent 6px 12px); }
 .cell.unknown { opacity: 0.75; }
 
+/* Kinder-Fenster (Schule frei inkl. WE, Papa braucht Urlaub) */
+.cell.in-win { box-shadow: inset 0 -5px 0 var(--school); }
+.cell.in-win.we { background: rgba(56,189,248,0.12); }
+.win-badge {
+    align-self: flex-start; font-size: 0.68rem; font-weight: 700; color: #04263a;
+    background: var(--school); border-radius: 50px; padding: 0 0.45rem; white-space: nowrap;
+}
+
 /* gemeinsam frei >= 3 Tage */
-.cell.run { box-shadow: inset 0 -4px 0 var(--both); }
+.cell.run { box-shadow: inset 0 -5px 0 var(--both); }
+.cell.run.we { background: rgba(52,211,153,0.14); }
 .run-badge {
     align-self: flex-start; font-size: 0.68rem; font-weight: 700; color: #052e1f;
     background: var(--both); border-radius: 50px; padding: 0 0.45rem; white-space: nowrap;
@@ -272,7 +285,7 @@ body.sheet-open .sheet { transform: translate(-50%, 0); }
     .emo { font-size: 0.72rem; text-align: left; letter-spacing: 0; word-break: break-all; }
     .lbls { display: none; }
     .trip-band { height: 0.35rem; margin: auto -0.2rem 0; padding: 0; font-size: 0; }
-    .run-badge { display: none; }
+    .run-badge, .win-badge { display: none; }
     .month-title { font-size: 1.3rem; }
     .win-list { grid-template-columns: 1fr; }
     .win { padding: 0.6rem 0.7rem; }
