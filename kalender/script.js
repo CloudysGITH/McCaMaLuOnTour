@@ -111,18 +111,13 @@ const WERK = [
     ['2027-12-31', null, 'Silvester', '🎆']
 ];
 
-// Deutsche Feiertage & Tage (nur Info)
+// Deutsche Feiertage, bundesweit (nur Info)
 const DE = [
-    ['2026-11-01', null, 'Allerheiligen (NRW/BY)', '🕯️'],
-    ['2026-11-11', null, 'St. Martin / Karnevalsbeginn 11:11', '🏮'],
-    ['2026-12-06', null, 'Nikolaus', '🎅'],
     ['2026-12-24', null, 'Heiligabend', '🎄'],
     ['2026-12-25', null, '1. Weihnachtstag', '🎄'],
     ['2026-12-26', null, '2. Weihnachtstag', '🎁'],
     ['2026-12-31', null, 'Silvester', '🎆'],
     ['2027-01-01', null, 'Neujahr', '🥂'],
-    ['2027-01-06', null, 'Heilige Drei Könige (BY)', '👑'],
-    ['2027-02-08', null, 'Rosenmontag (Bonn!)', '🎭'],
     ['2027-03-26', null, 'Karfreitag', '✝️'],
     ['2027-03-28', null, 'Ostersonntag', '🐣'],
     ['2027-03-29', null, 'Ostermontag', '🐣'],
@@ -130,11 +125,7 @@ const DE = [
     ['2027-05-06', null, 'Christi Himmelfahrt', '☁️'],
     ['2027-05-16', null, 'Pfingstsonntag', '🕊️'],
     ['2027-05-17', null, 'Pfingstmontag', '🕊️'],
-    ['2027-05-27', null, 'Fronleichnam (NRW/BY)', '⛪'],
     ['2027-10-03', null, 'Tag der Deutschen Einheit', '🇩🇪'],
-    ['2027-11-01', null, 'Allerheiligen (NRW/BY)', '🕯️'],
-    ['2027-11-11', null, 'St. Martin / Karnevalsbeginn 11:11', '🏮'],
-    ['2027-12-06', null, 'Nikolaus', '🎅'],
     ['2027-12-24', null, 'Heiligabend', '🎄'],
     ['2027-12-25', null, '1. Weihnachtstag', '🎄'],
     ['2027-12-26', null, '2. Weihnachtstag', '🎁'],
