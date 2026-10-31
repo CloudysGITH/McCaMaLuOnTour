@@ -146,14 +146,13 @@ const FAMILY = [
     ['2026-11-28', null, '16:00 Starry nights', '✨'],
     ['2026-11-29', null, '07:00 Family visit WWFT · 09:00 Luisa U15 Girls Football Program', '⚽'],
     ['2026-12-05', '2026-12-07', 'Mark & Luisa wandern in Khao Yai', '🥾'],
-    ['2026-12-05', null, 'Gärtner (ganztägig)', '🌿'],
     ['2026-12-07', null, '07:00 Claudi @ Pickleball Masters Final Championship', '🏓']
 ];
 
 // Fenster, die schon verplant sind: [von, bis, Grund]
 const BLOCKED = [
     ['2026-11-27', '2026-11-29', 'Starry nights (Sa) · Family visit WWFT + Luisa Football (So)'],
-    ['2026-12-05', '2026-12-07', 'Gärtner (Sa) · Mark & Luisa wandern in Khao Yai · Claudi Pickleball-Finale (Mo)']
+    ['2026-12-05', '2026-12-07', 'Mark & Luisa wandern in Khao Yai (Sa–Mo) · Claudi Pickleball-Finale (Mo)']
 ];
 
 // Unsere Reisen
