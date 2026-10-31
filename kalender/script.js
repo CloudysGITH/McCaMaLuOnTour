@@ -146,7 +146,7 @@ const FAMILY = [
     ['2026-11-28', null, '16:00 Starry nights', '✨'],
     ['2026-11-29', null, '07:00 Family visit WWFT · 09:00 Luisa U15 Girls Football Program', '⚽'],
     ['2026-12-05', '2026-12-07', 'Mark & Luisa wandern in Khao Yai', '🥾'],
-    ['2026-12-07', null, 'Claudia spielt Pickleball-Turnier (Masters Final)', '🏓']
+    ['2026-12-05', '2026-12-07', 'Claudia@Pickleball Masters Final Championship', '🏓']
 ];
 
 // Fenster, die schon verplant sind: [von, bis, Grund]
