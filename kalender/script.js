@@ -141,6 +141,17 @@ const DE = [
     ['2027-12-31', null, 'Silvester', '🎆']
 ];
 
+// Familien-Termine (aus dem iCloud-Kalender, nur Einmaliges)
+const FAMILY = [
+    ['2026-11-28', null, '16:00 Starry nights', '✨'],
+    ['2026-11-29', null, '07:00 Family visit WWFT · 09:00 Luisa U15 Girls Football Program', '⚽']
+];
+
+// Fenster, die schon verplant sind: [von, bis, Grund]
+const BLOCKED = [
+    ['2026-11-27', '2026-11-29', 'Starry nights (Sa) · Family visit WWFT + Luisa Football (So)']
+];
+
 // Unsere Reisen
 const TRIPS = [
     {
@@ -212,6 +223,9 @@ const schoolMap = expand(SCHOOL);
 const schoolInfoMap = expand(SCHOOL_INFO);
 const werkMap = expand(WERK);
 const deMap = expand(DE);
+const familyMap = expand(FAMILY);
+const blockedOf = {};
+BLOCKED.forEach(([from, to, why]) => { let d = from; while (d <= to) { blockedOf[d] = { from, to, why }; d = addDays(d, 1); } });
 
 function tripOn(s) { return TRIPS.find(t => s >= t.from && s <= t.to); }
 
@@ -244,7 +258,8 @@ function computeWindows() {
                 tentative: w.days.some(tentative),
                 openEnd: w.to === SCHOOL_KNOWN_UNTIL,
                 reason: (schoolMap[w.days.find(x => schoolMap[x])] || [{}])[0],
-                trip: TRIPS.find(t => t.from <= w.to && t.to >= w.from)
+                trip: TRIPS.find(t => t.from <= w.to && t.to >= w.from),
+                blocked: w.days.map(x => blockedOf[x]).find(Boolean)
             };
         });
 }
@@ -266,7 +281,7 @@ function renderWindows() {
         const r = w.reason || {};
         const range = fmt(w.from) + ' – ' + fmt(w.to) + w.to.slice(0, 4);
         return `
-        <button class="win ${allFree ? 'win-all' : ''} ${w.tentative ? 'win-tent' : ''}" data-jump="${w.from}">
+        <button class="win ${allFree ? 'win-all' : ''} ${w.tentative ? 'win-tent' : ''} ${w.blocked ? 'win-blocked' : ''}" data-jump="${w.from}">
             <span class="win-emoji">${r.emoji || '🎉'}</span>
             <span class="win-main">
                 <span class="win-date">${WD[dow(w.from)]} ${range}</span>
@@ -275,6 +290,7 @@ function renderWindows() {
             <span class="win-stats">
                 <strong>${w.len}${w.openEnd ? '+' : ''} Tage</strong>
                 <span>${allFree ? '🎉 alle frei' : '🧳 Papa: ' + w.vacation + ' Urlaubstag' + (w.vacation === 1 ? '' : 'e')}</span>
+                ${w.blocked ? `<span class="win-busy">⛔ belegt</span>` : ''}
                 ${w.trip ? `<span class="win-trip">${w.trip.emoji} ${esc(w.trip.name)}</span>` : ''}
             </span>
         </button>`;
@@ -341,6 +357,7 @@ function renderCell(s, today) {
     if (tentative(s)) cls.push('tent');
     if (s > SCHOOL_KNOWN_UNTIL && !sf) cls.push('unknown');
     if (s === today) cls.push('today');
+    if (blockedOf[s]) cls.push('blocked');
 
     // langes gemeinsames Wochenende: alle frei an >= 3 Tagen am Stueck (mit Feiertag)
     const w = windowOf[s];
@@ -351,6 +368,7 @@ function renderCell(s, today) {
     (schoolMap[s] || []).forEach(e => { if (e.first || !e.range) { emojis.push(e.emoji); labels.push(['s', e.label]); } });
     (werkMap[s] || []).forEach(e => { if (!emojis.includes(e.emoji)) emojis.push(e.emoji); if (!sf || !(schoolMap[s] || []).some(x => x.label === e.label)) labels.push(['w', e.label]); });
     (schoolInfoMap[s] || []).forEach(e => { emojis.push(e.emoji); labels.push(['i', e.label]); });
+    (familyMap[s] || []).forEach(e => { emojis.unshift(e.emoji); labels.unshift(['f', e.label]); });
     if (prefs.de) (deMap[s] || []).forEach(e => { emojis.push(e.emoji); labels.push(['d', e.label]); });
 
     const trip = prefs.trips ? tripOn(s) : null;
@@ -364,7 +382,8 @@ function renderCell(s, today) {
     }
 
     let runBadge = '';
-    if (sharedRun[s] && sharedRun[s].from === s) runBadge = `<span class="run-badge">🎉 ${sharedRun[s].len} Tage alle frei</span>`;
+    if (blockedOf[s] && blockedOf[s].from === s) runBadge = '<span class="busy-badge">⛔ belegt</span>';
+    else if (sharedRun[s] && sharedRun[s].from === s) runBadge = `<span class="run-badge">🎉 ${sharedRun[s].len} Tage alle frei</span>`;
     else if (w && !sharedRun[s] && w.from === s && w.len <= 16) runBadge = `<span class="win-badge">🧳 ${w.len} Tage · ${w.vacation ? w.vacation + ' Urlaubstag' + (w.vacation === 1 ? '' : 'e') : 'alle frei'}</span>`;
     const uniq = [...new Set(emojis)].slice(0, 4);
 
@@ -407,6 +426,8 @@ function openSheet(s) {
     h += row(sf ? '✅' : (unknown ? '❓' : '📚'), sf ? 'Schule frei' : (unknown ? 'Schule: Kalender 2027/28 noch offen' : 'Schule'), we && !schoolTxt ? 'Wochenende' : schoolTxt, sf ? 'ok-s' : '');
     h += row(wf ? '✅' : '🏭', wf ? 'Werk frei' : 'Werk: Arbeitstag', we && !werkTxt ? 'Wochenende' : werkTxt, wf ? 'ok-w' : '');
     (schoolInfoMap[s] || []).forEach(e => { h += row(e.emoji, 'Schule – Hinweis', e.label); });
+    (familyMap[s] || []).forEach(e => { h += row(e.emoji, 'Familien-Termin', e.label); });
+    if (blockedOf[s]) h += row('⛔', 'Fenster belegt (' + fmt(blockedOf[s].from) + ' – ' + fmt(blockedOf[s].to) + ')', blockedOf[s].why);
     (deMap[s] || []).forEach(e => { h += row(e.emoji, 'Deutschland', e.label); });
 
     const trip = tripOn(s);

@@ -94,6 +94,7 @@ body.locked { overflow: hidden; }
 .sw-werk { background: var(--werk); }
 .sw-tent { border: 2px dashed var(--school); background: repeating-linear-gradient(45deg, rgba(56,189,248,0.35) 0 3px, transparent 3px 6px); }
 .sw-run { background: transparent; box-shadow: inset 0 -4px 0 var(--both); border: 1px solid var(--line); }
+.sw-busy { background: repeating-linear-gradient(-45deg, #4b4b63 0 3px, transparent 3px 6px); border: 1px solid var(--line); }
 .sw-win { background: transparent; box-shadow: inset 0 -4px 0 var(--school); border: 1px solid var(--line); }
 .sw-trip { background: linear-gradient(90deg, var(--winter), var(--opa)); height: 0.4rem; }
 .lg-de { font-size: 0.65rem; font-weight: 700; color: var(--bg); background: var(--de); border-radius: 4px; padding: 0 0.25rem; }
@@ -201,6 +202,21 @@ body.locked { overflow: hidden; }
     background: var(--school); border-radius: 50px; padding: 0 0.45rem; white-space: nowrap;
 }
 
+/* schon verplant */
+.cell.blocked { box-shadow: inset 0 -5px 0 #6b6b85 !important; }
+.cell.blocked::after {
+    content: ''; position: absolute; inset: 0; pointer-events: none;
+    background: repeating-linear-gradient(-45deg, rgba(10,10,20,0.35) 0 5px, transparent 5px 10px);
+}
+.cell.blocked > * { position: relative; z-index: 1; }
+.busy-badge {
+    align-self: flex-start; font-size: 0.68rem; font-weight: 700; color: #fff;
+    background: #4b4b63; border-radius: 50px; padding: 0 0.45rem; white-space: nowrap;
+}
+.win-blocked { opacity: 0.6; }
+.win-busy { color: #c7c7d6 !important; font-weight: 600; }
+.lbl-f { color: #fde68a; font-weight: 600; }
+
 /* gemeinsam frei >= 3 Tage */
 .cell.run { box-shadow: inset 0 -5px 0 var(--both); }
 .cell.run.we { background: rgba(52,211,153,0.14); }
@@ -285,7 +301,7 @@ body.sheet-open .sheet { transform: translate(-50%, 0); }
     .emo { font-size: 0.72rem; text-align: left; letter-spacing: 0; word-break: break-all; }
     .lbls { display: none; }
     .trip-band { height: 0.35rem; margin: auto -0.2rem 0; padding: 0; font-size: 0; }
-    .run-badge, .win-badge { display: none; }
+    .run-badge, .win-badge, .busy-badge { display: none; }
     .month-title { font-size: 1.3rem; }
     .win-list { grid-template-columns: 1fr; }
     .win { padding: 0.6rem 0.7rem; }
