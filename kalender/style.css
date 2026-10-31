@@ -240,6 +240,7 @@ body.locked { overflow: hidden; }
 }
 .trip-winter .trip-band { background: var(--winter); }
 .trip-opa .trip-band { background: var(--opa); }
+.trip-spartan .trip-band { background: #f87171; }
 
 .lbls { display: flex; flex-direction: column; gap: 0.1rem; min-width: 0; }
 .lbl {

@@ -157,6 +157,12 @@ const TRIPS = [
         }
     },
     {
+        id: 'spartan', name: 'Spartan Race Chiang Rai', emoji: '🏃', from: '2026-12-12', to: '2026-12-13', href: null,
+        days: {
+            '2026-12-12': ['💪', 'Spartan Race in Chiang Rai – Mark, Claudia, Luisa & Marlene']
+        }
+    },
+    {
         id: 'opa', name: 'Opas 80er', emoji: '🎂', from: '2027-03-17', to: '2027-03-22', href: '../opa80/',
         days: {
             '2027-03-17': ['✈️', 'TG 922 BKK 12:40 → FRA 19:05'],
@@ -419,7 +425,7 @@ function openSheet(s) {
     const trip = tripOn(s);
     if (trip) {
         const td = trip.days[s];
-        h += `<a class="srow srow-trip" href="${trip.href}"><span class="srow-i">${trip.emoji}</span><div><strong>${esc(trip.name)}</strong> (${fmt(trip.from)}–${fmt(trip.to)})${td ? '<br>' + td[0] + ' ' + esc(td[1]) : ''}<br><span class="go">Zur Reiseseite →</span></div></a>`;
+        h += `<${trip.href ? 'a' : 'div'} class="srow srow-trip" ${trip.href ? `href="${trip.href}"` : ''}><span class="srow-i">${trip.emoji}</span><div><strong>${esc(trip.name)}</strong> (${fmt(trip.from)}–${fmt(trip.to)})${td ? '<br>' + td[0] + ' ' + esc(td[1]) : ''}${trip.href ? '<br><span class="go">Zur Reiseseite →</span>' : ''}</div></${trip.href ? 'a' : 'div'}>`;
     }
     if (sharedRun[s]) {
         const r = sharedRun[s];
