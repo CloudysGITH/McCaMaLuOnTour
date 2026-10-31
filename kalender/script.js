@@ -116,16 +116,12 @@ const DE = [
     ['2026-12-24', null, 'Heiligabend', '🎄'],
     ['2026-12-25', null, '1. Weihnachtstag', '🎄'],
     ['2026-12-26', null, '2. Weihnachtstag', '🎁'],
-    ['2026-12-31', null, 'Silvester', '🎆'],
     ['2027-01-01', null, 'Neujahr', '🥂'],
-    ['2027-03-26', null, 'Karfreitag', '✝️'],
     ['2027-03-28', null, 'Ostersonntag', '🐣'],
     ['2027-03-29', null, 'Ostermontag', '🐣'],
-    ['2027-05-01', null, 'Tag der Arbeit', '🌳'],
     ['2027-12-24', null, 'Heiligabend', '🎄'],
     ['2027-12-25', null, '1. Weihnachtstag', '🎄'],
-    ['2027-12-26', null, '2. Weihnachtstag', '🎁'],
-    ['2027-12-31', null, 'Silvester', '🎆']
+    ['2027-12-26', null, '2. Weihnachtstag', '🎁']
 ];
 
 // Familien-Termine (aus dem iCloud-Kalender, nur Einmaliges)
