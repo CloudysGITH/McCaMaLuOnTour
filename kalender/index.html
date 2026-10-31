@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Kein HTML-Caching: Aenderungen sollen sofort sichtbar sein -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+
+    <title>Familienkalender</title>
+
+    <link rel="icon" href="../favicon.svg?v=2" type="image/svg+xml">
+    <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png?v=1">
+    <meta name="theme-color" content="#0a0a14">
+
+    <!-- Open Graph / WhatsApp Preview: neutral (Kalender enthaelt Opas 80er!) -->
+    <meta property="og:title" content="Mc CaMaLu on Tour">
+    <meta property="og:description" content="Die Reisen der Familie Berger &ndash; geplant, geteilt, erinnert">
+    <meta property="og:url" content="https://cloudysgith.github.io/McCaMaLuOnTour/kalender/">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="https://cloudysgith.github.io/McCaMaLuOnTour/og-image.png?v=2">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css?v=20261031a">
+
+    <!-- Firebase: nur Login (gemeinsam mit Hub + Touren, gleiches Projekt & gleiche Origin) -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAVWHSOEQCpavUEm8tCwB1zZcf8lvDiAFA",
+            authDomain: "bst2026-41f21.firebaseapp.com",
+            databaseURL: "https://bst2026-41f21-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "bst2026-41f21",
+            storageBucket: "bst2026-41f21.firebasestorage.app",
+            messagingSenderId: "120422502733",
+            appId: "1:120422502733:web:3c1a80948654892e96e704"
+        };
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const CREW_EMAIL = "crew@bst2026.app";
+
+        window.fbSignIn = (codeword) =>
+            signInWithEmailAndPassword(auth, CREW_EMAIL, String(codeword).toLowerCase().trim());
+
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                window.crewAuthed = true;
+                window.dispatchEvent(new Event('crew-authed'));
+            }
+        });
+    </script>
+</head>
+<body>
+
+<!-- PASSWORD SCREEN -->
+<div class="lock-screen" id="lockScreen">
+    <div class="lock-content">
+        <div class="lock-emoji">&#x1F5D3;&#xFE0F;</div>
+        <h1 class="lock-title">Familienkalender</h1>
+        <p class="lock-sub">Familien-Bereich &ndash; bitte Codewort eingeben</p>
+        <form id="lockForm" onsubmit="return false;">
+            <input type="password" id="lockInput" class="lock-input" placeholder="Codewort..." autocomplete="off" autofocus>
+            <button type="submit" class="lock-btn" id="lockBtn">Rein da!</button>
+        </form>
+        <p class="lock-error" id="lockError"></p>
+    </div>
+</div>
+
+<a class="back" href="../">&larr; Mc CaMaLu on Tour</a>
+
+<header class="cal-header">
+    <p class="cal-pre">Wann haben wir alle frei?</p>
+    <h1 class="cal-title">Familienkalender</h1>
+    <p class="cal-sub">November 2026 &ndash; Dezember 2027 &middot; Schule (NIST, SEC) &middot; Werk (MBMTh) &middot; unsere Reisen</p>
+</header>
+
+<!-- LEGENDE + FILTER -->
+<section class="legend-bar">
+    <div class="legend">
+        <span class="lg"><i class="sw sw-both"></i>Alle frei</span>
+        <span class="lg"><i class="sw sw-school"></i>Schule frei</span>
+        <span class="lg"><i class="sw sw-werk"></i>Werk frei</span>
+        <span class="lg"><i class="sw sw-tent"></i>vorl&auml;ufig</span>
+        <span class="lg"><i class="sw sw-run"></i>langes Wochenende / Fenster</span>
+        <span class="lg"><i class="sw sw-trip"></i>Reise</span>
+        <span class="lg"><span class="lg-de">DE</span>dt. Feiertag (Info)</span>
+    </div>
+    <div class="toggles">
+        <label><input type="checkbox" id="tgTrips" checked> &#x2708;&#xFE0F; Reisen</label>
+        <label><input type="checkbox" id="tgDe" checked> &#x1F1E9;&#x1F1EA; DE-Feiertage</label>
+    </div>
+</section>
+
+<!-- FREIE FENSTER -->
+<details class="windows" id="winBox" open>
+    <summary class="sec-title">&#x1F389; Freie Fenster der Kinder &ndash; und wie viel Urlaub Papa daf&uuml;r braucht</summary>
+    <div class="win-list" id="winList"></div>
+</details>
+
+<!-- MONATSNAVIGATION -->
+<nav class="month-nav" id="monthNav"></nav>
+
+<main class="months" id="months"></main>
+
+<section class="notes">
+    <h2 class="sec-title">&#x1F4DD; Quellen &amp; Stand</h2>
+    <ul>
+        <li><strong>Schule:</strong> NIST School Calendar 2026&ndash;2027, nur SEC. Bei den Three-way Conferences gilt der <em>2. Termin</em> als frei (Gespr&auml;che immer am 1. Termin).</li>
+        <li><strong>Schuljahr 2027/28:</strong> Kalender noch nicht ver&ouml;ffentlicht. Ab 19.06.2027 Sommerferien, ab 16.08.2027 offen. Offizielle Thai-Feiertage im Herbst sind gestrichelt als &bdquo;vorl&auml;ufig&ldquo; eingetragen.</li>
+        <li><strong>Werk:</strong> MBMTh Holiday 2026 (Excel) und &bdquo;Final MBMTh calendar&ldquo; 2027 (18 Tage, mit TAAP abgestimmt). 25.10. und 06.12.2027 sind in den Januar bzw. April verschoben.</li>
+        <li><strong>DE-Feiertage:</strong> bundesweit + NRW/Bayern, nur zur Info (z.&nbsp;B. f&uuml;r Besuche).</li>
+    </ul>
+</section>
+
+<footer class="cal-footer">Made with &#x2764;&#xFE0F; for the best trips ever &ndash; Familie Berger</footer>
+
+<!-- TAG-DETAILS -->
+<div class="sheet-bg" id="sheetBg"></div>
+<div class="sheet" id="sheet" role="dialog" aria-modal="true">
+    <button class="sheet-close" id="sheetClose" aria-label="Schlie&szlig;en">&times;</button>
+    <div id="sheetBody"></div>
+</div>
+
+<script src="script.js?v=20261031a"></script>
+</body>
+</html>

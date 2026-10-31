@@ -182,6 +182,10 @@
         .past-info h3 { margin: 0.1rem 0; font-size: 1.1rem; }
         .past-season, .past-route, .past-dates { margin: 0; font-size: 0.85rem; color: var(--text-dim); }
         .past-summer .past-season { color: #f9a8d4; }
+        .past-tile.tool-tile { filter: none; opacity: 1; border-color: rgba(52,211,153,0.35);
+            background: linear-gradient(135deg, rgba(56,189,248,0.12), rgba(52,211,153,0.10) 50%, rgba(251,146,60,0.10)); }
+        .tool-tile .past-season { color: #6ee7b7; }
+        .tool-tile .past-cta { color: #6ee7b7; }
         .past-cta { font-size: 0.85rem; font-weight: 600; white-space: nowrap; color: #f9a8d4; }
         @media (max-width: 600px) {
             .past-tile { flex-wrap: wrap; }
@@ -447,6 +451,22 @@
         </div>
     </a>
 </main>
+
+<!-- PLANEN: Familienkalender (Schule / Werk / Reisen) -->
+<section class="past">
+    <h2 class="past-title">&#x1F5D3;&#xFE0F; Planen</h2>
+    <div class="past-grid">
+        <a class="past-tile tool-tile" href="kalender/">
+            <span class="past-emoji">&#x1F5D3;&#xFE0F;</span>
+            <div class="past-info">
+                <p class="past-season">Nov 2026 &ndash; Dez 2027</p>
+                <h3>Familienkalender</h3>
+                <p class="past-route">Schulferien &middot; Werks-Feiertage &middot; lange Wochenenden &middot; unsere Reisen</p>
+            </div>
+            <span class="past-cta">Wann haben wir frei? &rarr;</span>
+        </a>
+    </div>
+</section>
 
 <!-- PAST TRAVELS: abgeschlossene Reisen, eingefroren (body.archived auf der Tour-Seite) -->
 <section class="past">
