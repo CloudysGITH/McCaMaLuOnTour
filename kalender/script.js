@@ -152,6 +152,7 @@ const TRIPS = [
             '2026-12-27': ['⛷️', 'Erster Skitag Kaunertal'],
             '2027-01-02': ['🏔️', 'Pitztal-Tag mit Caro & Co.'],
             '2027-01-03': ['🏡', 'Weiter ins Allgäu (Leutkirch) · Carla fährt heim'],
+            '2027-01-05': ['🌊', 'Aqua Mundo ab 13:00 (Center Parcs Leutkirch)'],
             '2027-01-08': ['✈️', 'Rückflug MUC 19:05'],
             '2027-01-09': ['🛬', 'Landung BKK 15:10']
         }
