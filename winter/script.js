@@ -935,7 +935,8 @@ function initGearInventory() {
         .map(th => th.textContent.trim());
 
     // Ausgangsstand: wie viele Teile fehlten laut Inventur ueberhaupt?
-    let baseTotal = 0;
+    // Schon gekaufte Teile (fest im HTML als .gear-bought) zaehlen zum Fortschritt
+    let baseTotal = table.querySelectorAll('td.gear-bought').length;
 
     const cells = [];
 

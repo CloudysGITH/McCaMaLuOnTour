@@ -1781,6 +1781,9 @@ body.locked {
     outline-offset: -2px;
 }
 
+/* Fest als gekauft eingetragen */
+.gear-bought { background: rgba(52,211,153,0.12); }
+
 /* Besorgt: rotes Kreuz wird zum gruenen Haken */
 .gear-no.gear-done {
     color: var(--green);
